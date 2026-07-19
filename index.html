@@ -24,12 +24,12 @@
             --apple-muted: #86868b;       /* Apple Signature Muted Gray */
             --apple-border: rgba(0, 0, 0, 0.08);
             --luxury-black: #000000;
-            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             
             /* Ultra-smooth Bezier Curve for High-End Cinematic Transitions */
-            --apple-transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            --radius-premium: 20px;
-            --radius-card: 14px;
+            --apple-bezier: cubic-bezier(0.25, 1, 0.5, 1);
+            --radius-premium: 24px;
+            --radius-card: 16px;
         }
 
         html {
@@ -43,23 +43,22 @@
             color: var(--apple-text);
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
         /* Typography Hierarchy with Intentional Negative Letter-Spacing */
         h1 {
             font-weight: 700;
-            font-size: clamp(40px, 5vw, 64px);
+            font-size: clamp(38px, 5vw, 58px);
             letter-spacing: -0.03em;
-            line-height: 1.08;
+            line-height: 1.1;
             color: var(--luxury-black);
         }
 
         h2 {
             font-weight: 700;
-            font-size: clamp(28px, 4vw, 42px);
+            font-size: clamp(28px, 4vw, 40px);
             letter-spacing: -0.025em;
-            line-height: 1.1;
+            line-height: 1.15;
             color: var(--luxury-black);
         }
 
@@ -67,14 +66,14 @@
             font-weight: 600;
             font-size: 22px;
             letter-spacing: -0.02em;
-            color: var(--apple-text);
+            color: var(--luxury-black);
         }
 
         p {
             font-weight: 400;
             color: var(--apple-muted);
-            line-height: 1.55;
-            font-size: 17px;
+            line-height: 1.6;
+            font-size: 16px;
             letter-spacing: -0.01em;
         }
 
@@ -85,29 +84,35 @@
             padding: 0 24px;
         }
 
-        /* Advanced Intersection Observer Reveal Effect */
-        .reveal-section {
+        /* ==========================================================================
+           CINEMATIC SCROLL REVEAL ENGINE (APPLE STYLE ANIMATION)
+           ========================================================================== */
+        .reveal-node {
             opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transform: translateY(40px);
+            transition: opacity 0.8s var(--apple-bezier), transform 0.8s var(--apple-bezier);
+            will-change: transform, opacity;
         }
 
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .reveal-node.active {
+            opacity: 1;
+            transform: translateY(0);
         }
+
+        /* Delay utilities for sequential element rendering */
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
 
         /* ==========================================================================
-           NAVIGATION BAR (GLASSMORPHISM & BLUR METRICS)
+           NAVIGATION BAR (GLASSMORPHISM & LOGO INTEGRATION)
            ========================================================================== */
         nav {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 48px;
+            height: 52px;
             background: rgba(255, 255, 255, 0.72);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
@@ -124,29 +129,31 @@
             width: 100%;
         }
 
-        .logo {
-            font-weight: 600;
-            font-size: 15px;
-            text-transform: lowercase;
-            letter-spacing: -0.03em;
-            text-decoration: none;
-            color: var(--luxury-black);
+        .nav-logo-img {
+            height: 22px;
+            width: auto;
+            display: block;
+        }
+
+        .nav-right-block {
+            display: flex;
+            align-items: center;
+            gap: 48px;
         }
 
         .nav-links {
             display: flex;
-            gap: 40px;
+            gap: 36px;
             list-style: none;
-            align-items: center;
         }
 
         .nav-links a {
             text-decoration: none;
             color: var(--apple-muted);
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 400;
             letter-spacing: -0.01em;
-            transition: var(--apple-transition);
+            transition: color 0.3s ease;
         }
 
         .nav-links a:hover {
@@ -156,9 +163,9 @@
         .nav-cta {
             background: var(--luxury-black);
             color: #fff !important;
-            padding: 5px 14px;
+            padding: 6px 16px;
             border-radius: 980px;
-            font-size: 12px !important;
+            font-size: 13px !important;
             font-weight: 500 !important;
             transition: var(--apple-transition);
         }
@@ -169,67 +176,26 @@
         }
 
         /* ==========================================================================
-           HERO SECTION (THE ART OF INTENTIONAL NEGATIVE SPACE)
+           HERO SECTION
            ========================================================================== */
         .hero {
-            padding: 190px 0 120px 0;
+            padding: 200px 0 120px 0;
             text-align: center;
-            background: var(--apple-bg);
         }
 
         .hero h1 {
-            max-width: 850px;
+            max-width: 880px;
             margin: 0 auto 28px auto;
         }
 
         .hero p {
-            font-size: 22px;
+            font-size: 21px;
             max-width: 680px;
             margin: 0 auto 48px auto;
-            color: var(--apple-muted);
-        }
-
-        .btn-primary {
-            display: inline-block;
-            background: var(--luxury-black);
-            color: #fff;
-            text-decoration: none;
-            padding: 14px 32px;
-            border-radius: 980px;
-            font-size: 16px;
-            font-weight: 500;
-            letter-spacing: -0.01em;
-            transition: var(--apple-transition);
-        }
-
-        .btn-primary:hover {
-            background: #2d2d2f;
-            transform: scale(1.01);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-        }
-
-        .section {
-            padding: 140px 0;
-            border-top: 1px solid var(--apple-border);
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 80px;
-        }
-
-        .section-header h2 {
-            margin-bottom: 20px;
-        }
-
-        .section-header p {
-            font-size: 19px;
-            max-width: 600px;
-            margin: 0 auto;
         }
 
         /* ==========================================================================
-           BEFORE/AFTER INTERACTIVE BLUEPRINT SLIDER
+           BEFORE/AFTER SLIDER (APPLE CONTROL ELEMENT INTEGRATION)
            ========================================================================== */
         .slider-wrapper {
             max-width: 960px;
@@ -238,7 +204,7 @@
             aspect-ratio: 16/10;
             border-radius: var(--radius-premium);
             overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.08);
             border: 1px solid var(--apple-border);
         }
 
@@ -258,7 +224,6 @@
         }
 
         .img-before { z-index: 1; }
-        
         .img-after {
             z-index: 2;
             width: 50%;
@@ -277,18 +242,10 @@
             width: 100%;
             height: 100%;
             background: transparent;
-            z-index: 3;
+            z-index: 4;
             outline: none;
             margin: 0;
             cursor: ew-resize;
-        }
-
-        .slider-input::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 2px;
-            height: 1200px;
-            background: var(--luxury-black);
         }
 
         .slider-line {
@@ -297,53 +254,70 @@
             top: 0;
             width: 1px;
             height: 100%;
-            background: var(--luxury-black);
+            background: rgba(0, 0, 0, 0.2);
             z-index: 2;
             pointer-events: none;
         }
 
+        /* Apple High-End Handle Integration */
+        .slider-handle-badge {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.04);
+            z-index: 3;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--luxury-black);
+            letter-spacing: -0.05em;
+        }
+
         /* ==========================================================================
-           CORE STANDARDS (MINIMAL GRID ARCHITECTURE)
+           CORE STANDARDS (BALANCED 2X2 SYMMETRY UPGRADE)
            ========================================================================== */
         .standards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 48px;
+            grid-template-columns: repeat(2, 1fr); /* Enforces perfect balanced columns */
+            gap: 64px 48px;
         }
 
         .standard-card {
             position: relative;
-            padding-top: 24px;
+            padding-top: 32px;
             border-top: 1px solid var(--apple-border);
         }
 
         .standard-num {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             color: var(--luxury-black);
-            margin-bottom: 14px;
+            margin-bottom: 16px;
             display: block;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
         }
 
         .standard-card h3 {
-            font-size: 21px;
-            margin-bottom: 14px;
-            color: var(--luxury-black);
-        }
-
-        .standard-card p {
-            font-size: 15px;
+            font-size: 24px;
+            margin-bottom: 16px;
         }
 
         /* ==========================================================================
-           CONTINUOUS MASTER PORTFOLIO (EDITORIAL EDIT)
+           CONTINUOUS PORTFOLIO EDITORIAL GALLERY
            ========================================================================== */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 48px 32px;
+            gap: 56px 32px;
         }
 
         .gallery-item {
@@ -357,9 +331,8 @@
             border-radius: var(--radius-premium);
             overflow: hidden;
             aspect-ratio: 4/3;
-            border: 1px solid rgba(0, 0, 0, 0.02);
-            margin-bottom: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01);
+            border: 1px solid rgba(0, 0, 0, 0.01);
+            margin-bottom: 22px;
         }
 
         .gallery-item img {
@@ -370,24 +343,19 @@
         }
 
         .gallery-item:hover img {
-            transform: scale(1.015);
+            transform: scale(1.012);
         }
 
         .gallery-meta h4 {
-            font-size: 17px;
+            font-size: 18px;
             font-weight: 600;
             margin-bottom: 6px;
             color: var(--apple-text);
-            letter-spacing: -0.015em;
-        }
-
-        .gallery-meta p {
-            font-size: 14px;
-            color: var(--apple-muted);
+            letter-spacing: -0.02em;
         }
 
         /* ==========================================================================
-           LIVE CURRENCY TOGGLE & B2B PRICING MATRIX
+           TRIPLE MATRIX PRICING ENGINE (Live USD Conversion Integration)
            ========================================================================== */
         .pricing-toggle-zone {
             display: flex;
@@ -407,7 +375,7 @@
         .toggle-btn {
             background: none;
             border: none;
-            padding: 10px 28px;
+            padding: 10px 26px;
             font-size: 13px;
             font-weight: 500;
             color: var(--apple-muted);
@@ -436,18 +404,10 @@
             border-radius: var(--radius-premium);
             transition: var(--apple-transition);
             background: #fff;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.01);
         }
 
         .pricing-card:hover {
             border-color: var(--luxury-black);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.02);
-        }
-
-        .pricing-card h3 {
-            font-size: 22px;
-            margin-bottom: 8px;
-            color: var(--luxury-black);
         }
 
         .pricing-card .price-display {
@@ -481,9 +441,7 @@
             color: var(--luxury-black);
         }
 
-        /* ==========================================================================
-           SPECIFICATION & WORKFLOW PHASES
-           ========================================================================== */
+        /* Specs & Zero Compromise Grid */
         .specs-layout {
             display: grid;
             grid-template-columns: 1fr 1.6fr;
@@ -495,7 +453,6 @@
             background: var(--apple-secondary-bg);
             padding: 54px;
             border-radius: var(--radius-premium);
-            border: 1px solid rgba(0,0,0,0.01);
         }
 
         .specs-highlight-card h3 {
@@ -511,23 +468,16 @@
             list-style: none;
         }
 
-        .specs-list li {
-            position: relative;
-        }
-
         .specs-list strong {
             color: var(--luxury-black);
             display: block;
             margin-bottom: 8px;
             font-size: 16px;
-            letter-spacing: -0.015em;
         }
 
-        .specs-list p {
-            font-size: 14px;
-            color: var(--apple-muted);
-        }
+        .specs-list p { font-size: 14px; }
 
+        /* Workflow Phase Channels */
         .workflow-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -553,9 +503,7 @@
             border: 1px solid var(--apple-border);
         }
 
-        /* ==========================================================================
-           INTUITIVE SUBMISSION ZONE (GOOGLE UX PLATFORM)
-           ========================================================================== */
+        /* Intake Pipeline Form */
         .form-container-box {
             max-width: 680px;
             margin: 0 auto;
@@ -563,7 +511,6 @@
             border: 1px solid var(--apple-border);
             padding: 64px;
             border-radius: var(--radius-premium);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.01);
         }
 
         .form-group {
@@ -576,7 +523,6 @@
             font-weight: 600;
             margin-bottom: 10px;
             color: var(--luxury-black);
-            letter-spacing: -0.01em;
         }
 
         .form-control {
@@ -595,7 +541,6 @@
         .form-control:focus {
             background: #fff;
             border-color: var(--luxury-black);
-            box-shadow: 0 0 0 4px rgba(0,0,0,0.02);
         }
 
         .checkbox-group {
@@ -610,15 +555,10 @@
             align-items: center;
             gap: 10px;
             font-size: 14px;
-            color: var(--apple-text);
             cursor: pointer;
         }
 
-        .checkbox-label input {
-            accent-color: var(--luxury-black);
-            width: 16px;
-            height: 16px;
-        }
+        .checkbox-label input { accent-color: var(--luxury-black); width: 16px; height: 16px; }
 
         .dropzone-area {
             border: 1px dashed var(--apple-muted);
@@ -627,12 +567,6 @@
             text-align: center;
             border-radius: var(--radius-card);
             cursor: pointer;
-            transition: var(--apple-transition);
-        }
-
-        .dropzone-area:hover {
-            border-color: var(--luxury-black);
-            background: rgba(0,0,0,0.01);
         }
 
         .submit-btn {
@@ -646,33 +580,13 @@
             font-weight: 500;
             cursor: pointer;
             transition: var(--apple-transition);
-            margin-top: 12px;
         }
 
-        .submit-btn:hover {
-            background: #2d2d2f;
-        }
+        .submit-btn:hover { background: #2d2d2f; }
+        .direct-channels { text-align: center; margin-top: 36px; font-size: 14px; }
+        .direct-channels a { color: var(--luxury-black); text-decoration: none; font-weight: 500; border-bottom: 1px solid var(--luxury-black); }
 
-        .direct-channels {
-            text-align: center;
-            margin-top: 36px;
-            font-size: 14px;
-            color: var(--apple-muted);
-        }
-
-        .direct-channels a {
-            color: var(--luxury-black);
-            text-decoration: none;
-            font-weight: 500;
-            border-bottom: 1px solid var(--luxury-black);
-            transition: var(--apple-transition);
-        }
-
-        .direct-channels a:hover {
-            opacity: 0.7;
-        }
-
-        /* About & Editorial Layout */
+        /* About & Brand Narrative Section */
         .about-layout {
             display: grid;
             grid-template-columns: 1fr 2fr;
@@ -682,9 +596,7 @@
         .about-layout h2 { font-size: 48px; }
         .about-content p { font-size: 19px; margin-bottom: 28px; color: var(--apple-text); }
 
-        /* ==========================================================================
-           PREMIUM CORPORATE FOOTER
-           ========================================================================== */
+        /* Refined Editorial Footer */
         footer {
             padding: 100px 0 40px 0;
             border-top: 1px solid var(--apple-border);
@@ -707,59 +619,45 @@
             font-weight: 600;
         }
 
-        .footer-col ul {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+        .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+        .footer-col a { text-decoration: none; color: var(--apple-muted); font-size: 14px; transition: color 0.3s ease; }
+        .footer-col a:hover { color: var(--luxury-black); }
+        .footer-bottom { text-align: center; font-size: 13px; color: var(--apple-muted); padding-top: 40px; border-top: 1px solid rgba(0, 0, 0, 0.05); }
 
-        .footer-col a {
-            text-decoration: none;
-            color: var(--apple-muted);
-            font-size: 14px;
-            transition: var(--apple-transition);
-        }
-
-        .footer-col a:hover {
-            color: var(--luxury-black);
-        }
-
-        .footer-bottom {
-            text-align: center;
-            font-size: 13px;
-            color: var(--apple-muted);
-            padding-top: 40px;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        @media (max-width: 900px) {
+            .standards-grid { grid-template-columns: 1fr; gap: 40px; }
         }
 
         @media (max-width: 768px) {
             .specs-layout, .about-layout, .footer-grid { grid-template-columns: 1fr; gap: 48px; }
-            .hero h1 { font-size: 42px; }
-            .form-container-box { padding: 40px 24px; }
+            .hero h1 { font-size: 40px; }
+            .nav-right-block { display: none; } /* Mobile optimization placeholder */
         }
     </style>
 </head>
 <body>
 
-    <!-- Transparent Glassmorphism Header -->
+    <!-- Transparent Glassmorphism Header with Custom Logo Asset -->
     <nav>
         <div class="container">
             <div class="nav-container">
-                <a href="#" class="logo">lavientra studio</a>
-                <ul class="nav-links">
-                    <li><a href="#showcase">showcase</a></li>
-                    <li><a href="#standards">standards</a></li>
-                    <li><a href="#portfolio">portfolio</a></li>
-                    <li><a href="#pricing">pricing</a></li>
-                    <li><a href="#upload" class="nav-cta">upload sketch</a></li>
-                </ul>
+                <!-- Points correctly to your newly uploaded logo file -->
+                <a href="#"><img src="assets/main-logo.svg" alt="lavientra studio" class="nav-logo-img"></a>
+                <div class="nav-right-block">
+                    <ul class="nav-links">
+                        <li><a href="#showcase">showcase</a></li>
+                        <li><a href="#standards">standards</a></li>
+                        <li><a href="#portfolio">portfolio</a></li>
+                        <li><a href="#pricing">pricing</a></li>
+                    </ul>
+                    <a href="#upload" class="nav-cta">upload sketch</a>
+                </div>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero reveal-section">
+    <section class="hero reveal-node">
         <div class="container">
             <h1>High-Precision 2D Floor Plans Drawn for the UK & AUS Real Estate Markets.</h1>
             <p>Turn your rough sketches into print and web-ready layouts within 24 hours. Every plan is drawn strictly following RICS Standards (UK) and Property Council Guidelines (AUS)—clean, precise, and custom-branded to your agency.</p>
@@ -767,8 +665,8 @@
         </div>
     </section>
 
-    <!-- Before/After Slider Showcase -->
-    <section id="showcase" class="section reveal-section">
+    <!-- Before/After Slider Showcase (With Integrated Apple Style Handle) -->
+    <section id="showcase" class="section reveal-node">
         <div class="container">
             <div class="section-header">
                 <h2>Precision Refined.</h2>
@@ -782,13 +680,15 @@
                     <img src="assets/plan-after.webp" alt="Finished CAD Document Layout">
                 </div>
                 <div class="slider-line" id="sliderLine"></div>
+                <!-- Dynamic White Circular Dial Indicator Overlay -->
+                <div class="slider-handle-badge" id="sliderHandleIcon">&larr;&rarr;</div>
                 <input type="range" min="0" max="100" value="50" class="slider-input" id="sliderRange">
             </div>
         </div>
     </section>
 
-    <!-- Core Standards & Compliance Section -->
-    <section id="standards" class="section reveal-section">
+    <!-- Core Standards (Upgraded to Symmetry 2x2 Clean Metric) -->
+    <section id="standards" class="section reveal-node">
         <div class="container">
             <div class="section-header">
                 <h2>Core Standards & Services.</h2>
@@ -819,8 +719,8 @@
         </div>
     </section>
 
-    <!-- Continuous Architectural Portfolio -->
-    <section id="portfolio" class="section reveal-section">
+    <!-- Continuous Master Portfolio Magazine Grid -->
+    <section id="portfolio" class="section reveal-node">
         <div class="container">
             <div class="section-header">
                 <h2>Our Portfolio.</h2>
@@ -828,42 +728,42 @@
             </div>
 
             <div class="gallery-grid">
-                <div class="gallery-item">
+                <div class="gallery-item reveal-node delay-1">
                     <div class="gallery-img-container"><img src="assets/portfolio-bw.webp" alt="Standard B&W Plan"></div>
                     <div class="gallery-meta">
                         <h4>Standard Editorial B&W</h4>
                         <p>High-contrast vector lineage, ideal for traditional print brochures.</p>
                     </div>
                 </div>
-                <div class="gallery-item">
+                <div class="gallery-item reveal-node delay-2">
                     <div class="gallery-img-container"><img src="assets/portfolio-color.webp" alt="Color Zone Plan"></div>
                     <div class="gallery-meta">
                         <h4>Color Zoned Marketing Layout</h4>
                         <p>Soft color-coded zones to help buyers visualize property flow instantly.</p>
                     </div>
                 </div>
-                <div class="gallery-item">
+                <div class="gallery-item reveal-node delay-3">
                     <div class="gallery-img-container"><img src="assets/portfolio-furniture.webp" alt="Furniture Add"></div>
                     <div class="gallery-meta">
                         <h4>Premium Furnished Space</h4>
                         <p>Includes accurate, modern CAD blocks to showcase property scale and potential.</p>
                     </div>
                 </div>
-                <div class="gallery-item">
+                <div class="gallery-item reveal-node delay-1">
                     <div class="gallery-img-container"><img src="assets/portfolio-commercial.webp" alt="Commercial Building"></div>
                     <div class="gallery-meta">
                         <h4>Commercial Property Specification</h4>
                         <p>Drafted cleanly to showcase complex corporate layouts and massive square footage.</p>
                     </div>
                 </div>
-                <div class="gallery-item">
+                <div class="gallery-item reveal-node delay-2">
                     <div class="gallery-img-container"><img src="assets/portfolio-complex.webp" alt="Complex Drawing"></div>
                     <div class="gallery-meta">
                         <h4>Complex Multi-Level Blueprint</h4>
                         <p>Absolute geometrical precision for intricate layouts, split-levels, and period properties.</p>
                     </div>
                 </div>
-                <div class="gallery-item">
+                <div class="gallery-item reveal-node delay-3">
                     <div class="gallery-img-container"><img src="assets/portfolio-siteplan.webp" alt="Site Plan"></div>
                     <div class="gallery-meta">
                         <h4>Overall Site & Boundary Layout</h4>
@@ -874,23 +774,24 @@
         </div>
     </section>
 
-    <!-- Premium B2B Pricing Zone with Live Real-Time Currency Toggle -->
-    <section id="pricing" class="section reveal-section">
+    <!-- Premium B2B Pricing Engine (Upgraded to Triple Currency Architecture) -->
+    <section id="pricing" class="section reveal-node">
         <div class="container">
             <div class="section-header">
                 <h2>Transparent Pricing.</h2>
-                <p>Base rates are calculated in USD and converted live based on your target market exchange rate.</p>
+                <p>Base rates are peg-calculated in USD and automatically dynamically rendered into your local currency pipeline value.</p>
             </div>
 
             <div class="pricing-toggle-zone">
                 <div class="pill-toggle">
-                    <button class="toggle-btn active" id="btn-uk" onclick="setMarket('uk')">🇬🇧 United Kingdom (GBP)</button>
-                    <button class="toggle-btn" id="btn-aus" onclick="setMarket('aus')">🇦🇺 Australia (AUD)</button>
+                    <button class="toggle-btn active" id="btn-uk" onclick="setMarket('uk')">🇬🇧 UK (GBP)</button>
+                    <button class="toggle-btn" id="btn-aus" onclick="setMarket('aus')">🇦🇺 AUS (AUD)</button>
+                    <button class="toggle-btn" id="btn-usd" onclick="setMarket('usd')">🇺🇸 Global (USD)</button>
                 </div>
             </div>
 
             <div class="pricing-grid">
-                <div class="pricing-card">
+                <div class="pricing-card reveal-node delay-1">
                     <h3>Standard Layouts</h3>
                     <p>B&W, Color Zoned, or Furnished styles</p>
                     <div class="price-display" id="price-standard">--</div>
@@ -900,7 +801,7 @@
                         <li>24-Hour Standard Pipeline Delivery</li>
                     </ul>
                 </div>
-                <div class="pricing-card">
+                <div class="pricing-card reveal-node delay-2">
                     <h3>Advanced Layouts</h3>
                     <p>Commercial, Complex, or Site Plans</p>
                     <div class="price-display" id="price-advanced">--</div>
@@ -910,7 +811,7 @@
                         <li>Full Perimeter Detail Mapping</li>
                     </ul>
                 </div>
-                <div class="pricing-card">
+                <div class="pricing-card reveal-node delay-3">
                     <h3>6-Hour Express Add-on</h3>
                     <p>Priority drafting pipeline bypass</p>
                     <div class="price-display" id="price-express">--</div>
@@ -924,8 +825,8 @@
         </div>
     </section>
 
-    <!-- Zero Compromise Checklist Specifications -->
-    <section class="section reveal-section">
+    <!-- Zero Compromise Checklist -->
+    <section class="section reveal-node">
         <div class="container">
             <div class="specs-layout">
                 <div class="specs-highlight-card">
@@ -964,8 +865,8 @@
         </div>
     </section>
 
-    <!-- Pipeline Workflow Section -->
-    <section class="section reveal-section">
+    <!-- Pipeline Workflow -->
+    <section class="section reveal-node">
         <div class="container">
             <div class="section-header">
                 <h2>The Workflow.</h2>
@@ -989,14 +890,14 @@
                 <span style="font-size: 24px;">💼</span>
                 <div>
                     <strong style="display: block; margin-bottom: 6px; font-size: 16px;">For High-Volume & Regular Agencies:</strong>
-                    <p style="font-size: 14px; color: var(--apple-text);">We offer a hassle-free Weekly Billing System. We track every plan we draw for you throughout the week and bill your agency every single Friday. No daily invoices, just smooth workflow.</p>
+                    <p style="font-size: 14px;">We offer a hassle-free Weekly Billing System. We track every plan we draw for you throughout the week and bill your agency every single Friday. No daily invoices, just smooth workflow.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Project Intake Google Form UX Engine -->
-    <section id="upload" class="section reveal-section">
+    <!-- Project Intake Google UX Form -->
+    <section id="upload" class="section reveal-node">
         <div class="container">
             <div class="section-header">
                 <h2>Ready to Start? Send Your Sketch.</h2>
@@ -1048,7 +949,7 @@
                         <label>Upload Files (Sketches / Blueprints)</label>
                         <div class="dropzone-area" onclick="document.getElementById('sketchFiles').click()">
                             <p>Drag & Drop your files here, or <strong>browse local storage</strong></p>
-                            <input type="file" name="attachments" id="sketchFiles" style="display: none;" multiple>
+                            <input type="file" id="sketchFiles" style="display: none;" multiple>
                         </div>
                     </div>
 
@@ -1067,8 +968,8 @@
         </div>
     </section>
 
-    <!-- About Section -->
-    <section class="section reveal-section">
+    <!-- About Company Narrative Section -->
+    <section id="about" class="section reveal-node">
         <div class="container">
             <div class="about-layout">
                 <div>
@@ -1082,7 +983,7 @@
         </div>
     </section>
 
-    <!-- Luxury B2B Footer -->
+    <!-- Refined Editorial Footer Layout -->
     <footer>
         <div class="container">
             <div class="footer-grid">
@@ -1115,18 +1016,20 @@
         </div>
     </footer>
 
-    <!-- Premium Interactive Scripting Engine -->
+    <!-- Premium Core Interactive Scripting Engine -->
     <script>
-        // Before/After Image Slider Tracking Logic
+        // Before/After Image Slider Control Elements Logic
         const sliderRange = document.getElementById('sliderRange');
         const afterImg = document.getElementById('afterImg');
         const sliderLine = document.getElementById('sliderLine');
+        const sliderHandleIcon = document.getElementById('sliderHandleIcon');
         const sliderContainer = document.getElementById('sliderContainer');
 
         function updateSlider() {
             const val = sliderRange.value;
             afterImg.style.width = val + '%';
             sliderLine.style.left = val + '%';
+            sliderHandleIcon.style.left = val + '%';
         }
 
         sliderRange.addEventListener('input', updateSlider);
@@ -1136,16 +1039,23 @@
             const absoluteImg = afterImg.querySelector('img');
             if (absoluteImg) absoluteImg.style.width = containerWidth + 'px';
         });
-        
-        // Base Rates in USD (Modify these to set your packages)
-        const baseUSD = {
-            standard: 35.00,
-            advanced: 75.00,
-            express: 20.00
-        };
 
+        // Cinematic Apple Reveal Animations Engine (Intersection Observer Setup)
+        const observeOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observeOptions);
+
+        document.querySelectorAll('.reveal-node').forEach(node => observer.observe(node));
+        
+        // Base Rates Spec Matrix (USD Baseline System)
+        const baseUSD = { standard: 35.00, advanced: 75.00, express: 20.00 };
         let currentMarket = 'uk';
-        let exchangeRates = { GBP: 0.78, AUD: 1.52 }; // Premium baseline fallbacks
+        let exchangeRates = { GBP: 0.78, AUD: 1.52, USD: 1.00 }; 
 
         async function fetchLiveExchangeRates() {
             try {
@@ -1157,7 +1067,7 @@
                     updatePricingDisplay();
                 }
             } catch (e) {
-                console.log("Banking exchange server offline, routing fallback premiums.", e);
+                console.log("Banking network exchange lag, deploying cache baseline values.", e);
                 updatePricingDisplay();
             }
         }
@@ -1166,19 +1076,23 @@
             currentMarket = market;
             document.getElementById('btn-uk').classList.toggle('active', market === 'uk');
             document.getElementById('btn-aus').classList.toggle('active', market === 'aus');
+            document.getElementById('btn-usd').classList.toggle('active', market === 'usd');
             updatePricingDisplay();
         }
 
         function updatePricingDisplay() {
-            const symbol = currentMarket === 'uk' ? '£' : '$';
-            const rate = currentMarket === 'uk' ? exchangeRates.GBP : exchangeRates.AUD;
+            let symbol = '$';
+            let rate = exchangeRates.USD;
+
+            if (currentMarket === 'uk') { symbol = '£'; rate = exchangeRates.GBP; }
+            else if (currentMarket === 'aus') { symbol = '$'; rate = exchangeRates.AUD; }
 
             document.getElementById('price-standard').textContent = symbol + (baseUSD.standard * rate).toFixed(2);
             document.getElementById('price-advanced').textContent = symbol + (baseUSD.advanced * rate).toFixed(2);
             document.getElementById('price-express').textContent = '+' + symbol + (baseUSD.express * rate).toFixed(2);
         }
 
-        // Initialize Engines
+        // Init Core Engines
         fetchLiveExchangeRates();
         window.dispatchEvent(new Event('resize'));
     </script>
