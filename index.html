@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lavientra Studio | High-Precision Real Estate 2D Floor Plans</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Apple UI Minimalism Stylesheet */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f7; 
+            --text-primary: #000000;
+            --text-secondary: #6e6e73;
+            --accent: #121212;
+            --border: #e5e5e7;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            letter-spacing: -0.01em;
+        }
+
+        h1, h2, h3, h4 {
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+        }
+
+        p {
+            font-weight: 400;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Fixed Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 54px;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            font-weight: 600;
+            font-size: 16px;
+            text-transform: lowercase;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 400;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: #fff !important;
+            padding: 8px 16px;
+            border-radius: 980px;
+            font-size: 13px !important;
+            font-weight: 500 !important;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 180px 0 100px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 58px;
+            max-width: 900px;
+            margin: 0 auto 24px auto;
+        }
+
+        .hero p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto 40px auto;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 980px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.015);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+        }
+
+        .section {
+            padding: 120px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 38px;
+            margin-bottom: 16px;
+        }
+
+        /* Before/After Slider */
+        .slider-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            aspect-ratio: 16/10;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        .slider-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slider-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .img-before { z-index: 1; }
+        .img-after {
+            z-index: 2;
+            width: 50%;
+            overflow: hidden;
+        }
+
+        .img-after img {
+            max-width: none;
+            height: 100%;
+        }
+
+        .slider-input {
+            position: absolute;
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: 3;
+            outline: none;
+            margin: 0;
+            cursor: ew-resize;
+        }
+
+        .slider-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 2px;
+            height: 1000px;
+            background: var(--text-primary);
+        }
+
+        .slider-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 1px;
+            height: 100%;
+            background: var(--text-primary);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Core Standards Grid */
+        .standards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 32px;
+        }
+
+        .standard-card {
+            position: relative;
+            padding: 16px 0;
+        }
+
+        .standard-num {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .standard-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        /* Continuous Magazine Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 40px;
+        }
+
+        .gallery-item {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .gallery-img-container {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            border: 1px solid rgba(0,0,0,0.02);
+            margin-bottom: 16px;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.015);
+        }
+
+        .gallery-meta h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .gallery-meta p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Currency Toggle & Pricing Layout */
+        .pricing-toggle-zone {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 48px;
+        }
+
+        .pill-toggle {
+            background: var(--bg-secondary);
+            padding: 4px;
+            border-radius: 980px;
+            display: flex;
+            gap: 4px;
+            border: 1px solid var(--border);
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            padding: 10px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 980px;
+            transition: var(--transition);
+        }
+
+        .toggle-btn.active {
+            background: #fff;
+            color: var(--text-primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            border: 1px solid var(--border);
+            padding: 48px;
+            border-radius: var(--radius-lg);
+            transition: var(--transition);
+            background: #fff;
+        }
+
+        .pricing-card:hover {
+            border-color: var(--text-primary);
+        }
+
+        .pricing-card h3 {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .pricing-card .price-display {
+            font-size: 42px;
+            font-weight: 700;
+            margin: 24px 0;
+            letter-spacing: -0.04em;
+        }
+
+        .pricing-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 24px;
+        }
+
+        .pricing-features li {
+            font-size: 14px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pricing-features li::before {
+            content: "—";
+            color: var(--text-primary);
+        }
+
+        /* Core Specification Checklist */
+        .specs-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 48px;
+            align-items: start;
+        }
+
+        .specs-highlight-card {
+            background: var(--bg-secondary);
+            padding: 48px;
+            border-radius: var(--radius-lg);
+        }
+
+        .specs-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 32px;
+            list-style: none;
+        }
+
+        .specs-list li {
+            position: relative;
+            padding-left: 24px;
+        }
+
+        .specs-list li::before {
+            content: "—";
+            position: absolute;
+            left: 0;
+            color: var(--text-primary);
+        }
+
+        .specs-list strong {
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 6px;
+            font-size: 16px;
+        }
+
+        .specs-list p {
+            font-size: 14px;
+        }
+
+        /* Workflow steps */
+        .workflow-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-bottom: 48px;
+        }
+
+        .step-card h4 {
+            font-size: 14px;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .billing-banner {
+            background: var(--bg-secondary);
+            padding: 32px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        /* Form styling */
+        .form-container-box {
+            max-width: 650px;
+            margin: 0 auto;
+            background: #fff;
+            border: 1px solid var(--border);
+            padding: 54px;
+            border-radius: var(--radius-lg);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border);
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            font-family: var(--font-main);
+            font-size: 15px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            background: #fff;
+            border-color: var(--text-primary);
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .checkbox-label input {
+            accent-color: var(--text-primary);
+        }
+
+        .dropzone-area {
+            border: 2px dashed var(--border);
+            background: var(--bg-secondary);
+            padding: 40px;
+            text-align: center;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .dropzone-area:hover {
+            border-color: var(--text-primary);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .submit-btn:hover {
+            opacity: 0.95;
+        }
+
+        .direct-channels {
+            text-align: center;
+            margin-top: 32px;
+            font-size: 14px;
+        }
+
+        .direct-channels a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid var(--text-primary);
+        }
+
+        /* About layout */
+        .about-layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 60px;
+        }
+
+        .about-layout h2 { font-size: 44px; }
+        .about-content p { font-size: 18px; margin-bottom: 24px; }
+
+        /* Footer Column Layout */
+        footer {
+            padding: 80px 0 40px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1.5fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .footer-col h5 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 16px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-col a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .footer-col a:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+            padding-top: 40px;
+            border-top: 1px solid var(--bg-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .specs-layout, .about-layout, .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+            .hero h1 { font-size: 38px; }
+            .form-container-box { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Transparent Fixed Header -->
+    <nav>
+        <div class="container">
+            <div class="nav-container">
+                <a href="#" class="logo">lavientra studio</a>
+                <ul class="nav-links">
+                    <li><a href="#slider-section">showcase</a></li>
+                    <li><a href="#standards">standards</a></li>
+                    <li><a href="#portfolio">portfolio</a></li>
+                    <li><a href="#pricing">pricing</a></li>
+                    <li><a href="#upload" class="nav-cta">upload sketch</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>High-Precision 2D Floor Plans Drawn for the UK & AUS Real Estate Markets.</h1>
+            <p>Turn your rough sketches into print and web-ready layouts within 24 hours. Every plan is drawn strictly following RICS Standards (UK) and Property Council Guidelines (AUS)—clean, precise, and custom-branded to your agency.</p>
+            <a href="#upload" class="btn-primary">Submit a Sketch — Get a Free Quote &rarr;</a>
+        </div>
+    </section>
+
+    <!-- Dynamic Slider Section -->
+    <section id="slider-section" class="section" style="padding-top: 40px;">
+        <div class="container">
+            <div class="section-header">
+                <h2>Precision Refined.</h2>
+                <p>Slide to witness the seamless transition from a rough hand-drawn field sketch to a perfectly aligned, marketing-ready blueprint layout.</p>
+            </div>
+            <div class="slider-wrapper" id="sliderContainer">
+                <div class="slider-img img-before">
+                    <img src="assets/sketch-before.webp" alt="Rough Hand Sketch Draft">
+                </div>
+                <div class="slider-img img-after" id="afterImg">
+                    <img src="assets/plan-after.webp" alt="Finished CAD Document Layout">
+                </div>
+                <div class="slider-line" id="sliderLine"></div>
+                <input type="range" min="0" max="100" value="50" class="slider-input" id="sliderRange">
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Standards Section (Placed early according to UX framework) -->
+    <section id="standards" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Core Standards & Services.</h2>
+                <p>We combine geometrical absolute consistency with modern marketing agility.</p>
+            </div>
+            <div class="standards-grid">
+                <div class="standard-card">
+                    <span class="standard-num">01 / Compliance & Precision</span>
+                    <h3>Absolute Compliance</h3>
+                    <p>Every plan is drawn strictly according to RICS Standards (UK) and Property Council Guidelines (AUS). We ensure 100% precision with accurate room labels, clear measurement lines, detailed bathroom parts, standard scale bars, and precise north points.</p>
+                </div>
+                <div class="standard-card">
+                    <span class="standard-num">02 / Fast & Express Delivery</span>
+                    <h3>Express Pipelines</h3>
+                    <p>Standard delivery within 24 hours. Need it sooner? Select our 6-Hour Express Service to hit your tight marketing deadlines.</p>
+                </div>
+                <div class="standard-card">
+                    <span class="standard-num">03 / Flexible Outputs</span>
+                    <h3>Adaptive Exports</h3>
+                    <p>Receive your assets in any marketing format your agency requires: PDF, JPG, PNG, TIF, or SVG.</p>
+                </div>
+                <div class="standard-card">
+                    <span class="standard-num">04 / Your Style, Our Precision</span>
+                    <h3>Tailored Replications</h3>
+                    <p>Have an established brand layout? Just send us one of your previous floor plans. We will precisely replicate your agency's custom style, fonts, and colors while delivering an ultra-clean, standardized layout.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filterless Continuous Master Portfolio -->
+    <section id="portfolio" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Portfolio.</h2>
+                <p>Explore our diverse drafting structures tailored completely to international marketing specs.</p>
+            </div>
+
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <div class="gallery-img-container"><img src="assets/portfolio-bw.webp" alt="Standard B&W Plan"></div>
+                    <div class="gallery-meta">
+                        <h4>Standard Editorial B&W</h4>
+                        <p>High-contrast vector lineage, ideal for traditional print brochures.</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-img-container"><img src="assets/portfolio-color.webp" alt="Color Zone Plan"></div>
+                    <div class="gallery-meta">
+                        <h4>Color Zoned Marketing Layout</h4>
+                        <p>Soft color-coded zones to help buyers visualize property flow instantly.</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-img-container"><img src="assets/portfolio-furniture.webp" alt="Furniture Add"></div>
+                    <div class="gallery-meta">
+                        <h4>Premium Furnished Space</h4>
+                        <p>Includes accurate, modern CAD blocks to showcase property scale and potential.</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-img-container"><img src="assets/portfolio-commercial.webp" alt="Commercial Building"></div>
+                    <div class="gallery-meta">
+                        <h4>Commercial Property Specification</h4>
+                        <p>Drafted cleanly to showcase complex corporate layouts and massive square footage.</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-img-container"><img src="assets/portfolio-complex.webp" alt="Complex Drawing"></div>
+                    <div class="gallery-meta">
+                        <h4>Complex Multi-Level Blueprint</h4>
+                        <p>Absolute geometrical precision for intricate layouts, split-levels, and period properties.</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-img-container"><img src="assets/portfolio-siteplan.webp" alt="Site Plan"></div>
+                    <div class="gallery-meta">
+                        <h4>Overall Site & Boundary Layout</h4>
+                        <p>Clear mapping of external perimeters, gardens, and outbuildings.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section with Real-Time Toggle -->
+    <section id="pricing" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Transparent Pricing.</h2>
+                <p>Base rates are calculated in USD and converted live based on your target market exchange rate.</p>
+            </div>
+
+            <div class="pricing-toggle-zone">
+                <div class="pill-toggle">
+                    <button class="toggle-btn active" id="btn-uk" onclick="setMarket('uk')">🇬🇧 United Kingdom (GBP)</button>
+                    <button class="toggle-btn" id="btn-aus" onclick="setMarket('aus')">🇦🇺 Australia (AUD)</button>
+                </div>
+            </div>
+
+            <div class="pricing-grid">
+                <!-- Card 1 -->
+                <div class="pricing-card">
+                    <h3>Standard Layouts</h3>
+                    <p>B&W, Color Zoned, or Furnished styles</p>
+                    <div class="price-display" id="price-standard">--</div>
+                    <ul class="pricing-features">
+                        <li>Single Residential Units</li>
+                        <li>Photographer Branding Setup</li>
+                        <li>24-Hour Standard Pipeline Delivery</li>
+                    </ul>
+                </div>
+                <!-- Card 2 -->
+                <div class="pricing-card">
+                    <h3>Advanced Layouts</h3>
+                    <p>Commercial, Complex, or Site Plans</p>
+                    <div class="price-display" id="price-advanced">--</div>
+                    <ul class="pricing-features">
+                        <li>Multi-level Tracking Setup</li>
+                        <li>Extensive Square Footage Handling</li>
+                        <li>Full Perimeter Detail Mapping</li>
+                    </ul>
+                </div>
+                <!-- Card 3 -->
+                <div class="pricing-card">
+                    <h3>6-Hour Express Add-on</h3>
+                    <p>Priority drafting pipeline bypass</p>
+                    <div class="price-display" id="price-express">--</div>
+                    <ul class="pricing-features">
+                        <li>Priority Queue Bypassing</li>
+                        <li>Immediate Pipeline Processing</li>
+                        <li>Perfect for Tight Cutoffs</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Specs Checklist Section -->
+    <section class="section">
+        <div class="container">
+            <div class="specs-layout">
+                <div class="specs-highlight-card">
+                    <h3>No Tiers of Quality</h3>
+                    <p>We believe in absolute perfection. Every plan we draw ships to the same premium specification, whether it’s a small studio flat or a massive commercial unit.</p>
+                </div>
+                <div>
+                    <ul class="specs-list">
+                        <li>
+                            <strong>Precise Room Labels</strong>
+                            <p>Every single room is accurately named, correctly positioned, and structured according to standard guidelines.</p>
+                        </li>
+                        <li>
+                            <strong>Exact Dimensions & Details</strong>
+                            <p>Clear metric and imperial measurements per room, along with highly detailed bathroom parts and fixtures.</p>
+                        </li>
+                        <li>
+                            <strong>Total Floor Area</strong>
+                            <p>The total area is clearly calculated and stated on the plan in both sq ft (for UK) and sq m (for AUS).</p>
+                        </li>
+                        <li>
+                            <strong>Scale Bar & North Point</strong>
+                            <p>Consistent professional line weights, drawn strictly to scale with standard scale bars and precise north points.</p>
+                        </li>
+                        <li>
+                            <strong>Flexible File Formats</strong>
+                            <p>Delivered in print-ready and web-ready resolutions (PDF, JPG, PNG, TIF, or SVG) as standard. CAD/DWG upon request.</p>
+                        </li>
+                        <li>
+                            <strong>Unlimited Amendments</strong>
+                            <p>Your satisfaction is our priority. Enjoy unlimited free revisions within 30 days of delivery until the plan is exactly how you want it.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>The Workflow.</h2>
+                <p>From sketch directly to production pipeline setup in three friction-free movements.</p>
+            </div>
+            <div class="workflow-grid">
+                <div class="step-card">
+                    <h4>Step 01 / Upload & Brief</h4>
+                    <p>Send us your hand-drawn sketches, blueprints, or property measurements via our quick form.</p>
+                </div>
+                <div class="step-card">
+                    <h4>Step 02 / Review & Invoice</h4>
+                    <p>We analyze the area and features, then send a transparent digital invoice directly to your email.</p>
+                </div>
+                <div class="step-card">
+                    <h4>Step 03 / Download</h4>
+                    <p>Your final marketing-ready assets are delivered within 24 hours (or 6 hours if express).</p>
+                </div>
+            </div>
+            <div class="billing-banner">
+                <span style="font-size: 24px;">💼</span>
+                <div>
+                    <strong style="display: block; margin-bottom: 6px; font-size: 16px;">For High-Volume & Regular Agencies:</strong>
+                    <p style="font-size: 14px;">We offer a hassle-free Weekly Billing System. We track every plan we draw for you throughout the week and bill your agency every single Friday. No daily invoices, just smooth workflow.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Intake Form Zone -->
+    <section id="upload" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Ready to Start? Send Your Sketch.</h2>
+                <p>Fill out the pipeline details below to instantly route your structural documentation to drafting.</p>
+            </div>
+
+            <div class="form-container-box">
+                <!-- Replace with your Formspree Endpoint link later to get emails -->
+                <form id="projectIntakeForm" action="https://formspree.io/f/YOUR_ENDPOINT_HERE" method="POST">
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" name="name" id="fullName" class="form-control" placeholder="e.g. Thomas Sterling" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="agencyEmail">Agency Name / Email</label>
+                        <input type="email" name="email" id="agencyEmail" class="form-control" placeholder="e.g. contact@aspectstudios.co.uk" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="targetCountry">Target Country</label>
+                        <select name="country" id="targetCountry" class="form-control">
+                            <option value="United Kingdom">United Kingdom</option>
+                            <option value="Australia">Australia</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="serviceNeeded">Service Needed</label>
+                        <select name="service" id="serviceNeeded" class="form-control">
+                            <option value="24h Standard">24h Standard</option>
+                            <option value="6h Express">6h Express</option>
+                            <option value="General Inquiry">General Inquiry / Question</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Plan Style Required</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label"><input type="checkbox" name="style" value="B&W"> B&W</label>
+                            <label class="checkbox-label"><input type="checkbox" name="style" value="Color Zoned"> Color Zoned</label>
+                            <label class="checkbox-label"><input type="checkbox" name="style" value="Furnished"> Furnished</label>
+                            <label class="checkbox-label"><input type="checkbox" name="style" value="Commercial"> Commercial</label>
+                            <label class="checkbox-label"><input type="checkbox" name="style" value="Complex"> Complex</label>
+                            <label class="checkbox-label"><input type="checkbox" name="style" value="Site Plan"> Site Plan</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload Files (Sketches / Blueprints)</label>
+                        <div class="dropzone-area" onclick="document.getElementById('sketchFiles').click()">
+                            <p>Drag & Drop your files here, or <strong>browse local storage</strong></p>
+                            <input type="file" name="attachments" id="sketchFiles" style="display: none;" multiple>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="instructions">Message / Special Instructions</label>
+                        <textarea name="message" id="instructions" class="form-control" rows="4" placeholder="Mention any custom specifications or color code rules..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Send to Lavientra Studio</button>
+                </form>
+
+                <div class="direct-channels">
+                    <p>Prefer a direct conversation? Skip the form and chat via <a href="https://wa.me/YOUR_PHONE_NUMBER" target="_blank">WhatsApp</a> or email <a href="mailto:hello@thivanka.com">hello@thivanka.com</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Company Narrative Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <div class="about-layout">
+                <div>
+                    <h2>Precise.<br>Clean.<br>Accurate.</h2>
+                </div>
+                <div class="about-content">
+                    <p>At Lavientra Studio, we bridge the gap between architectural precision and high-end real estate marketing. Backed by years of professional draughtsmanship experience working with international property standards, we specialize in converting rough site sketches into ultra-clean, RICS and Property Council compliant 2D floor plans.</p>
+                    <p>We don’t just trace lines; we understand the geometry of space. Our philosophy is rooted in drawing highly accurate, clean, and consistent floor plans. Our team meticulously verifies every measurement and ensures absolute visual clarity, guaranteeing that every plan we deliver acts as a seamless, distraction-free tool to help your agency close deals faster.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Refined B2B Footer Layout -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h5 style="font-weight: 600;">lavientra studio</h5>
+                    <p style="font-size: 14px; margin-top: 10px;">Strategic to Lead. Design to Attract.</p>
+                </div>
+                <div class="footer-col">
+                    <h5>Quick Navigation</h5>
+                    <ul>
+                        <li><a href="#slider-section">Showcase</a></li>
+                        <li><a href="#standards">Standards</a></li>
+                        <li><a href="#portfolio">Portfolio</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Direct Channels</h5>
+                    <ul>
+                        <li><a href="mailto:hello@thivanka.com">Email: hello@thivanka.com</a></li>
+                        <li><a href="https://wa.me/YOUR_PHONE_NUMBER" target="_blank">WhatsApp Chat Support</a></li>
+                        <li><a href="https://instagram.com/lavientra.studio" target="_blank">Instagram: @lavientra.studio</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p style="margin-bottom: 8px;">&copy; 2026 Lavientra Studio. All rights reserved.</p>
+                <p style="font-size: 11px; opacity: 0.7;">Operating on UK & AUS time zones to ensure seamless overnight delivery. All floor plans are independently drafted to match local marketing standards.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive JavaScript Engine -->
+    <script>
+        // Before/After Image Comparison Slider Logic
+        const sliderRange = document.getElementById('sliderRange');
+        const afterImg = document.getElementById('afterImg');
+        const sliderLine = document.getElementById('sliderLine');
+        const sliderContainer = document.getElementById('sliderContainer');
+
+        function updateSliderPosition() {
+            const val = sliderRange.value;
+            afterImg.style.width = val + '%';
+            sliderLine.style.left = val + '%';
+        }
+
+        sliderRange.addEventListener('input', updateSliderPosition);
+
+        window.addEventListener('resize', () => {
+            const currentWidth = sliderContainer.offsetWidth;
+            const absoluteImg = afterImg.querySelector('img');
+            if (absoluteImg) absoluteImg.style.width = currentWidth + 'px';
+        });
+        
+        // Real-Time Currency Converter Logic (Pegged to USD base price)
+        // Adjust your base prices here (in USD):
+        const baseUSD = {
+            standard: 40.00,
+            advanced: 80.00,
+            express: 25.00
+        };
+
+        let currentMarket = 'uk';
+        let exchangeRates = { GBP: 0.78, AUD: 1.52 }; // Default fallbacks
+
+        // Fetch live global market exchange rates
+        async function fetchLiveRates() {
+            try {
+                const res = await fetch('https://open.er-api.com/v6/latest/USD');
+                const data = await res.json();
+                if(data && data.rates) {
+                    exchangeRates.GBP = data.rates.GBP || exchangeRates.GBP;
+                    exchangeRates.AUD = data.rates.AUD || exchangeRates.AUD;
+                    updatePricingDisplay();
+                }
+            } catch (error) {
+                console.log("Currency API offline, using fallback premium matrix calculations.", error);
+                updatePricingDisplay();
+            }
+        }
+
+        function setMarket(market) {
+            currentMarket = market;
+            document.getElementById('btn-uk').classList.toggle('active', market === 'uk');
+            document.getElementById('btn-aus').classList.toggle('active', market === 'aus');
+            updatePricingDisplay();
+        }
+
+        function updatePricingDisplay() {
+            const symbol = currentMarket === 'uk' ? '£' : '$';
+            const rate = currentMarket === 'uk' ? exchangeRates.GBP : exchangeRates.AUD;
+
+            document.getElementById('price-standard').textContent = symbol + (baseUSD.standard * rate).toFixed(2);
+            document.getElementById('price-advanced').textContent = symbol + (baseUSD.advanced * rate).toFixed(2);
+            document.getElementById('price-express').textContent = '+' + symbol + (baseUSD.express * rate).toFixed(2);
+        }
+
+        // Initialize Engine
+        fetchLiveRates();
+        window.dispatchEvent(new Event('resize'));
+    </script>
+</body>
+</html>
