@@ -8,7 +8,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Apple UI Minimalism Stylesheet */
+        /* ==========================================================================
+           ADVANCED ARCHITECTURAL CSS VARIABLES (APPLE HIGH-END UI COMPLIANT)
+           ========================================================================== */
         *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
@@ -16,62 +18,100 @@
         }
 
         :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f5f5f7; 
-            --text-primary: #000000;
-            --text-secondary: #6e6e73;
-            --accent: #121212;
-            --border: #e5e5e7;
-            --radius-lg: 16px;
-            --radius-md: 12px;
-            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            --apple-bg: #ffffff;
+            --apple-secondary-bg: #f5f5f7;
+            --apple-text: #1d1d1f;        /* Apple Signature Dark Gray */
+            --apple-muted: #86868b;       /* Apple Signature Muted Gray */
+            --apple-border: rgba(0, 0, 0, 0.08);
+            --luxury-black: #000000;
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            
+            /* Ultra-smooth Bezier Curve for High-End Cinematic Transitions */
+            --apple-transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            --radius-premium: 20px;
+            --radius-card: 14px;
         }
 
         html {
             scroll-behavior: smooth;
+            background-color: var(--apple-bg);
         }
 
         body {
             font-family: var(--font-main);
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
+            background-color: var(--apple-bg);
+            color: var(--apple-text);
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            letter-spacing: -0.01em;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        h1, h2, h3, h4 {
+        /* Typography Hierarchy with Intentional Negative Letter-Spacing */
+        h1 {
             font-weight: 700;
+            font-size: clamp(40px, 5vw, 64px);
             letter-spacing: -0.03em;
-            line-height: 1.15;
+            line-height: 1.08;
+            color: var(--luxury-black);
+        }
+
+        h2 {
+            font-weight: 700;
+            font-size: clamp(28px, 4vw, 42px);
+            letter-spacing: -0.025em;
+            line-height: 1.1;
+            color: var(--luxury-black);
+        }
+
+        h3 {
+            font-weight: 600;
+            font-size: 22px;
+            letter-spacing: -0.02em;
+            color: var(--apple-text);
         }
 
         p {
             font-weight: 400;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            font-size: 16px;
+            color: var(--apple-muted);
+            line-height: 1.55;
+            font-size: 17px;
+            letter-spacing: -0.01em;
         }
 
         .container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1140px;
             margin: 0 auto;
             padding: 0 24px;
         }
 
-        /* Fixed Navigation */
+        /* Advanced Intersection Observer Reveal Effect */
+        .reveal-section {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ==========================================================================
+           NAVIGATION BAR (GLASSMORPHISM & BLUR METRICS)
+           ========================================================================== */
         nav {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 54px;
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            height: 48px;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--apple-border);
             z-index: 1000;
             display: flex;
             align-items: center;
@@ -86,101 +126,120 @@
 
         .logo {
             font-weight: 600;
-            font-size: 16px;
+            font-size: 15px;
             text-transform: lowercase;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.03em;
             text-decoration: none;
-            color: var(--text-primary);
+            color: var(--luxury-black);
         }
 
         .nav-links {
             display: flex;
-            gap: 32px;
+            gap: 40px;
             list-style: none;
             align-items: center;
         }
 
         .nav-links a {
             text-decoration: none;
-            color: var(--text-secondary);
-            font-size: 13px;
+            color: var(--apple-muted);
+            font-size: 12px;
             font-weight: 400;
-            transition: var(--transition);
+            letter-spacing: -0.01em;
+            transition: var(--apple-transition);
         }
 
         .nav-links a:hover {
-            color: var(--text-primary);
+            color: var(--luxury-black);
         }
 
         .nav-cta {
-            background: var(--accent);
+            background: var(--luxury-black);
             color: #fff !important;
-            padding: 8px 16px;
+            padding: 5px 14px;
             border-radius: 980px;
-            font-size: 13px !important;
+            font-size: 12px !important;
             font-weight: 500 !important;
+            transition: var(--apple-transition);
         }
 
-        /* Hero */
+        .nav-cta:hover {
+            opacity: 0.85;
+            transform: scale(1.02);
+        }
+
+        /* ==========================================================================
+           HERO SECTION (THE ART OF INTENTIONAL NEGATIVE SPACE)
+           ========================================================================== */
         .hero {
-            padding: 180px 0 100px 0;
+            padding: 190px 0 120px 0;
             text-align: center;
+            background: var(--apple-bg);
         }
 
         .hero h1 {
-            font-size: 58px;
-            max-width: 900px;
-            margin: 0 auto 24px auto;
+            max-width: 850px;
+            margin: 0 auto 28px auto;
         }
 
         .hero p {
-            font-size: 20px;
-            max-width: 700px;
-            margin: 0 auto 40px auto;
+            font-size: 22px;
+            max-width: 680px;
+            margin: 0 auto 48px auto;
+            color: var(--apple-muted);
         }
 
         .btn-primary {
             display: inline-block;
-            background: var(--accent);
+            background: var(--luxury-black);
             color: #fff;
             text-decoration: none;
-            padding: 14px 28px;
+            padding: 14px 32px;
             border-radius: 980px;
             font-size: 16px;
             font-weight: 500;
-            transition: var(--transition);
+            letter-spacing: -0.01em;
+            transition: var(--apple-transition);
         }
 
         .btn-primary:hover {
-            transform: scale(1.015);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+            background: #2d2d2f;
+            transform: scale(1.01);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
         }
 
         .section {
-            padding: 120px 0;
-            border-top: 1px solid var(--border);
+            padding: 140px 0;
+            border-top: 1px solid var(--apple-border);
         }
 
         .section-header {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
         }
 
         .section-header h2 {
-            font-size: 38px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
-        /* Before/After Slider */
+        .section-header p {
+            font-size: 19px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ==========================================================================
+           BEFORE/AFTER INTERACTIVE BLUEPRINT SLIDER
+           ========================================================================== */
         .slider-wrapper {
-            max-width: 900px;
+            max-width: 960px;
             margin: 0 auto;
             position: relative;
             aspect-ratio: 16/10;
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-premium);
             overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.05);
-            border: 1px solid var(--border);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--apple-border);
         }
 
         .slider-img {
@@ -199,6 +258,7 @@
         }
 
         .img-before { z-index: 1; }
+        
         .img-after {
             z-index: 2;
             width: 50%;
@@ -227,8 +287,8 @@
             -webkit-appearance: none;
             appearance: none;
             width: 2px;
-            height: 1000px;
-            background: var(--text-primary);
+            height: 1200px;
+            background: var(--luxury-black);
         }
 
         .slider-line {
@@ -237,63 +297,76 @@
             top: 0;
             width: 1px;
             height: 100%;
-            background: var(--text-primary);
+            background: var(--luxury-black);
             z-index: 2;
             pointer-events: none;
         }
 
-        /* Core Standards Grid */
+        /* ==========================================================================
+           CORE STANDARDS (MINIMAL GRID ARCHITECTURE)
+           ========================================================================== */
         .standards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 32px;
+            gap: 48px;
         }
 
         .standard-card {
             position: relative;
-            padding: 16px 0;
+            padding-top: 24px;
+            border-top: 1px solid var(--apple-border);
         }
 
         .standard-num {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 16px;
+            color: var(--luxury-black);
+            margin-bottom: 14px;
             display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .standard-card h3 {
-            font-size: 20px;
-            margin-bottom: 12px;
+            font-size: 21px;
+            margin-bottom: 14px;
+            color: var(--luxury-black);
         }
 
-        /* Continuous Magazine Gallery */
+        .standard-card p {
+            font-size: 15px;
+        }
+
+        /* ==========================================================================
+           CONTINUOUS MASTER PORTFOLIO (EDITORIAL EDIT)
+           ========================================================================== */
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-            gap: 40px;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 48px 32px;
         }
 
         .gallery-item {
             display: flex;
             flex-direction: column;
-            cursor: pointer;
+            text-decoration: none;
         }
 
         .gallery-img-container {
-            background: var(--bg-secondary);
-            border-radius: var(--radius-lg);
+            background: var(--apple-secondary-bg);
+            border-radius: var(--radius-premium);
             overflow: hidden;
             aspect-ratio: 4/3;
-            border: 1px solid rgba(0,0,0,0.02);
-            margin-bottom: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.02);
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01);
         }
 
         .gallery-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: var(--transition);
+            transition: var(--apple-transition);
         }
 
         .gallery-item:hover img {
@@ -301,346 +374,381 @@
         }
 
         .gallery-meta h4 {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 600;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
+            color: var(--apple-text);
+            letter-spacing: -0.015em;
         }
 
         .gallery-meta p {
             font-size: 14px;
-            color: var(--text-secondary);
+            color: var(--apple-muted);
         }
 
-        /* Currency Toggle & Pricing Layout */
+        /* ==========================================================================
+           LIVE CURRENCY TOGGLE & B2B PRICING MATRIX
+           ========================================================================== */
         .pricing-toggle-zone {
             display: flex;
             justify-content: center;
-            margin-bottom: 48px;
+            margin-bottom: 64px;
         }
 
         .pill-toggle {
-            background: var(--bg-secondary);
+            background: var(--apple-secondary-bg);
             padding: 4px;
             border-radius: 980px;
             display: flex;
             gap: 4px;
-            border: 1px solid var(--border);
+            border: 1px solid var(--apple-border);
         }
 
         .toggle-btn {
             background: none;
             border: none;
-            padding: 10px 24px;
-            font-size: 14px;
+            padding: 10px 28px;
+            font-size: 13px;
             font-weight: 500;
-            color: var(--text-secondary);
+            color: var(--apple-muted);
             cursor: pointer;
             border-radius: 980px;
-            transition: var(--transition);
+            transition: var(--apple-transition);
         }
 
         .toggle-btn.active {
             background: #fff;
-            color: var(--text-primary);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            color: var(--luxury-black);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.04);
         }
 
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 32px;
-            max-width: 1000px;
+            max-width: 1050px;
             margin: 0 auto;
         }
 
         .pricing-card {
-            border: 1px solid var(--border);
+            border: 1px solid var(--apple-border);
             padding: 48px;
-            border-radius: var(--radius-lg);
-            transition: var(--transition);
+            border-radius: var(--radius-premium);
+            transition: var(--apple-transition);
             background: #fff;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.01);
         }
 
         .pricing-card:hover {
-            border-color: var(--text-primary);
+            border-color: var(--luxury-black);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.02);
         }
 
         .pricing-card h3 {
             font-size: 22px;
             margin-bottom: 8px;
+            color: var(--luxury-black);
         }
 
         .pricing-card .price-display {
-            font-size: 42px;
+            font-size: 46px;
             font-weight: 700;
-            margin: 24px 0;
-            letter-spacing: -0.04em;
+            margin: 28px 0;
+            letter-spacing: -0.05em;
+            color: var(--luxury-black);
         }
 
         .pricing-features {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 14px;
-            margin-top: 24px;
+            gap: 16px;
+            margin-top: 28px;
+            border-top: 1px solid var(--apple-secondary-bg);
+            padding-top: 24px;
         }
 
         .pricing-features li {
             font-size: 14px;
-            color: var(--text-secondary);
+            color: var(--apple-muted);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .pricing-features li::before {
             content: "—";
-            color: var(--text-primary);
+            color: var(--luxury-black);
         }
 
-        /* Core Specification Checklist */
+        /* ==========================================================================
+           SPECIFICATION & WORKFLOW PHASES
+           ========================================================================== */
         .specs-layout {
             display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 48px;
+            grid-template-columns: 1fr 1.6fr;
+            gap: 64px;
             align-items: start;
         }
 
         .specs-highlight-card {
-            background: var(--bg-secondary);
-            padding: 48px;
-            border-radius: var(--radius-lg);
+            background: var(--apple-secondary-bg);
+            padding: 54px;
+            border-radius: var(--radius-premium);
+            border: 1px solid rgba(0,0,0,0.01);
+        }
+
+        .specs-highlight-card h3 {
+            font-size: 26px;
+            margin-bottom: 18px;
+            color: var(--luxury-black);
         }
 
         .specs-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 32px;
+            gap: 40px;
             list-style: none;
         }
 
         .specs-list li {
             position: relative;
-            padding-left: 24px;
-        }
-
-        .specs-list li::before {
-            content: "—";
-            position: absolute;
-            left: 0;
-            color: var(--text-primary);
         }
 
         .specs-list strong {
-            color: var(--text-primary);
+            color: var(--luxury-black);
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-size: 16px;
+            letter-spacing: -0.015em;
         }
 
         .specs-list p {
             font-size: 14px;
+            color: var(--apple-muted);
         }
 
-        /* Workflow steps */
         .workflow-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 40px;
-            margin-bottom: 48px;
+            gap: 48px;
+            margin-bottom: 54px;
         }
 
         .step-card h4 {
-            font-size: 14px;
-            color: var(--text-primary);
-            margin-bottom: 12px;
+            font-size: 13px;
+            color: var(--luxury-black);
+            margin-bottom: 14px;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.06em;
         }
 
         .billing-banner {
-            background: var(--bg-secondary);
-            padding: 32px;
-            border-radius: var(--radius-lg);
+            background: var(--apple-secondary-bg);
+            padding: 36px;
+            border-radius: var(--radius-premium);
             display: flex;
             align-items: flex-start;
-            gap: 20px;
+            gap: 24px;
+            border: 1px solid var(--apple-border);
         }
 
-        /* Form styling */
+        /* ==========================================================================
+           INTUITIVE SUBMISSION ZONE (GOOGLE UX PLATFORM)
+           ========================================================================== */
         .form-container-box {
-            max-width: 650px;
+            max-width: 680px;
             margin: 0 auto;
             background: #fff;
-            border: 1px solid var(--border);
-            padding: 54px;
-            border-radius: var(--radius-lg);
+            border: 1px solid var(--apple-border);
+            padding: 64px;
+            border-radius: var(--radius-premium);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.01);
         }
 
         .form-group {
-            margin-bottom: 24px;
+            margin-bottom: 28px;
         }
 
         .form-group label {
             display: block;
             font-size: 13px;
-            font-weight: 500;
-            margin-bottom: 8px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--luxury-black);
+            letter-spacing: -0.01em;
         }
 
         .form-control {
             width: 100%;
-            padding: 14px;
-            border: 1px solid var(--border);
-            background: var(--bg-secondary);
-            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid var(--apple-border);
+            background: var(--apple-secondary-bg);
+            border-radius: var(--radius-card);
             font-family: var(--font-main);
             font-size: 15px;
             outline: none;
-            transition: var(--transition);
+            color: var(--apple-text);
+            transition: var(--apple-transition);
         }
 
         .form-control:focus {
             background: #fff;
-            border-color: var(--text-primary);
+            border-color: var(--luxury-black);
+            box-shadow: 0 0 0 4px rgba(0,0,0,0.02);
         }
 
         .checkbox-group {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 12px;
-            margin-top: 8px;
+            gap: 14px;
+            margin-top: 10px;
         }
 
         .checkbox-label {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             font-size: 14px;
-            color: var(--text-secondary);
+            color: var(--apple-text);
             cursor: pointer;
         }
 
         .checkbox-label input {
-            accent-color: var(--text-primary);
+            accent-color: var(--luxury-black);
+            width: 16px;
+            height: 16px;
         }
 
         .dropzone-area {
-            border: 2px dashed var(--border);
-            background: var(--bg-secondary);
-            padding: 40px;
+            border: 1px dashed var(--apple-muted);
+            background: var(--apple-secondary-bg);
+            padding: 48px;
             text-align: center;
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-card);
             cursor: pointer;
-            transition: var(--transition);
+            transition: var(--apple-transition);
         }
 
         .dropzone-area:hover {
-            border-color: var(--text-primary);
+            border-color: var(--luxury-black);
+            background: rgba(0,0,0,0.01);
         }
 
         .submit-btn {
             width: 100%;
-            background: var(--accent);
+            background: var(--luxury-black);
             color: #fff;
             border: none;
-            padding: 16px;
-            border-radius: var(--radius-md);
-            font-size: 15px;
+            padding: 18px;
+            border-radius: var(--radius-card);
+            font-size: 16px;
             font-weight: 500;
             cursor: pointer;
-            transition: var(--transition);
+            transition: var(--apple-transition);
+            margin-top: 12px;
         }
 
         .submit-btn:hover {
-            opacity: 0.95;
+            background: #2d2d2f;
         }
 
         .direct-channels {
             text-align: center;
-            margin-top: 32px;
+            margin-top: 36px;
             font-size: 14px;
+            color: var(--apple-muted);
         }
 
         .direct-channels a {
-            color: var(--text-primary);
+            color: var(--luxury-black);
             text-decoration: none;
             font-weight: 500;
-            border-bottom: 1px solid var(--text-primary);
+            border-bottom: 1px solid var(--luxury-black);
+            transition: var(--apple-transition);
         }
 
-        /* About layout */
+        .direct-channels a:hover {
+            opacity: 0.7;
+        }
+
+        /* About & Editorial Layout */
         .about-layout {
             display: grid;
             grid-template-columns: 1fr 2fr;
-            gap: 60px;
+            gap: 80px;
         }
 
-        .about-layout h2 { font-size: 44px; }
-        .about-content p { font-size: 18px; margin-bottom: 24px; }
+        .about-layout h2 { font-size: 48px; }
+        .about-content p { font-size: 19px; margin-bottom: 28px; color: var(--apple-text); }
 
-        /* Footer Column Layout */
+        /* ==========================================================================
+           PREMIUM CORPORATE FOOTER
+           ========================================================================== */
         footer {
-            padding: 80px 0 40px 0;
-            border-top: 1px solid var(--border);
+            padding: 100px 0 40px 0;
+            border-top: 1px solid var(--apple-border);
+            background: var(--apple-secondary-bg);
         }
 
         .footer-grid {
             display: grid;
-            grid-template-columns: 1.5fr 1fr 1.5fr;
-            gap: 40px;
-            margin-bottom: 60px;
+            grid-template-columns: 1.6fr 1fr 1.6fr;
+            gap: 60px;
+            margin-bottom: 80px;
         }
 
         .footer-col h5 {
             font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 16px;
+            letter-spacing: 0.08em;
+            margin-bottom: 20px;
+            color: var(--luxury-black);
+            font-weight: 600;
         }
 
         .footer-col ul {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         .footer-col a {
             text-decoration: none;
-            color: var(--text-secondary);
+            color: var(--apple-muted);
             font-size: 14px;
-            transition: var(--transition);
+            transition: var(--apple-transition);
         }
 
         .footer-col a:hover {
-            color: var(--text-primary);
+            color: var(--luxury-black);
         }
 
         .footer-bottom {
             text-align: center;
             font-size: 13px;
-            color: var(--text-secondary);
+            color: var(--apple-muted);
             padding-top: 40px;
-            border-top: 1px solid var(--bg-secondary);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         @media (max-width: 768px) {
-            .specs-layout, .about-layout, .footer-grid { grid-template-columns: 1fr; gap: 40px; }
-            .hero h1 { font-size: 38px; }
-            .form-container-box { padding: 30px 20px; }
+            .specs-layout, .about-layout, .footer-grid { grid-template-columns: 1fr; gap: 48px; }
+            .hero h1 { font-size: 42px; }
+            .form-container-box { padding: 40px 24px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Transparent Fixed Header -->
+    <!-- Transparent Glassmorphism Header -->
     <nav>
         <div class="container">
             <div class="nav-container">
                 <a href="#" class="logo">lavientra studio</a>
                 <ul class="nav-links">
-                    <li><a href="#slider-section">showcase</a></li>
+                    <li><a href="#showcase">showcase</a></li>
                     <li><a href="#standards">standards</a></li>
                     <li><a href="#portfolio">portfolio</a></li>
                     <li><a href="#pricing">pricing</a></li>
@@ -651,7 +759,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero reveal-section">
         <div class="container">
             <h1>High-Precision 2D Floor Plans Drawn for the UK & AUS Real Estate Markets.</h1>
             <p>Turn your rough sketches into print and web-ready layouts within 24 hours. Every plan is drawn strictly following RICS Standards (UK) and Property Council Guidelines (AUS)—clean, precise, and custom-branded to your agency.</p>
@@ -659,8 +767,8 @@
         </div>
     </section>
 
-    <!-- Dynamic Slider Section -->
-    <section id="slider-section" class="section" style="padding-top: 40px;">
+    <!-- Before/After Slider Showcase -->
+    <section id="showcase" class="section reveal-section">
         <div class="container">
             <div class="section-header">
                 <h2>Precision Refined.</h2>
@@ -679,8 +787,8 @@
         </div>
     </section>
 
-    <!-- Core Standards Section (Placed early according to UX framework) -->
-    <section id="standards" class="section">
+    <!-- Core Standards & Compliance Section -->
+    <section id="standards" class="section reveal-section">
         <div class="container">
             <div class="section-header">
                 <h2>Core Standards & Services.</h2>
@@ -711,8 +819,8 @@
         </div>
     </section>
 
-    <!-- Filterless Continuous Master Portfolio -->
-    <section id="portfolio" class="section">
+    <!-- Continuous Architectural Portfolio -->
+    <section id="portfolio" class="section reveal-section">
         <div class="container">
             <div class="section-header">
                 <h2>Our Portfolio.</h2>
@@ -766,8 +874,8 @@
         </div>
     </section>
 
-    <!-- Pricing Section with Real-Time Toggle -->
-    <section id="pricing" class="section">
+    <!-- Premium B2B Pricing Zone with Live Real-Time Currency Toggle -->
+    <section id="pricing" class="section reveal-section">
         <div class="container">
             <div class="section-header">
                 <h2>Transparent Pricing.</h2>
@@ -782,7 +890,6 @@
             </div>
 
             <div class="pricing-grid">
-                <!-- Card 1 -->
                 <div class="pricing-card">
                     <h3>Standard Layouts</h3>
                     <p>B&W, Color Zoned, or Furnished styles</p>
@@ -793,7 +900,6 @@
                         <li>24-Hour Standard Pipeline Delivery</li>
                     </ul>
                 </div>
-                <!-- Card 2 -->
                 <div class="pricing-card">
                     <h3>Advanced Layouts</h3>
                     <p>Commercial, Complex, or Site Plans</p>
@@ -804,7 +910,6 @@
                         <li>Full Perimeter Detail Mapping</li>
                     </ul>
                 </div>
-                <!-- Card 3 -->
                 <div class="pricing-card">
                     <h3>6-Hour Express Add-on</h3>
                     <p>Priority drafting pipeline bypass</p>
@@ -819,8 +924,8 @@
         </div>
     </section>
 
-    <!-- Core Specs Checklist Section -->
-    <section class="section">
+    <!-- Zero Compromise Checklist Specifications -->
+    <section class="section reveal-section">
         <div class="container">
             <div class="specs-layout">
                 <div class="specs-highlight-card">
@@ -859,8 +964,8 @@
         </div>
     </section>
 
-    <!-- Workflow Section -->
-    <section class="section">
+    <!-- Pipeline Workflow Section -->
+    <section class="section reveal-section">
         <div class="container">
             <div class="section-header">
                 <h2>The Workflow.</h2>
@@ -884,14 +989,14 @@
                 <span style="font-size: 24px;">💼</span>
                 <div>
                     <strong style="display: block; margin-bottom: 6px; font-size: 16px;">For High-Volume & Regular Agencies:</strong>
-                    <p style="font-size: 14px;">We offer a hassle-free Weekly Billing System. We track every plan we draw for you throughout the week and bill your agency every single Friday. No daily invoices, just smooth workflow.</p>
+                    <p style="font-size: 14px; color: var(--apple-text);">We offer a hassle-free Weekly Billing System. We track every plan we draw for you throughout the week and bill your agency every single Friday. No daily invoices, just smooth workflow.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Project Intake Form Zone -->
-    <section id="upload" class="section">
+    <!-- Project Intake Google Form UX Engine -->
+    <section id="upload" class="section reveal-section">
         <div class="container">
             <div class="section-header">
                 <h2>Ready to Start? Send Your Sketch.</h2>
@@ -899,7 +1004,6 @@
             </div>
 
             <div class="form-container-box">
-                <!-- Replace with your Formspree Endpoint link later to get emails -->
                 <form id="projectIntakeForm" action="https://formspree.io/f/YOUR_ENDPOINT_HERE" method="POST">
                     <div class="form-group">
                         <label for="fullName">Full Name</label>
@@ -963,8 +1067,8 @@
         </div>
     </section>
 
-    <!-- About Company Narrative Section -->
-    <section id="about" class="section">
+    <!-- About Section -->
+    <section class="section reveal-section">
         <div class="container">
             <div class="about-layout">
                 <div>
@@ -978,18 +1082,18 @@
         </div>
     </section>
 
-    <!-- Refined B2B Footer Layout -->
+    <!-- Luxury B2B Footer -->
     <footer>
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <h5 style="font-weight: 600;">lavientra studio</h5>
+                    <h5>lavientra studio</h5>
                     <p style="font-size: 14px; margin-top: 10px;">Strategic to Lead. Design to Attract.</p>
                 </div>
                 <div class="footer-col">
                     <h5>Quick Navigation</h5>
                     <ul>
-                        <li><a href="#slider-section">Showcase</a></li>
+                        <li><a href="#showcase">Showcase</a></li>
                         <li><a href="#standards">Standards</a></li>
                         <li><a href="#portfolio">Portfolio</a></li>
                         <li><a href="#pricing">Pricing</a></li>
@@ -999,53 +1103,51 @@
                     <h5>Direct Channels</h5>
                     <ul>
                         <li><a href="mailto:hello@thivanka.com">Email: hello@thivanka.com</a></li>
-                        <li><a href="https://wa.me/YOUR_PHONE_NUMBER" target="_blank">WhatsApp Chat Support</a></li>
+                        <li><a href="https://wa.me/YOUR_PHONE_NUMBER" target="_blank">WhatsApp Corporate Support</a></li>
                         <li><a href="https://instagram.com/lavientra.studio" target="_blank">Instagram: @lavientra.studio</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
                 <p style="margin-bottom: 8px;">&copy; 2026 Lavientra Studio. All rights reserved.</p>
-                <p style="font-size: 11px; opacity: 0.7;">Operating on UK & AUS time zones to ensure seamless overnight delivery. All floor plans are independently drafted to match local marketing standards.</p>
+                <p style="font-size: 11px; opacity: 0.6;">Operating on UK & AUS time zones to ensure seamless overnight delivery. All floor plans are independently drafted to match local marketing standards.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Interactive JavaScript Engine -->
+    <!-- Premium Interactive Scripting Engine -->
     <script>
-        // Before/After Image Comparison Slider Logic
+        // Before/After Image Slider Tracking Logic
         const sliderRange = document.getElementById('sliderRange');
         const afterImg = document.getElementById('afterImg');
         const sliderLine = document.getElementById('sliderLine');
         const sliderContainer = document.getElementById('sliderContainer');
 
-        function updateSliderPosition() {
+        function updateSlider() {
             const val = sliderRange.value;
             afterImg.style.width = val + '%';
             sliderLine.style.left = val + '%';
         }
 
-        sliderRange.addEventListener('input', updateSliderPosition);
+        sliderRange.addEventListener('input', updateSlider);
 
         window.addEventListener('resize', () => {
-            const currentWidth = sliderContainer.offsetWidth;
+            const containerWidth = sliderContainer.offsetWidth;
             const absoluteImg = afterImg.querySelector('img');
-            if (absoluteImg) absoluteImg.style.width = currentWidth + 'px';
+            if (absoluteImg) absoluteImg.style.width = containerWidth + 'px';
         });
         
-        // Real-Time Currency Converter Logic (Pegged to USD base price)
-        // Adjust your base prices here (in USD):
+        // Base Rates in USD (Modify these to set your packages)
         const baseUSD = {
-            standard: 40.00,
-            advanced: 80.00,
-            express: 25.00
+            standard: 35.00,
+            advanced: 75.00,
+            express: 20.00
         };
 
         let currentMarket = 'uk';
-        let exchangeRates = { GBP: 0.78, AUD: 1.52 }; // Default fallbacks
+        let exchangeRates = { GBP: 0.78, AUD: 1.52 }; // Premium baseline fallbacks
 
-        // Fetch live global market exchange rates
-        async function fetchLiveRates() {
+        async function fetchLiveExchangeRates() {
             try {
                 const res = await fetch('https://open.er-api.com/v6/latest/USD');
                 const data = await res.json();
@@ -1054,8 +1156,8 @@
                     exchangeRates.AUD = data.rates.AUD || exchangeRates.AUD;
                     updatePricingDisplay();
                 }
-            } catch (error) {
-                console.log("Currency API offline, using fallback premium matrix calculations.", error);
+            } catch (e) {
+                console.log("Banking exchange server offline, routing fallback premiums.", e);
                 updatePricingDisplay();
             }
         }
@@ -1076,8 +1178,8 @@
             document.getElementById('price-express').textContent = '+' + symbol + (baseUSD.express * rate).toFixed(2);
         }
 
-        // Initialize Engine
-        fetchLiveRates();
+        // Initialize Engines
+        fetchLiveExchangeRates();
         window.dispatchEvent(new Event('resize'));
     </script>
 </body>
