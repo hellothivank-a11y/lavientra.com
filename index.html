@@ -20,13 +20,11 @@
         :root {
             --apple-bg: #ffffff;
             --apple-secondary-bg: #f5f5f7;
-            --apple-text: #1d1d1f;        /* Apple Signature Dark Gray */
-            --apple-muted: #86868b;       /* Apple Signature Muted Gray */
-            --apple-border: rgba(0, 0, 0, 0.08);
+            --apple-text: #1d1d1f;
+            --apple-muted: #515154; /* Darkened for much better visibility */
+            --apple-border: rgba(0, 0, 0, 0.1);
             --luxury-black: #000000;
             --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            
-            /* Ultra-smooth Bezier Curve for High-End Cinematic Transitions */
             --apple-bezier: cubic-bezier(0.25, 1, 0.5, 1);
             --radius-premium: 24px;
             --radius-card: 16px;
@@ -45,10 +43,10 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Typography Hierarchy with Intentional Negative Letter-Spacing */
+        /* Typography */
         h1 {
             font-weight: 700;
-            font-size: clamp(38px, 5vw, 58px);
+            font-size: clamp(42px, 6vw, 64px); 
             letter-spacing: -0.03em;
             line-height: 1.1;
             color: var(--luxury-black);
@@ -56,24 +54,24 @@
 
         h2 {
             font-weight: 700;
-            font-size: clamp(28px, 4vw, 40px);
+            font-size: clamp(28px, 4vw, 42px);
             letter-spacing: -0.025em;
             line-height: 1.15;
             color: var(--luxury-black);
         }
 
         h3 {
-            font-weight: 600;
+            font-weight: 700; /* Increased thickness */
             font-size: 22px;
             letter-spacing: -0.02em;
             color: var(--luxury-black);
         }
 
         p {
-            font-weight: 400;
+            font-weight: 500; /* Increased thickness for better readability */
             color: var(--apple-muted);
-            line-height: 1.6;
-            font-size: 16px;
+            line-height: 1.65;
+            font-size: 17px;
             letter-spacing: -0.01em;
         }
 
@@ -84,9 +82,7 @@
             padding: 0 24px;
         }
 
-        /* ==========================================================================
-           CINEMATIC SCROLL REVEAL ENGINE (APPLE STYLE ANIMATION)
-           ========================================================================== */
+        /* Cinematic Scroll Reveal Engine */
         .reveal-node {
             opacity: 0;
             transform: translateY(40px);
@@ -99,21 +95,18 @@
             transform: translateY(0);
         }
 
-        /* Delay utilities for sequential element rendering */
         .delay-1 { transition-delay: 0.1s; }
         .delay-2 { transition-delay: 0.2s; }
         .delay-3 { transition-delay: 0.3s; }
 
-        /* ==========================================================================
-           NAVIGATION BAR (GLASSMORPHISM & LOGO INTEGRATION)
-           ========================================================================== */
+        /* Navigation Bar */
         nav {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 52px;
-            background: rgba(255, 255, 255, 0.72);
+            height: 56px;
+            background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border-bottom: 1px solid var(--apple-border);
@@ -151,7 +144,7 @@
             text-decoration: none;
             color: var(--apple-muted);
             font-size: 13px;
-            font-weight: 400;
+            font-weight: 500; /* Increased thickness */
             letter-spacing: -0.01em;
             transition: color 0.3s ease;
         }
@@ -163,49 +156,89 @@
         .nav-cta {
             background: var(--luxury-black);
             color: #fff !important;
-            padding: 6px 16px;
+            padding: 8px 18px;
             border-radius: 980px;
             font-size: 13px !important;
-            font-weight: 500 !important;
-            transition: var(--apple-transition);
+            font-weight: 600 !important;
+            transition: all 0.3s ease;
         }
 
         .nav-cta:hover {
-            opacity: 0.85;
+            background: #2d2d2f;
             transform: scale(1.02);
         }
 
-        /* ==========================================================================
-           HERO SECTION
-           ========================================================================== */
+        /* Hero Section */
         .hero {
-            padding: 200px 0 120px 0;
+            padding: 220px 0 140px 0;
             text-align: center;
         }
 
         .hero h1 {
-            max-width: 880px;
-            margin: 0 auto 28px auto;
+            max-width: 800px;
+            margin: 0 auto 24px auto;
         }
 
         .hero p {
-            font-size: 21px;
-            max-width: 680px;
+            font-size: 20px;
+            max-width: 720px;
             margin: 0 auto 48px auto;
         }
 
-        /* ==========================================================================
-           BEFORE/AFTER SLIDER (APPLE CONTROL ELEMENT INTEGRATION)
-           ========================================================================== */
+        .btn-primary {
+            display: inline-block;
+            background: var(--luxury-black);
+            color: #fff;
+            text-decoration: none;
+            padding: 16px 36px;
+            border-radius: 980px;
+            font-size: 16px;
+            font-weight: 600; /* Thicker button text */
+            letter-spacing: 0.02em;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #2d2d2f;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Sections General Spacing */
+        .section {
+            padding: 160px 0; /* Massive padding to ensure sections never overlap */
+            border-top: 1px solid var(--apple-border);
+            position: relative;
+            clear: both;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px; /* Extra space below headers */
+        }
+
+        .section-header h2 {
+            margin-bottom: 16px;
+        }
+
+        .section-header p {
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* Before/After Slider (BULLETPROOF HEIGHT FIX) */
         .slider-wrapper {
             max-width: 960px;
-            margin: 0 auto;
+            margin: 0 auto 60px auto; /* Added bottom margin */
             position: relative;
-            aspect-ratio: 16/10;
+            width: 100%;
+            height: 0;
+            padding-bottom: 62.5%; /* Forces exactly 16:10 aspect ratio without collapsing */
             border-radius: var(--radius-premium);
             overflow: hidden;
             box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.08);
             border: 1px solid var(--apple-border);
+            background: var(--apple-secondary-bg);
         }
 
         .slider-img {
@@ -221,6 +254,7 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            color: transparent;
         }
 
         .img-before { z-index: 1; }
@@ -248,6 +282,17 @@
             cursor: ew-resize;
         }
 
+        .slider-input::-webkit-slider-thumb,
+        .slider-input::-moz-range-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 40px;
+            height: 100vh;
+            background: transparent; 
+            cursor: ew-resize;
+            border: none;
+        }
+
         .slider-line {
             position: absolute;
             left: 50%;
@@ -259,14 +304,13 @@
             pointer-events: none;
         }
 
-        /* Apple High-End Handle Integration */
         .slider-handle-badge {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             background: #ffffff;
             border-radius: 50%;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.04);
@@ -275,19 +319,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 15px;
+            font-weight: 700;
             color: var(--luxury-black);
             letter-spacing: -0.05em;
         }
 
-        /* ==========================================================================
-           CORE STANDARDS (BALANCED 2X2 SYMMETRY UPGRADE)
-           ========================================================================== */
+        /* Core Standards Grid */
         .standards-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* Enforces perfect balanced columns */
-            gap: 64px 48px;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 100px 60px; /* Massive breathing room between items */
+            margin-bottom: 40px;
         }
 
         .standard-card {
@@ -297,8 +340,8 @@
         }
 
         .standard-num {
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 700; /* Thicker numbers */
             color: var(--luxury-black);
             margin-bottom: 16px;
             display: block;
@@ -307,17 +350,15 @@
         }
 
         .standard-card h3 {
-            font-size: 24px;
+            font-size: 26px; /* Slightly larger headings */
             margin-bottom: 16px;
         }
 
-        /* ==========================================================================
-           CONTINUOUS PORTFOLIO EDITORIAL GALLERY
-           ========================================================================== */
+        /* Portfolio */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 56px 32px;
+            gap: 64px 32px;
         }
 
         .gallery-item {
@@ -331,7 +372,7 @@
             border-radius: var(--radius-premium);
             overflow: hidden;
             aspect-ratio: 4/3;
-            border: 1px solid rgba(0, 0, 0, 0.01);
+            border: 1px solid rgba(0, 0, 0, 0.02);
             margin-bottom: 22px;
         }
 
@@ -339,24 +380,23 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: var(--apple-transition);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            color: transparent;
         }
 
         .gallery-item:hover img {
-            transform: scale(1.012);
+            transform: scale(1.02);
         }
 
         .gallery-meta h4 {
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 19px; /* Thicker */
+            font-weight: 700;
             margin-bottom: 6px;
-            color: var(--apple-text);
+            color: var(--luxury-black);
             letter-spacing: -0.02em;
         }
 
-        /* ==========================================================================
-           TRIPLE MATRIX PRICING ENGINE (Live USD Conversion Integration)
-           ========================================================================== */
+        /* Pricing Section */
         .pricing-toggle-zone {
             display: flex;
             justify-content: center;
@@ -376,12 +416,12 @@
             background: none;
             border: none;
             padding: 10px 26px;
-            font-size: 13px;
-            font-weight: 500;
+            font-size: 14px;
+            font-weight: 600; /* Thicker */
             color: var(--apple-muted);
             cursor: pointer;
             border-radius: 980px;
-            transition: var(--apple-transition);
+            transition: all 0.3s ease;
         }
 
         .toggle-btn.active {
@@ -402,7 +442,7 @@
             border: 1px solid var(--apple-border);
             padding: 48px;
             border-radius: var(--radius-premium);
-            transition: var(--apple-transition);
+            transition: all 0.4s ease;
             background: #fff;
         }
 
@@ -429,7 +469,8 @@
         }
 
         .pricing-features li {
-            font-size: 14px;
+            font-size: 15px;
+            font-weight: 500;
             color: var(--apple-muted);
             display: flex;
             align-items: center;
@@ -441,7 +482,7 @@
             color: var(--luxury-black);
         }
 
-        /* Specs & Zero Compromise Grid */
+        /* Specs Grid */
         .specs-layout {
             display: grid;
             grid-template-columns: 1fr 1.6fr;
@@ -455,38 +496,32 @@
             border-radius: var(--radius-premium);
         }
 
-        .specs-highlight-card h3 {
-            font-size: 26px;
-            margin-bottom: 18px;
-            color: var(--luxury-black);
-        }
-
         .specs-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 40px;
+            gap: 48px;
             list-style: none;
         }
 
         .specs-list strong {
             color: var(--luxury-black);
             display: block;
-            margin-bottom: 8px;
-            font-size: 16px;
+            margin-bottom: 10px;
+            font-size: 17px;
+            font-weight: 700;
         }
 
-        .specs-list p { font-size: 14px; }
-
-        /* Workflow Phase Channels */
+        /* Workflow */
         .workflow-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 48px;
-            margin-bottom: 54px;
+            margin-bottom: 64px;
         }
 
         .step-card h4 {
-            font-size: 13px;
+            font-size: 14px;
+            font-weight: 700;
             color: var(--luxury-black);
             margin-bottom: 14px;
             text-transform: uppercase;
@@ -503,7 +538,7 @@
             border: 1px solid var(--apple-border);
         }
 
-        /* Intake Pipeline Form */
+        /* Form */
         .form-container-box {
             max-width: 680px;
             margin: 0 auto;
@@ -519,8 +554,8 @@
 
         .form-group label {
             display: block;
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 14px;
+            font-weight: 700;
             margin-bottom: 10px;
             color: var(--luxury-black);
         }
@@ -533,9 +568,10 @@
             border-radius: var(--radius-card);
             font-family: var(--font-main);
             font-size: 15px;
+            font-weight: 500;
             outline: none;
-            color: var(--apple-text);
-            transition: var(--apple-transition);
+            color: var(--luxury-black);
+            transition: all 0.3s ease;
         }
 
         .form-control:focus {
@@ -546,19 +582,20 @@
         .checkbox-group {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 14px;
-            margin-top: 10px;
+            gap: 16px;
+            margin-top: 12px;
         }
 
         .checkbox-label {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 14px;
+            font-size: 15px;
+            font-weight: 500;
             cursor: pointer;
         }
 
-        .checkbox-label input { accent-color: var(--luxury-black); width: 16px; height: 16px; }
+        .checkbox-label input { accent-color: var(--luxury-black); width: 18px; height: 18px; }
 
         .dropzone-area {
             border: 1px dashed var(--apple-muted);
@@ -576,17 +613,18 @@
             border: none;
             padding: 18px;
             border-radius: var(--radius-card);
-            font-size: 16px;
-            font-weight: 500;
+            font-size: 17px;
+            font-weight: 600;
             cursor: pointer;
-            transition: var(--apple-transition);
+            transition: all 0.3s ease;
         }
 
         .submit-btn:hover { background: #2d2d2f; }
-        .direct-channels { text-align: center; margin-top: 36px; font-size: 14px; }
-        .direct-channels a { color: var(--luxury-black); text-decoration: none; font-weight: 500; border-bottom: 1px solid var(--luxury-black); }
+        
+        .direct-channels { text-align: center; margin-top: 40px; font-size: 15px; font-weight: 500; }
+        .direct-channels a { color: var(--luxury-black); text-decoration: none; font-weight: 700; border-bottom: 2px solid var(--luxury-black); }
 
-        /* About & Brand Narrative Section */
+        /* About */
         .about-layout {
             display: grid;
             grid-template-columns: 1fr 2fr;
@@ -594,9 +632,9 @@
         }
 
         .about-layout h2 { font-size: 48px; }
-        .about-content p { font-size: 19px; margin-bottom: 28px; color: var(--apple-text); }
+        .about-content p { font-size: 20px; margin-bottom: 28px; color: var(--apple-text); }
 
-        /* Refined Editorial Footer */
+        /* Footer */
         footer {
             padding: 100px 0 40px 0;
             border-top: 1px solid var(--apple-border);
@@ -611,37 +649,35 @@
         }
 
         .footer-col h5 {
-            font-size: 12px;
+            font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             margin-bottom: 20px;
             color: var(--luxury-black);
-            font-weight: 600;
+            font-weight: 700;
         }
 
-        .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-        .footer-col a { text-decoration: none; color: var(--apple-muted); font-size: 14px; transition: color 0.3s ease; }
+        .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+        .footer-col a { text-decoration: none; color: var(--apple-muted); font-size: 15px; font-weight: 500; transition: color 0.3s ease; }
         .footer-col a:hover { color: var(--luxury-black); }
-        .footer-bottom { text-align: center; font-size: 13px; color: var(--apple-muted); padding-top: 40px; border-top: 1px solid rgba(0, 0, 0, 0.05); }
+        .footer-bottom { text-align: center; font-size: 14px; font-weight: 500; color: var(--apple-muted); padding-top: 40px; border-top: 1px solid rgba(0, 0, 0, 0.05); }
 
         @media (max-width: 900px) {
-            .standards-grid { grid-template-columns: 1fr; gap: 40px; }
+            .standards-grid { grid-template-columns: 1fr; gap: 60px; }
         }
 
         @media (max-width: 768px) {
             .specs-layout, .about-layout, .footer-grid { grid-template-columns: 1fr; gap: 48px; }
-            .hero h1 { font-size: 40px; }
-            .nav-right-block { display: none; } /* Mobile optimization placeholder */
+            .nav-right-block { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Transparent Glassmorphism Header with Custom Logo Asset -->
+    <!-- Navigation -->
     <nav>
         <div class="container">
             <div class="nav-container">
-                <!-- Points correctly to your newly uploaded logo file -->
                 <a href="#"><img src="assets/main-logo.svg" alt="lavientra studio" class="nav-logo-img"></a>
                 <div class="nav-right-block">
                     <ul class="nav-links">
@@ -659,14 +695,14 @@
     <!-- Hero Section -->
     <section class="hero reveal-node">
         <div class="container">
-            <h1>High-Precision 2D Floor Plans Drawn for the UK & AUS Real Estate Markets.</h1>
-            <p>Turn your rough sketches into print and web-ready layouts within 24 hours. Every plan is drawn strictly following RICS Standards (UK) and Property Council Guidelines (AUS)—clean, precise, and custom-branded to your agency.</p>
-            <a href="#upload" class="btn-primary">Submit a Sketch — Get a Free Quote &rarr;</a>
+            <h1>High-Precision 2D Floor Plans.</h1>
+            <p>Drafted exclusively for UK & AUS real estate markets. Turn rough sketches into marketing-ready, RICS-compliant layouts within 24 hours.</p>
+            <a href="#upload" class="btn-primary">Submit Sketch</a>
         </div>
     </section>
 
-    <!-- Before/After Slider Showcase (With Integrated Apple Style Handle) -->
-    <section id="showcase" class="section reveal-node">
+    <!-- Before/After Slider -->
+    <section id="showcase" class="section reveal-node" style="padding-top: 0; border-top: none;">
         <div class="container">
             <div class="section-header">
                 <h2>Precision Refined.</h2>
@@ -674,20 +710,19 @@
             </div>
             <div class="slider-wrapper" id="sliderContainer">
                 <div class="slider-img img-before">
-                    <img src="assets/sketch-before.webp" alt="Rough Hand Sketch Draft">
+                    <img src="assets/sketch-before.webp" alt="Draft">
                 </div>
                 <div class="slider-img img-after" id="afterImg">
-                    <img src="assets/plan-after.webp" alt="Finished CAD Document Layout">
+                    <img src="assets/plan-after.webp" alt="CAD">
                 </div>
                 <div class="slider-line" id="sliderLine"></div>
-                <!-- Dynamic White Circular Dial Indicator Overlay -->
                 <div class="slider-handle-badge" id="sliderHandleIcon">&larr;&rarr;</div>
                 <input type="range" min="0" max="100" value="50" class="slider-input" id="sliderRange">
             </div>
         </div>
     </section>
 
-    <!-- Core Standards (Upgraded to Symmetry 2x2 Clean Metric) -->
+    <!-- Core Standards -->
     <section id="standards" class="section reveal-node">
         <div class="container">
             <div class="section-header">
@@ -719,7 +754,7 @@
         </div>
     </section>
 
-    <!-- Continuous Master Portfolio Magazine Grid -->
+    <!-- Portfolio Section -->
     <section id="portfolio" class="section reveal-node">
         <div class="container">
             <div class="section-header">
@@ -729,42 +764,42 @@
 
             <div class="gallery-grid">
                 <div class="gallery-item reveal-node delay-1">
-                    <div class="gallery-img-container"><img src="assets/portfolio-bw.webp" alt="Standard B&W Plan"></div>
+                    <div class="gallery-img-container"><img src="assets/portfolio-bw.webp" alt="Plan"></div>
                     <div class="gallery-meta">
                         <h4>Standard Editorial B&W</h4>
                         <p>High-contrast vector lineage, ideal for traditional print brochures.</p>
                     </div>
                 </div>
                 <div class="gallery-item reveal-node delay-2">
-                    <div class="gallery-img-container"><img src="assets/portfolio-color.webp" alt="Color Zone Plan"></div>
+                    <div class="gallery-img-container"><img src="assets/portfolio-color.webp" alt="Plan"></div>
                     <div class="gallery-meta">
                         <h4>Color Zoned Marketing Layout</h4>
                         <p>Soft color-coded zones to help buyers visualize property flow instantly.</p>
                     </div>
                 </div>
                 <div class="gallery-item reveal-node delay-3">
-                    <div class="gallery-img-container"><img src="assets/portfolio-furniture.webp" alt="Furniture Add"></div>
+                    <div class="gallery-img-container"><img src="assets/portfolio-furniture.webp" alt="Plan"></div>
                     <div class="gallery-meta">
                         <h4>Premium Furnished Space</h4>
                         <p>Includes accurate, modern CAD blocks to showcase property scale and potential.</p>
                     </div>
                 </div>
                 <div class="gallery-item reveal-node delay-1">
-                    <div class="gallery-img-container"><img src="assets/portfolio-commercial.webp" alt="Commercial Building"></div>
+                    <div class="gallery-img-container"><img src="assets/portfolio-commercial.webp" alt="Plan"></div>
                     <div class="gallery-meta">
                         <h4>Commercial Property Specification</h4>
                         <p>Drafted cleanly to showcase complex corporate layouts and massive square footage.</p>
                     </div>
                 </div>
                 <div class="gallery-item reveal-node delay-2">
-                    <div class="gallery-img-container"><img src="assets/portfolio-complex.webp" alt="Complex Drawing"></div>
+                    <div class="gallery-img-container"><img src="assets/portfolio-complex.webp" alt="Plan"></div>
                     <div class="gallery-meta">
                         <h4>Complex Multi-Level Blueprint</h4>
                         <p>Absolute geometrical precision for intricate layouts, split-levels, and period properties.</p>
                     </div>
                 </div>
                 <div class="gallery-item reveal-node delay-3">
-                    <div class="gallery-img-container"><img src="assets/portfolio-siteplan.webp" alt="Site Plan"></div>
+                    <div class="gallery-img-container"><img src="assets/portfolio-siteplan.webp" alt="Plan"></div>
                     <div class="gallery-meta">
                         <h4>Overall Site & Boundary Layout</h4>
                         <p>Clear mapping of external perimeters, gardens, and outbuildings.</p>
@@ -774,7 +809,7 @@
         </div>
     </section>
 
-    <!-- Premium B2B Pricing Engine (Upgraded to Triple Currency Architecture) -->
+    <!-- Pricing Section -->
     <section id="pricing" class="section reveal-node">
         <div class="container">
             <div class="section-header">
@@ -825,7 +860,7 @@
         </div>
     </section>
 
-    <!-- Zero Compromise Checklist -->
+    <!-- Zero Compromise -->
     <section class="section reveal-node">
         <div class="container">
             <div class="specs-layout">
@@ -865,7 +900,7 @@
         </div>
     </section>
 
-    <!-- Pipeline Workflow -->
+    <!-- Workflow -->
     <section class="section reveal-node">
         <div class="container">
             <div class="section-header">
@@ -890,13 +925,13 @@
                 <span style="font-size: 24px;">💼</span>
                 <div>
                     <strong style="display: block; margin-bottom: 6px; font-size: 16px;">For High-Volume & Regular Agencies:</strong>
-                    <p style="font-size: 14px;">We offer a hassle-free Weekly Billing System. We track every plan we draw for you throughout the week and bill your agency every single Friday. No daily invoices, just smooth workflow.</p>
+                    <p style="font-size: 15px; color: var(--apple-muted);">We offer a hassle-free Weekly Billing System. We track every plan we draw for you throughout the week and bill your agency every single Friday. No daily invoices, just smooth workflow.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Project Intake Google UX Form -->
+    <!-- Form -->
     <section id="upload" class="section reveal-node">
         <div class="container">
             <div class="section-header">
@@ -910,12 +945,10 @@
                         <label for="fullName">Full Name</label>
                         <input type="text" name="name" id="fullName" class="form-control" placeholder="e.g. Thomas Sterling" required>
                     </div>
-                    
                     <div class="form-group">
                         <label for="agencyEmail">Agency Name / Email</label>
                         <input type="email" name="email" id="agencyEmail" class="form-control" placeholder="e.g. contact@aspectstudios.co.uk" required>
                     </div>
-
                     <div class="form-group">
                         <label for="targetCountry">Target Country</label>
                         <select name="country" id="targetCountry" class="form-control">
@@ -923,7 +956,6 @@
                             <option value="Australia">Australia</option>
                         </select>
                     </div>
-
                     <div class="form-group">
                         <label for="serviceNeeded">Service Needed</label>
                         <select name="service" id="serviceNeeded" class="form-control">
@@ -932,7 +964,6 @@
                             <option value="General Inquiry">General Inquiry / Question</option>
                         </select>
                     </div>
-
                     <div class="form-group">
                         <label>Plan Style Required</label>
                         <div class="checkbox-group">
@@ -944,7 +975,6 @@
                             <label class="checkbox-label"><input type="checkbox" name="style" value="Site Plan"> Site Plan</label>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label>Upload Files (Sketches / Blueprints)</label>
                         <div class="dropzone-area" onclick="document.getElementById('sketchFiles').click()">
@@ -952,15 +982,12 @@
                             <input type="file" id="sketchFiles" style="display: none;" multiple>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="instructions">Message / Special Instructions</label>
                         <textarea name="message" id="instructions" class="form-control" rows="4" placeholder="Mention any custom specifications or color code rules..."></textarea>
                     </div>
-
                     <button type="submit" class="submit-btn">Send to Lavientra Studio</button>
                 </form>
-
                 <div class="direct-channels">
                     <p>Prefer a direct conversation? Skip the form and chat via <a href="https://wa.me/YOUR_PHONE_NUMBER" target="_blank">WhatsApp</a> or email <a href="mailto:hello@thivanka.com">hello@thivanka.com</a></p>
                 </div>
@@ -968,8 +995,8 @@
         </div>
     </section>
 
-    <!-- About Company Narrative Section -->
-    <section id="about" class="section reveal-node">
+    <!-- About -->
+    <section class="section reveal-node">
         <div class="container">
             <div class="about-layout">
                 <div>
@@ -983,7 +1010,7 @@
         </div>
     </section>
 
-    <!-- Refined Editorial Footer Layout -->
+    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-grid">
@@ -1011,14 +1038,13 @@
             </div>
             <div class="footer-bottom">
                 <p style="margin-bottom: 8px;">&copy; 2026 Lavientra Studio. All rights reserved.</p>
-                <p style="font-size: 11px; opacity: 0.6;">Operating on UK & AUS time zones to ensure seamless overnight delivery. All floor plans are independently drafted to match local marketing standards.</p>
+                <p style="font-size: 12px; font-weight: 500; opacity: 0.7;">Operating on UK & AUS time zones to ensure seamless overnight delivery. All floor plans are independently drafted to match local marketing standards.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Premium Core Interactive Scripting Engine -->
+    <!-- Scripts -->
     <script>
-        // Before/After Image Slider Control Elements Logic
         const sliderRange = document.getElementById('sliderRange');
         const afterImg = document.getElementById('afterImg');
         const sliderLine = document.getElementById('sliderLine');
@@ -1032,15 +1058,19 @@
             sliderHandleIcon.style.left = val + '%';
         }
 
+        // Initialize at 50%
+        updateSlider();
+        
         sliderRange.addEventListener('input', updateSlider);
-
+        
+        // Ensure inner image tracks wrapper width dynamically across all devices
         window.addEventListener('resize', () => {
             const containerWidth = sliderContainer.offsetWidth;
             const absoluteImg = afterImg.querySelector('img');
             if (absoluteImg) absoluteImg.style.width = containerWidth + 'px';
         });
 
-        // Cinematic Apple Reveal Animations Engine (Intersection Observer Setup)
+        // Cinematic Animations System
         const observeOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -1049,10 +1079,9 @@
                 }
             });
         }, observeOptions);
-
         document.querySelectorAll('.reveal-node').forEach(node => observer.observe(node));
         
-        // Base Rates Spec Matrix (USD Baseline System)
+        // Premium Pricing Conversion Engine
         const baseUSD = { standard: 35.00, advanced: 75.00, express: 20.00 };
         let currentMarket = 'uk';
         let exchangeRates = { GBP: 0.78, AUD: 1.52, USD: 1.00 }; 
@@ -1067,7 +1096,6 @@
                     updatePricingDisplay();
                 }
             } catch (e) {
-                console.log("Banking network exchange lag, deploying cache baseline values.", e);
                 updatePricingDisplay();
             }
         }
@@ -1083,18 +1111,17 @@
         function updatePricingDisplay() {
             let symbol = '$';
             let rate = exchangeRates.USD;
-
             if (currentMarket === 'uk') { symbol = '£'; rate = exchangeRates.GBP; }
             else if (currentMarket === 'aus') { symbol = '$'; rate = exchangeRates.AUD; }
-
             document.getElementById('price-standard').textContent = symbol + (baseUSD.standard * rate).toFixed(2);
             document.getElementById('price-advanced').textContent = symbol + (baseUSD.advanced * rate).toFixed(2);
             document.getElementById('price-express').textContent = '+' + symbol + (baseUSD.express * rate).toFixed(2);
         }
 
-        // Init Core Engines
         fetchLiveExchangeRates();
-        window.dispatchEvent(new Event('resize'));
+        
+        // Fire resize event on load to sync slider images
+        setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
     </script>
 </body>
 </html>
