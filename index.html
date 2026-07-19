@@ -43,7 +43,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Typography */
+        /* Typography Hierarchy */
         h1 {
             font-weight: 700;
             font-size: clamp(38px, 5vw, 54px); 
@@ -99,16 +99,9 @@
         .delay-2 { transition-delay: 0.2s; }
         .delay-3 { transition-delay: 0.3s; }
 
-        /* Premium Right-to-Left Slide Animation for Hero SVG */
         @keyframes slideFromRight {
-            0% {
-                opacity: 0;
-                transform: translateX(50px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            0% { opacity: 0; transform: translateX(50px); }
+            100% { opacity: 1; transform: translateX(0); }
         }
 
         /* Navigation Bar */
@@ -161,9 +154,7 @@
             transition: color 0.3s ease;
         }
 
-        .nav-links a:hover {
-            color: var(--luxury-black);
-        }
+        .nav-links a:hover { color: var(--luxury-black); }
 
         .nav-cta {
             background: var(--luxury-black);
@@ -172,7 +163,6 @@
             border-radius: 980px;
             font-size: 13px !important;
             font-weight: 500 !important;
-            text-transform: capitalize;
             transition: all 0.3s ease;
         }
 
@@ -181,7 +171,7 @@
             transform: scale(1.02);
         }
 
-        /* Hero Section Grid Overhaul */
+        /* Hero Section Grid */
         .hero {
             padding: 180px 0 100px 0;
         }
@@ -193,19 +183,9 @@
             align-items: center;
         }
 
-        .hero-left {
-            text-align: left;
-        }
-
-        .hero-left h1 {
-            margin-bottom: 20px;
-        }
-
-        .hero-left p {
-            font-size: 17px; /* Reduced typography footprint */
-            max-width: 100%;
-            margin-bottom: 36px;
-        }
+        .hero-left { text-align: left; }
+        .hero-left h1 { margin-bottom: 20px; }
+        .hero-left p { font-size: 17px; margin-bottom: 36px; }
 
         .hero-right {
             display: flex;
@@ -242,7 +222,7 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        /* Seamless Continuity Spacing Framework */
+        /* Spacing Framework */
         .section {
             padding: 100px 0; 
             border-top: 1px solid var(--apple-border);
@@ -255,16 +235,10 @@
             margin-bottom: 50px; 
         }
 
-        .section-header h2 {
-            margin-bottom: 16px;
-        }
+        .section-header h2 { margin-bottom: 16px; }
+        .section-header p { max-width: 650px; margin: 0 auto; }
 
-        .section-header p {
-            max-width: 650px;
-            margin: 0 auto;
-        }
-
-        /* Before/After Slider Element */
+        /* Before/After Slider */
         .slider-wrapper {
             max-width: 960px;
             margin: 0 auto; 
@@ -276,7 +250,7 @@
             overflow: hidden;
             box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.08);
             border: 1px solid var(--apple-border);
-            background: var(--apple-secondary-bg);
+            background: #ffffff; /* Upgraded to crisp white background frame */
         }
 
         .slider-img {
@@ -290,12 +264,11 @@
         .slider-img img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain; /* Prevents blueprint lineage cropping distortion */
             display: block;
             color: transparent;
         }
 
-        /* Corrected Base Layering Symmetry Setup */
         .img-before { z-index: 1; }
         .img-after {
             z-index: 2;
@@ -309,7 +282,6 @@
             height: 100%;
         }
 
-        /* Minimalist Labels inside Slider */
         .slider-badge-label {
             position: absolute;
             top: 24px;
@@ -317,18 +289,18 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.12em;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.9);
             padding: 6px 14px;
             border-radius: 6px;
             color: var(--luxury-black);
             z-index: 5;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             pointer-events: none;
+            border: 1px solid var(--apple-border);
         }
         .label-before { left: 24px; }
         .label-after { right: 24px; }
 
-        /* Input controller configuration track settings */
         .slider-input {
             position: absolute;
             -webkit-appearance: none !important;
@@ -373,7 +345,6 @@
             pointer-events: none;
         }
 
-        /* Perfect Center Framework Premium Handle Dial Badge Object */
         .slider-handle-badge {
             position: absolute;
             top: 50%;
@@ -391,13 +362,9 @@
             justify-content: center;
         }
 
-        .slider-handle-badge svg {
-            width: 20px;
-            height: 12px;
-            display: block;
-        }
+        .slider-handle-badge svg { width: 20px; height: 12px; display: block; }
 
-        /* Core Standards Matrix Grid Layout */
+        /* Core Standards Grid Layout */
         .standards-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr); 
@@ -420,12 +387,9 @@
             letter-spacing: 0.08em;
         }
 
-        .standard-card h3 {
-            font-size: 24px;
-            margin-bottom: 16px;
-        }
+        .standard-card h3 { font-size: 24px; margin-bottom: 16px; }
 
-        /* Continuous Portfolio Magazine Grid */
+        /* Portfolio Magazine Framework Upgraded with Solid White Boundary Frames */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -439,35 +403,31 @@
         }
 
         .gallery-img-container {
-            background: var(--apple-secondary-bg);
+            background: #ffffff; /* Upgraded from gray to solid high-contrast white */
             border-radius: var(--radius-premium);
             overflow: hidden;
-            aspect-ratio: 30/20;
-            border: 1px solid rgba(0, 0, 0, 0.02);
+            aspect-ratio: 30 / 25; /* Perfectly locked to your required 3000x2500 vector metric */
+            border: 1px solid var(--apple-border); /* Elegant corporate structural edge frame */
             margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .gallery-item img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: contain; /* Prevents extreme vector linework cropping artifacts */
             transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             color: transparent;
         }
 
-        .gallery-item:hover img {
-            transform: scale(1.02);
-        }
+        .gallery-item:hover img { transform: scale(1.015); }
+        .gallery-meta h4 { font-size: 18px; font-weight: 600; margin-bottom: 6px; color: var(--luxury-black); letter-spacing: -0.02em; }
 
-        .gallery-meta h4 {
-            font-size: 18px; 
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: var(--luxury-black);
-            letter-spacing: -0.02em;
-        }
-
-        /* Pricing Architecture Minimalist Switch Array */
+        /* ==========================================================================
+           PREMIUM SINGLE-CARD FLAT-RATE PRICING ENGINE OVERHAUL
+           ========================================================================== */
         .pricing-toggle-zone {
             display: flex;
             justify-content: center;
@@ -502,55 +462,90 @@
             box-shadow: 0 3px 10px rgba(0,0,0,0.04);
         }
 
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 32px;
-            max-width: 1050px;
+        .pricing-master-wrapper {
+            max-width: 800px;
             margin: 0 auto;
         }
 
-        .pricing-card {
+        .premium-pricing-card {
+            background: #ffffff;
             border: 1px solid var(--apple-border);
-            padding: 48px;
             border-radius: var(--radius-premium);
-            transition: all 0.4s ease;
-            background: #fff;
+            padding: 54px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.02);
         }
 
-        .pricing-card:hover {
-            border-color: var(--luxury-black);
+        .pricing-card-title-area {
+            border-bottom: 2px solid var(--luxury-black);
+            padding-bottom: 20px;
+            margin-bottom: 32px;
         }
 
-        .pricing-card .price-display {
-            font-size: 46px;
+        .pricing-card-title-area h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.03em; }
+        .pricing-card-title-area span { font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--apple-muted); letter-spacing: 0.05em; }
+
+        .price-list-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .price-row-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--apple-secondary-bg);
+        }
+
+        .price-row-item:last-child { border-bottom: none; }
+
+        .price-item-info h4 { font-size: 18px; font-weight: 600; color: var(--luxury-black); margin-bottom: 4px; }
+        .price-item-info p { font-size: 14px; color: var(--apple-muted); }
+
+        .price-item-value {
+            font-size: 24px;
             font-weight: 700;
-            margin: 28px 0;
-            letter-spacing: -0.05em;
             color: var(--luxury-black);
+            letter-spacing: -0.03em;
+            white-space: nowrap;
         }
 
-        .pricing-features {
+        .price-sub-section-title {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--luxury-black);
+            margin: 40px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--luxury-black);
+        }
+
+        .pricing-footnote-list {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--apple-border);
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            margin-top: 28px;
-            border-top: 1px solid var(--apple-secondary-bg);
-            padding-top: 24px;
+            gap: 12px;
         }
 
-        .pricing-features li {
-            font-size: 15px;
+        .pricing-footnote-list li {
+            font-size: 14px;
+            font-weight: 500;
             color: var(--apple-muted);
             display: flex;
-            align-items: center;
             gap: 10px;
+            align-items: flex-start;
+            line-height: 1.5;
         }
 
-        .pricing-features li::before { content: "—"; color: var(--luxury-black); }
+        .pricing-footnote-list li::before { content: "•"; color: var(--luxury-black); font-weight: 700; }
 
-        /* Technical Specification Block Layout */
+        /* Technical Specification Blocks */
         .specs-layout {
             display: grid;
             grid-template-columns: 1fr 1.6fr;
@@ -558,28 +553,11 @@
             align-items: start;
         }
 
-        .specs-highlight-card {
-            background: var(--apple-secondary-bg);
-            padding: 54px;
-            border-radius: var(--radius-premium);
-        }
+        .specs-highlight-card { background: var(--apple-secondary-bg); padding: 54px; border-radius: var(--radius-premium); }
+        .specs-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 48px; list-style: none; }
+        .specs-list strong { color: var(--luxury-black); display: block; margin-bottom: 10px; font-size: 16px; font-weight: 600; }
 
-        .specs-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 48px;
-            list-style: none;
-        }
-
-        .specs-list strong {
-            color: var(--luxury-black);
-            display: block;
-            margin-bottom: 10px;
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        /* Structural Workflow Channels */
+        /* Workflow */
         .workflow-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -587,35 +565,11 @@
             margin-bottom: 54px;
         }
 
-        .step-card h4 {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--luxury-black);
-            margin-bottom: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-        }
+        .step-card h4 { font-size: 14px; font-weight: 600; color: var(--luxury-black); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.06em; }
+        .billing-banner { background: var(--apple-secondary-bg); padding: 36px; border-radius: var(--radius-premium); display: flex; align-items: flex-start; gap: 24px; border: 1px solid var(--apple-border); }
 
-        .billing-banner {
-            background: var(--apple-secondary-bg);
-            padding: 36px;
-            border-radius: var(--radius-premium);
-            display: flex;
-            align-items: flex-start;
-            gap: 24px;
-            border: 1px solid var(--apple-border);
-        }
-
-        /* Form Layout Box Container */
-        .form-container-box {
-            max-width: 680px;
-            margin: 0 auto;
-            background: #fff;
-            border: 1px solid var(--apple-border);
-            padding: 64px;
-            border-radius: var(--radius-premium);
-        }
-
+        /* Intake Form Box */
+        .form-container-box { max-width: 680px; margin: 0 auto; background: #fff; border: 1px solid var(--apple-border); padding: 64px; border-radius: var(--radius-premium); }
         .form-group { margin-bottom: 28px; }
         .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 10px; color: var(--luxury-black); }
         .form-control {
@@ -637,12 +591,12 @@
         .direct-channels { text-align: center; margin-top: 40px; font-size: 15px; }
         .direct-channels a { color: var(--luxury-black); text-decoration: none; font-weight: 600; border-bottom: 1px solid var(--luxury-black); }
 
-        /* Brand Narrative Profile Section */
+        /* Upgraded Corporate Narrative Profile Section (8 Years Experience Setup) */
         .about-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; }
         .about-layout h2 { font-size: 48px; }
         .about-content p { font-size: 19px; margin-bottom: 28px; color: var(--apple-text); }
 
-        /* Editorial Brand Footer Frame */
+        /* Footer Frame */
         footer { padding: 80px 0 40px 0; border-top: 1px solid var(--apple-border); background: var(--apple-secondary-bg); }
         .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1.6fr; gap: 60px; margin-bottom: 60px; }
         .footer-col h5 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 20px; color: var(--luxury-black); font-weight: 600; }
@@ -651,20 +605,20 @@
         .footer-col a:hover { color: var(--luxury-black); }
         .footer-bottom { text-align: center; font-size: 13px; color: var(--apple-muted); padding-top: 40px; border-top: 1px solid rgba(0, 0, 0, 0.05); }
 
-        /* Responsive Architecture Grid Breaks */
         @media (max-width: 768px) {
             .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 40px; }
             .hero-left { text-align: center; }
-            .hero-right { order: -1; } /* Displays SVG plan on top layout context for mobile screens */
+            .hero-right { order: -1; } 
             .standards-grid { grid-template-columns: 1fr; gap: 50px; }
             .specs-layout, .about-layout, .footer-grid { grid-template-columns: 1fr; gap: 48px; }
+            .premium-pricing-card { padding: 32px 20px; }
             .nav-right-block { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Transparent Navigation Frame Overlay -->
+    <!-- Transparent Navigation Frame -->
     <nav>
         <div class="container">
             <div class="nav-container">
@@ -682,7 +636,7 @@
         </div>
     </nav>
 
-    <!-- Two-Column Interactive Hero Grid Section -->
+    <!-- Two-Column Hero Grid Section -->
     <section class="hero reveal-node">
         <div class="container">
             <div class="hero-grid">
@@ -692,14 +646,13 @@
                     <a href="#upload" class="btn-primary">Submit Sketch</a>
                 </div>
                 <div class="hero-right">
-                    <!-- Target source pointing directly to your dynamic inline vector flow asset -->
                     <img src="assets/hero-plan.svg" alt="Lavientra Vector Blueprint Asset" class="hero-svg-display">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Interactive Plan Presentation Slider Engine (Corrected Alignment Configurations) -->
+    <!-- Interactive Comparison Slider Engine -->
     <section id="showcase" class="section reveal-node" style="padding-top: 0; border-top: none;">
         <div class="container">
             <div class="section-header">
@@ -711,19 +664,19 @@
                 <div class="slider-badge-label label-before">Before</div>
                 <div class="slider-badge-label label-after">After</div>
                 
-                <!-- Base Layer Frame: Plan Image correctly positioned on the right background alignment -->
+                <!-- Base Layer Frame: Plan SVG positioned correctly on right side -->
                 <div class="slider-img img-before">
                     <img src="assets/plan-after.svg" alt="Finished Clean Vector SVG Layout">
                 </div>
                 
-                <!-- Sliding Layer Mask Frame: Sketch Image correctly rendered leftwards overlay window -->
+                <!-- Sliding Layer Mask Frame: Sketch Image positioned correctly on left side -->
                 <div class="slider-img img-after" id="afterImg">
                     <img src="assets/sketch-before.webp" alt="Draft Field Sketch">
                 </div>
                 
                 <div class="slider-line" id="sliderLine"></div>
                 
-                <!-- Premium Custom Filled Double-Arrow SVG Component Overlay Integration -->
+                <!-- Centered Premium Arrow Handle Dial Asset Overlay -->
                 <div class="slider-handle-badge" id="sliderHandleIcon">
                     <svg viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M6 1L1 6L6 11" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -777,42 +730,42 @@
 
             <div class="gallery-grid">
                 <div class="gallery-item reveal-node delay-1">
-                    <div class="gallery-img-container"><img src="assets/portfolio-bw.svg" alt="SVG Vector Document"></div>
+                    <div class="gallery-img-container"><img src="assets/portfolio-bw.svg" alt="SVG Plan Asset"></div>
                     <div class="gallery-meta">
                         <h4>Standard Editorial B&W</h4>
                         <p>High-contrast vector lineage, ideal for traditional print brochures.</p>
                     </div>
                 </div>
                 <div class="gallery-item reveal-node delay-2">
-                    <div class="gallery-img-container"><img src="assets/portfolio-color.svg" alt="SVG Vector Document"></div>
+                    <div class="gallery-img-container"><img src="assets/portfolio-color.svg" alt="SVG Plan Asset"></div>
                     <div class="gallery-meta">
                         <h4>Color Zoned Marketing Layout</h4>
                         <p>Soft color-coded zones to help buyers visualize property flow instantly.</p>
                     </div>
                 </div>
                 <div class="gallery-item reveal-node delay-3">
-                    <div class="gallery-img-container"><img src="assets/portfolio-furniture.svg" alt="SVG Vector Document"></div>
+                    <div class="gallery-img-container"><img src="assets/portfolio-furniture.svg" alt="SVG Plan Asset"></div>
                     <div class="gallery-meta">
                         <h4>Premium Furnished Space</h4>
                         <p>Includes accurate, modern CAD blocks to showcase property scale and potential.</p>
                     </div>
                 </div>
                 <div class="gallery-item reveal-node delay-1">
-                    <div class="gallery-img-container"><img src="assets/portfolio-commercial.svg" alt="SVG Vector Document"></div>
+                    <div class="gallery-img-container"><img src="assets/portfolio-commercial.svg" alt="SVG Plan Asset"></div>
                     <div class="gallery-meta">
                         <h4>Commercial Property Specification</h4>
                         <p>Drafted cleanly to showcase complex corporate layouts and massive square footage.</p>
                     </div>
                 </div>
                 <div class="gallery-item reveal-node delay-2">
-                    <div class="gallery-img-container"><img src="assets/portfolio-complex.svg" alt="SVG Vector Document"></div>
+                    <div class="gallery-img-container"><img src="assets/portfolio-complex.svg" alt="SVG Plan Asset"></div>
                     <div class="gallery-meta">
                         <h4>Complex Multi-Level Blueprint</h4>
                         <p>Absolute geometrical precision for intricate layouts, split-levels, and period properties.</p>
                     </div>
                 </div>
                 <div class="gallery-item reveal-node delay-3">
-                    <div class="gallery-img-container"><img src="assets/portfolio-siteplan.svg" alt="SVG Vector Document"></div>
+                    <div class="gallery-img-container"><img src="assets/portfolio-siteplan.svg" alt="SVG Plan Asset"></div>
                     <div class="gallery-meta">
                         <h4>Overall Site & Boundary Layout</h4>
                         <p>Clear mapping of external perimeters, gardens, and outbuildings.</p>
@@ -822,12 +775,12 @@
         </div>
     </section>
 
-    <!-- Dynamic B2B Currency Engine Switcher Section Block (Refactored Minimalist Text Switches) -->
+    <!-- Remodeled High-fidelity Flat-Rate Single-Card Pricing Matrix Section -->
     <section id="pricing" class="section reveal-node">
         <div class="container">
             <div class="section-header">
                 <h2>Transparent Pricing.</h2>
-                <p>Base rates are peg-calculated in USD and automatically dynamically rendered into your local currency pipeline value.</p>
+                <p>Straightforward flat-rate tiers dynamically calculated based on your target enterprise market exchange rates.</p>
             </div>
 
             <div class="pricing-toggle-zone">
@@ -838,35 +791,69 @@
                 </div>
             </div>
 
-            <div class="pricing-grid">
-                <div class="pricing-card reveal-node delay-1">
-                    <h3>Standard Layouts</h3>
-                    <p>B&W, Color Zoned, or Furnished styles</p>
-                    <div class="price-display" id="price-standard">--</div>
-                    <ul class="pricing-features">
-                        <li>Single Residential Units</li>
-                        <li>Photographer Branding Setup</li>
-                        <li>24-Hour Standard Pipeline Delivery</li>
-                    </ul>
-                </div>
-                <div class="pricing-card reveal-node delay-2">
-                    <h3>Advanced Layouts</h3>
-                    <p>Commercial, Complex, or Site Plans</p>
-                    <div class="price-display" id="price-advanced">--</div>
-                    <ul class="pricing-features">
-                        <li>Multi-level Tracking Setup</li>
-                        <li>Extensive Square Footage Handling</li>
-                        <li>Full Perimeter Detail Mapping</li>
-                    </ul>
-                </div>
-                <div class="pricing-card reveal-node delay-3">
-                    <h3>6-Hour Express Add-on</h3>
-                    <p>Priority drafting pipeline bypass</p>
-                    <div class="price-display" id="price-express">--</div>
-                    <ul class="pricing-features">
-                        <li>Priority Queue Bypassing</li>
-                        <li>Immediate Pipeline Processing</li>
-                        <li>Perfect for Tight Cutoffs</li>
+            <div class="pricing-master-wrapper">
+                <div class="premium-pricing-card">
+                    <div class="pricing-card-title-area">
+                        <h3>FLAT-RATE PRICING</h3>
+                        <span>(PER LAYOUT)</span>
+                    </div>
+
+                    <!-- Main Core Square Footage Scale Tiers List -->
+                    <div class="price-list-rows">
+                        <div class="price-row-item">
+                            <div class="price-item-info">
+                                <h4>Small Scale Properties</h4>
+                                <p>Up to 1000 Sq Ft</p>
+                            </div>
+                            <div class="price-item-value" id="price-small">--</div>
+                        </div>
+                        <div class="price-row-item">
+                            <div class="price-item-info">
+                                <h4>Mid-Size Properties</h4>
+                                <p>1000 – 3000 sq ft</p>
+                            </div>
+                            <div class="price-item-value" id="price-mid">--</div>
+                        </div>
+                        <div class="price-row-item">
+                            <div class="price-item-info">
+                                <h4>Premium Estates</h4>
+                                <p>3,000 – 5,000 sq ft</p>
+                            </div>
+                            <div class="price-item-value" id="price-premium">--</div>
+                        </div>
+                        <div class="price-row-item">
+                            <div class="price-item-info">
+                                <h4>Large Scale / Complex Layouts</h4>
+                                <p>5,000+ sq ft</p>
+                            </div>
+                            <div class="price-item-value" id="price-large">--</div>
+                        </div>
+                    </div>
+
+                    <!-- Custom Add-Ons Category Block -->
+                    <div class="price-sub-section-title">Add-On</div>
+                    
+                    <div class="price-list-rows">
+                        <div class="price-row-item">
+                            <div class="price-item-info">
+                                <h4>Color</h4>
+                                <p>Soft color-coded structural zone variants</p>
+                            </div>
+                            <div class="price-item-value" id="price-addon-color">--</div>
+                        </div>
+                        <div class="price-row-item">
+                            <div class="price-item-info">
+                                <h4>With Furniture</h4>
+                                <p>Premium high-fidelity dynamic CAD element blocks placement</p>
+                            </div>
+                            <div class="price-item-value" id="price-addon-furniture">--</div>
+                        </div>
+                    </div>
+
+                    <!-- Absolute Architectural Context Footnotes -->
+                    <ul class="pricing-footnote-list">
+                        <li id="pricing-note-incremental">Calculating structural expansion rates values...</li>
+                        <li>Volume discounts available for long-term agency partnerships.</li>
                     </ul>
                 </div>
             </div>
@@ -913,7 +900,7 @@
         </div>
     </section>
 
-    <!-- Interactive Production Pipeline Workflow Channels Section -->
+    <!-- Workflow Channels Section -->
     <section class="section reveal-node">
         <div class="container">
             <div class="section-header">
@@ -944,7 +931,7 @@
         </div>
     </section>
 
-    <!-- Project Intake Data Collection Pipeline Form Box Section -->
+    <!-- Form Box Section -->
     <section id="upload" class="section reveal-node">
         <div class="container">
             <div class="section-header">
@@ -1008,7 +995,7 @@
         </div>
     </section>
 
-    <!-- Brand Profile Narrative Block Section Layout -->
+    <!-- Upgraded Corporate Narrative Profile Section (8 Years Experience Setup) -->
     <section class="section reveal-node">
         <div class="container">
             <div class="about-layout">
@@ -1016,14 +1003,14 @@
                     <h2>Precise.<br>Clean.<br>Accurate.</h2>
                 </div>
                 <div class="about-content">
-                    <p>At Lavientra Studio, we bridge the gap between architectural precision and high-end real estate marketing. Backed by years of professional draughtsmanship experience working with international property standards, we specialize in converting rough site sketches into ultra-clean, RICS and Property Council compliant 2D floor plans.</p>
-                    <p>We don’t just trace lines; we understand the geometry of space. Our philosophy is rooted in drawing highly accurate, clean, and consistent floor plans. Our team meticulously verifies every measurement and ensures absolute visual clarity, guaranteeing that every plan we deliver acts as a seamless, distraction-free tool to help your agency close deals faster.</p>
+                    <p>At Lavientra Studio, we bridge the gap between architectural precision and high-end real estate marketing. Backed by **over 8 years of professional draughtsmanship experience** tailored precisely to premium international property sectors, we specialize in converting rough site sketches into ultra-clean, RICS and Property Council compliant 2D floor plans.</p>
+                    <p>We don’t just trace basic lines; we calculate and understand the true structural geometry of space. Our operational history includes delivering state-of-the-art corporate layout documents matching the absolute compliance requirements of the **largest real estate companies in the UK**. Every asset we ship ensures clear visual authority, serving as a distraction-free, high-fidelity presentation utility built to close deals faster.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- High-end Editorial Visual Footer Layout Frame -->
+    <!-- Corporate Editorial Footer -->
     <footer>
         <div class="container">
             <div class="footer-grid">
@@ -1056,7 +1043,7 @@
         </div>
     </footer>
 
-    <!-- Interactive Runtime Operation Engine Scripts -->
+    <!-- Scripting Execution Engine Operations -->
     <script>
         const sliderRange = document.getElementById('sliderRange');
         const afterImg = document.getElementById('afterImg');
@@ -1072,7 +1059,6 @@
         }
 
         updateSlider(); 
-        
         sliderRange.addEventListener('input', updateSlider);
         
         window.addEventListener('resize', () => {
@@ -1081,19 +1067,25 @@
             if (absoluteImg) absoluteImg.style.width = containerWidth + 'px';
         });
 
-        // Intersection Reveal Viewport Engine Logic Calls
         const observeOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
+                if (entry.isIntersecting) { entry.target.classList.add('active'); }
             });
         }, observeOptions);
         document.querySelectorAll('.reveal-node').forEach(node => observer.observe(node));
         
-        // Multi-currency Pipeline Engine System Data Call matrices
-        const baseUSD = { standard: 35.00, advanced: 75.00, express: 20.00 };
+        // Dynamic Single Card Flat-Rate Pricing Setup pegs (Pegged to your exact layout specs matrix)
+        const baseUSD = { 
+            small: 8.00, 
+            mid: 12.00, 
+            premium: 18.00, 
+            large: 24.00,
+            incremental: 4.00,
+            color: 2.00,
+            furniture: 4.00
+        };
+        
         let currentMarket = 'uk';
         let exchangeRates = { GBP: 0.78, AUD: 1.52, USD: 1.00 }; 
 
@@ -1122,15 +1114,27 @@
         function updatePricingDisplay() {
             let symbol = '$';
             let rate = exchangeRates.USD;
+            
             if (currentMarket === 'uk') { symbol = '£'; rate = exchangeRates.GBP; }
             else if (currentMarket === 'aus') { symbol = '$'; rate = exchangeRates.AUD; }
-            document.getElementById('price-standard').textContent = symbol + (baseUSD.standard * rate).toFixed(2);
-            document.getElementById('price-advanced').textContent = symbol + (baseUSD.advanced * rate).toFixed(2);
-            document.getElementById('price-express').textContent = '+' + symbol + (baseUSD.express * rate).toFixed(2);
+            
+            // Dynamic Tiers Mapping
+            document.getElementById('price-small').textContent = symbol + (baseUSD.small * rate).toFixed(2);
+            document.getElementById('price-mid').textContent = symbol + (baseUSD.mid * rate).toFixed(2);
+            document.getElementById('price-premium').textContent = symbol + (baseUSD.premium * rate).toFixed(2);
+            document.getElementById('price-large').textContent = symbol + (baseUSD.large * rate).toFixed(2);
+            
+            // Dynamic Add-Ons Mapping
+            document.getElementById('price-addon-color').textContent = symbol + (baseUSD.color * rate).toFixed(2);
+            document.getElementById('price-addon-furniture').textContent = symbol + (baseUSD.furniture * rate).toFixed(2);
+            
+            // Render Incremental Logic Text Footnotes inside Layout card context
+            const convertedIncremental = symbol + (baseUSD.incremental * rate).toFixed(2);
+            document.getElementById('pricing-note-incremental').textContent = 
+                `${convertedIncremental} additional charge applies for every incremental 2,500 sq ft beyond the initial 5,000 sq ft.`;
         }
 
         fetchLiveExchangeRates();
-        
         setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
     </script>
 </body>
