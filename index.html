@@ -93,11 +93,37 @@
 
         /* Portfolio */
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 56px 32px; }
-        .gallery-item { display: flex; flex-direction: column; text-decoration: none; }
-        .gallery-img-container { background: #ffffff; border-radius: var(--radius-premium); overflow: hidden; aspect-ratio: 30 / 25; border: 1px solid var(--apple-border); margin-bottom: 22px; display: flex; align-items: center; justify-content: center; }
+        .gallery-item { display: flex; flex-direction: column; text-decoration: none; cursor: pointer; }
+        .gallery-img-container { 
+            background: #ffffff; 
+            border-radius: var(--radius-premium); 
+            overflow: hidden; 
+            aspect-ratio: 20 / 30; /* Updated to 20/30 ratio */
+            border: 1px solid var(--apple-border); 
+            margin-bottom: 22px; 
+            display: flex; align-items: center; justify-content: center;
+            cursor: zoom-in; /* Zoom cursor hint */
+        }
         .gallery-item img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); color: transparent; }
-        .gallery-item:hover img { transform: scale(1.015); }
+        .gallery-item:hover img { transform: scale(1.02); }
         .gallery-meta h4 { font-size: 18px; font-weight: 600; margin-bottom: 6px; color: var(--luxury-black); letter-spacing: -0.02em; }
+
+        /* Premium Lightbox Modal Engine */
+        #lightbox {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.96);
+            display: none; align-items: center; justify-content: center;
+            z-index: 9999; cursor: zoom-out;
+            opacity: 0; transition: opacity 0.4s var(--apple-bezier);
+        }
+        #lightbox.active { opacity: 1; }
+        #lightbox img { 
+            max-width: 90%; max-height: 90%; 
+            border-radius: 8px; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.12); 
+            transform: scale(0.95); transition: transform 0.4s var(--apple-bezier);
+        }
+        #lightbox.active img { transform: scale(1); }
 
         /* Pricing */
         .pricing-toggle-zone { display: flex; justify-content: center; margin-bottom: 54px; }
@@ -146,47 +172,14 @@
         .dropzone-area { border: 2px dashed var(--apple-border); background: var(--apple-secondary-bg); padding: 48px; text-align: center; border-radius: var(--radius-card); cursor: pointer; transition: all 0.3s var(--apple-bezier); }
         .dropzone-area.dragover { background: #ffffff; border-color: var(--luxury-black); transform: scale(0.99); }
         
-        /* ----------------------------------------------------
-           Premium Loading Button Styles 
-           ---------------------------------------------------- */
-        .submit-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            width: 100%; 
-            background: var(--luxury-black); 
-            color: #fff; 
-            border: none; 
-            padding: 18px;
-            border-radius: var(--radius-card); 
-            font-size: 16px; 
-            font-weight: 500; 
-            cursor: pointer; 
-            transition: all 0.3s ease;
-        }
+        /* Premium Loading Button Styles */
+        .submit-btn { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; background: var(--luxury-black); color: #fff; border: none; padding: 18px; border-radius: var(--radius-card); font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; }
         .submit-btn:hover { background: #2d2d2f; }
         
-        /* Loading Animation Spinner */
-        .spinner-icon {
-            display: none;
-            width: 18px;
-            height: 18px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-        }
-        .submit-btn.loading {
-            pointer-events: none;
-            opacity: 0.9;
-        }
-        .submit-btn.loading .spinner-icon {
-            display: inline-block;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        .spinner-icon { display: none; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; }
+        .submit-btn.loading { pointer-events: none; opacity: 0.9; }
+        .submit-btn.loading .spinner-icon { display: inline-block; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         .direct-channels { text-align: center; margin-top: 40px; font-size: 15px; }
         .direct-channels a { color: var(--luxury-black); text-decoration: none; font-weight: 600; border-bottom: 1px solid var(--luxury-black); }
@@ -321,42 +314,42 @@
             </div>
 
             <div class="gallery-grid">
-                <div class="gallery-item reveal-node delay-1">
+                <div class="gallery-item reveal-node delay-1" onclick="openLightbox('assets/portfolio-bw.svg')">
                     <div class="gallery-img-container"><img src="assets/portfolio-bw.svg" alt="SVG Plan Asset"></div>
                     <div class="gallery-meta">
                         <h4>Standard Editorial B&W</h4>
                         <p>High-contrast vector lineage, ideal for traditional print brochures.</p>
                     </div>
                 </div>
-                <div class="gallery-item reveal-node delay-2">
+                <div class="gallery-item reveal-node delay-2" onclick="openLightbox('assets/portfolio-color.svg')">
                     <div class="gallery-img-container"><img src="assets/portfolio-color.svg" alt="SVG Plan Asset"></div>
                     <div class="gallery-meta">
                         <h4>Color Zoned Marketing Layout</h4>
                         <p>Soft color-coded zones to help buyers visualize property flow instantly.</p>
                     </div>
                 </div>
-                <div class="gallery-item reveal-node delay-3">
+                <div class="gallery-item reveal-node delay-3" onclick="openLightbox('assets/portfolio-furniture.svg')">
                     <div class="gallery-img-container"><img src="assets/portfolio-furniture.svg" alt="SVG Plan Asset"></div>
                     <div class="gallery-meta">
                         <h4>Premium Furnished Space</h4>
                         <p>Includes accurate, modern CAD blocks to showcase property scale and potential.</p>
                     </div>
                 </div>
-                <div class="gallery-item reveal-node delay-1">
+                <div class="gallery-item reveal-node delay-1" onclick="openLightbox('assets/portfolio-commercial.svg')">
                     <div class="gallery-img-container"><img src="assets/portfolio-commercial.svg" alt="SVG Plan Asset"></div>
                     <div class="gallery-meta">
                         <h4>Commercial Property Specification</h4>
                         <p>Drafted cleanly to showcase complex corporate layouts and massive square footage.</p>
                     </div>
                 </div>
-                <div class="gallery-item reveal-node delay-2">
+                <div class="gallery-item reveal-node delay-2" onclick="openLightbox('assets/portfolio-complex.svg')">
                     <div class="gallery-img-container"><img src="assets/portfolio-complex.svg" alt="SVG Plan Asset"></div>
                     <div class="gallery-meta">
                         <h4>Complex Multi-Level Blueprint</h4>
                         <p>Absolute geometrical precision for intricate layouts, split-levels, and period properties.</p>
                     </div>
                 </div>
-                <div class="gallery-item reveal-node delay-3">
+                <div class="gallery-item reveal-node delay-3" onclick="openLightbox('assets/portfolio-siteplan.svg')">
                     <div class="gallery-img-container"><img src="assets/portfolio-siteplan.svg" alt="SVG Plan Asset"></div>
                     <div class="gallery-meta">
                         <h4>Overall Site & Boundary Layout</h4>
@@ -579,7 +572,6 @@
                         <textarea id="instructions" class="form-control" rows="4" placeholder="Mention any custom specifications or color code rules..."></textarea>
                     </div>
                     
-                    <!-- NEW PREMIUM LOADING BUTTON STRUCTURE -->
                     <button type="submit" class="submit-btn" id="submitActionBtn">
                         <span class="spinner-icon"></span> 
                         <span class="btn-text">Send to Lavientra Studio</span>
@@ -639,6 +631,11 @@
         </div>
     </footer>
 
+    <!-- Premium Lightbox Container (Hidden by default) -->
+    <div id="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="Zoomed Portfolio View">
+    </div>
+
     <script>
         const sliderRange = document.getElementById('sliderRange');
         const afterImg = document.getElementById('afterImg');
@@ -670,6 +667,22 @@
         }, observeOptions);
         document.querySelectorAll('.reveal-node').forEach(node => observer.observe(node));
         
+        /* Lightbox Engine Functions */
+        function openLightbox(imgSrc) {
+            const lightbox = document.getElementById('lightbox');
+            document.getElementById('lightbox-img').src = imgSrc;
+            lightbox.style.display = 'flex';
+            // Small delay for smooth opacity transition
+            setTimeout(() => lightbox.classList.add('active'), 10); 
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            // Wait for transition to finish before hiding display
+            setTimeout(() => lightbox.style.display = 'none', 400); 
+        }
+
         const baseUSD = { 
             small: 8.00, mid: 12.00, premium: 18.00, large: 24.00,
             incremental: 4.00, color: 2.00, furniture: 4.00
@@ -765,7 +778,6 @@
                 return;
             }
 
-            /* Enable Loading Animation State */
             submitBtn.classList.add('loading');
             btnText.textContent = 'Uploading...';
 
@@ -790,7 +802,7 @@
                     files: encodedFilesArray
                 };
 
-                // ⚠️ PASTE YOUR ENTIRE DEPLOYED GOOGLE APPS SCRIPT WEB APP URL DIRECTLY BELOW inside quotes
+                // Updated fetch link with your Google Apps Script Web App URL
                 await fetch("https://script.google.com/macros/s/AKfycbzXbYy8FyQwR42Kt99spJ8TBNJ6tyGNougXfskIXujVTGgPWUy3gSQ_eI2-hQdd0Qc-Ig/exec", {
                     method: 'POST',
                     mode: 'no-cors',
@@ -807,7 +819,6 @@
                 console.error(err);
                 alert('Data communication drop alert detected. Please verify your script deployment parameters configurations.');
             } finally {
-                /* Reset Loading Animation State back to Default */
                 submitBtn.classList.remove('loading');
                 btnText.textContent = 'Send to Lavientra Studio';
             }
