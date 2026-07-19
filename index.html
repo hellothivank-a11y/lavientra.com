@@ -163,7 +163,7 @@
             border-radius: 980px;
             font-size: 13px !important;
             font-weight: 500 !important;
-            text-decoration: none !important; /* Explicitly removed underline tracking link variables */
+            text-decoration: none !important; 
             transition: all 0.3s ease;
         }
 
@@ -552,14 +552,13 @@
             align-items: start;
         }
 
-        /* Enhanced Space and Padding for No Tiers Card Container */
         .specs-highlight-card { 
             background: var(--apple-secondary-bg); 
-            padding: 64px 54px; /* Increased padding framework footprint */
+            padding: 64px 54px; 
             border-radius: var(--radius-premium); 
             display: flex;
             flex-direction: column;
-            gap: 24px; /* Internal breathing margin */
+            gap: 24px; 
             border: 1px solid var(--apple-border);
         }
         
@@ -573,7 +572,7 @@
         .specs-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 48px; list-style: none; }
         .specs-list strong { color: var(--luxury-black); display: block; margin-bottom: 10px; font-size: 16px; font-weight: 600; }
 
-        /* Dynamic Continuous Workflow Grid Components */
+        /* Workflow Grid Components */
         .workflow-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -643,18 +642,17 @@
         .direct-channels { text-align: center; margin-top: 40px; font-size: 15px; }
         .direct-channels a { color: var(--luxury-black); text-decoration: none; font-weight: 600; border-bottom: 1px solid var(--luxury-black); }
 
-        /* Centered Profile Layout Engine Configuration */
+        /* Centered Profile Layout Engine */
         .about-layout { 
             display: grid; 
             grid-template-columns: 1fr 2fr; 
             gap: 80px; 
-            align-items: center; /* Vertically aligns elements across matrix columns perfectly */
+            align-items: center; 
         }
         
-        /* Custom spacing logic values for the left title blocks */
         .about-left-heading h2 {
             font-size: 48px;
-            line-height: 1.6; /* Increased vertical text spacing footprint */
+            line-height: 1.6; 
             letter-spacing: -0.03em;
         }
         .about-content p { font-size: 19px; margin-bottom: 28px; color: var(--apple-text); }
@@ -835,7 +833,7 @@
         </div>
     </section>
 
-    <!-- Remodeled Flat-Rate Single-Card Pricing Tiers Grid Section (Default Engine to USD) -->
+    <!-- Remodeled Flat-Rate Single-Card Pricing Tiers Grid Section -->
     <section id="pricing" class="section reveal-node">
         <div class="container">
             <div class="section-header">
@@ -921,7 +919,6 @@
     <section class="section reveal-node">
         <div class="container">
             <div class="specs-layout">
-                <!-- Spacing padding and icon integration for No Tiers of Quality Block -->
                 <div class="specs-highlight-card">
                     <svg class="specs-highlight-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M16 2L2 16L16 30L30 16L16 2Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
@@ -962,7 +959,7 @@
         </div>
     </section>
 
-    <!-- Upgraded Workflow Steps Layout Structure -->
+    <!-- Workflow Steps Layout Structure -->
     <section class="section reveal-node">
         <div class="container">
             <div class="section-header">
@@ -1005,14 +1002,12 @@
             </div>
 
             <div class="form-container-box">
-                <!-- Replace target action script dynamically with your Google Apps Script URL endpoint -->
                 <form id="projectIntakeForm">
                     <div class="form-group">
                         <label for="fullName">Full Name</label>
                         <input type="text" id="fullName" class="form-control" placeholder="e.g. Thomas Sterling" required>
                     </div>
                     <div class="form-group">
-                        <!-- Upgraded dynamic validation field properties mapping -->
                         <label for="agencyEmail">Agency Email Address (Required for contact verification)</label>
                         <input type="email" id="agencyEmail" class="form-control" placeholder="e.g. contact@aspectstudios.co.uk" required>
                     </div>
@@ -1043,10 +1038,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Upload Files (Drag & Drop Sketches / Blueprints)</label>
+                        <label>Upload Files (Drag & Drop Multiple Sketches / Blueprints)</label>
                         <div class="dropzone-area" id="dropzoneArea">
-                            <p id="dropzoneText">Drag & Drop your sketch here, or <strong>browse local storage</strong></p>
-                            <input type="file" id="sketchFiles" style="display: none;" accept="image/*,.pdf,.svg">
+                            <p id="dropzoneText">Drag & Drop your sketches here, or <strong>browse local storage</strong></p>
+                            <input type="file" id="sketchFiles" style="display: none;" accept="image/*,.pdf,.svg" multiple>
                         </div>
                     </div>
                     <div class="form-group">
@@ -1062,7 +1057,7 @@
         </div>
     </section>
 
-    <!-- Upgraded Corporate Narrative Profile Section (Asterisks Stripped & Heading Centered) -->
+    <!-- Corporate Narrative Profile Section -->
     <section class="section reveal-node">
         <div class="container">
             <div class="about-layout">
@@ -1077,7 +1072,7 @@
         </div>
     </section>
 
-    <!-- Corporate Footer -->
+    <!-- Footer Frame -->
     <footer>
         <div class="container">
             <div class="footer-grid">
@@ -1142,7 +1137,6 @@
         }, observeOptions);
         document.querySelectorAll('.reveal-node').forEach(node => observer.observe(node));
         
-        // Dynamic Pricing Configuration (Defaulted to USD initialization pipeline state parameters)
         const baseUSD = { 
             small: 8.00, 
             mid: 12.00, 
@@ -1153,7 +1147,7 @@
             furniture: 4.00
         };
         
-        let currentMarket = 'usd'; /* Default structural entry state set to Global USD pricing */
+        let currentMarket = 'usd'; 
         let exchangeRates = { GBP: 0.78, AUD: 1.52, USD: 1.00 }; 
 
         async function fetchLiveExchangeRates() {
@@ -1199,17 +1193,16 @@
         }
 
         // ==========================================================================
-        // PRODUCTION INTERACTIVE DRAG & DROP HTML5 API AND BASE64 ENGINE CODE
+        // MULTI-FILE INTERACTIVE DRAG & DROP HTML5 API CORE ENGINE
         // ==========================================================================
         const dropzoneArea = document.getElementById('dropzoneArea');
         const fileInput = document.getElementById('sketchFiles');
         const dropzoneText = document.getElementById('dropzoneText');
         const intakeForm = document.getElementById('projectIntakeForm');
-        let selectedFileBlob = null;
+        let stagedFilesList = [];
 
         dropzoneArea.addEventListener('click', () => fileInput.click());
 
-        // Drag entry states logic tracking animation triggers
         dropzoneArea.addEventListener('dragover', (e) => {
             e.preventDefault();
             dropzoneArea.classList.add('dragover');
@@ -1223,40 +1216,57 @@
             e.preventDefault();
             dropzoneArea.classList.remove('dragover');
             if (e.dataTransfer.files.length > 0) {
-                processUploadedFile(e.dataTransfer.files[0]);
+                handleFilesIntegration(e.dataTransfer.files);
             }
         });
 
         fileInput.addEventListener('change', (e) => {
             if (e.target.files.length > 0) {
-                processUploadedFile(e.target.files[0]);
+                handleFilesIntegration(e.target.files);
             }
         });
 
-        function processUploadedFile(file) {
-            selectedFileBlob = file;
-            dropzoneText.innerHTML = `📄 Staged Target Object: <strong>${file.name}</strong> (${(file.size / 1024).toFixed(1)} KB)`;
+        function handleFilesIntegration(filesList) {
+            stagedFilesList = Array.from(filesList);
+            if(stagedFilesList.length === 1) {
+                dropzoneText.innerHTML = `📄 Staged object: <strong>${stagedFilesList[0].name}</strong>`;
+            } else {
+                dropzoneText.innerHTML = `📚 Total <strong>${stagedFilesList.length} files staged</strong> for queue processing.`;
+            }
         }
 
-        // Integration handler capturing data streams and packaging payload array strings directly to Apps Script
-        intakeForm.addEventListener('submit', function(e) {
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        intakeForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            
             const submitBtn = intakeForm.querySelector('.submit-btn');
             
-            if (!selectedFileBlob) {
-                alert('Please upload or drop a structural sketch variant before submission initialization processing.');
+            if (stagedFilesList.length === 0) {
+                alert('Please upload or drag structural sketch objects variant before submission initialization processing.');
                 return;
             }
 
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Uploading Sketch Data Stream...';
+            submitBtn.textContent = 'Processing Data Stream Pipeline...';
 
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const base64Content = event.target.result;
-                
-                // Extract checked visual style rules matrix values safely
+            try {
+                let encodedFilesArray = [];
+                for (let i = 0; i < stagedFilesList.length; i++) {
+                    let base64String = await toBase64(stagedFilesList[i]);
+                    encodedFilesArray.push({
+                        data: base64String,
+                        name: stagedFilesList[i].name,
+                        mimeType: stagedFilesList[i].type
+                    });
+                }
+
                 let selectedStyles = [];
                 document.querySelectorAll('input[name="style"]:checked').forEach(cb => {
                     selectedStyles.push(cb.value);
@@ -1265,37 +1275,30 @@
                 const payloadData = {
                     name: document.getElementById('fullName').value,
                     email: document.getElementById('agencyEmail').value,
-                    description: `[Country: ${document.getElementById('targetCountry').value}] [Pipeline: ${document.getElementById('serviceNeeded').value}] [Styles Selected: ${selectedStyles.join(', ')}] Notes: ${document.getElementById('instructions').value}`,
-                    image: base64Content,
-                    mimeType: selectedFileBlob.type,
-                    fileName: selectedFileBlob.name
+                    description: `[Country: ${document.getElementById('targetCountry').value}] [Pipeline: ${document.getElementById('serviceNeeded').value}] [Styles: ${selectedStyles.join(', ')}] Notes: ${document.getElementById('instructions').value}`,
+                    files: encodedFilesArray
                 };
 
-                // Stream out to your deployed deployment address asset web app url framework
-                fetch("https://script.google.com/macros/s/AKfycbwMAF7GDWulv5VXrcGIYrNsfL7Z_Ps6k9FrfvDayY0FfdbV5TkMm7yw5r8ZCakcSB_Vqg/exec", {
+                // ⚠️ PASTE YOUR ENTIRE DEPLOYED GOOGLE APPS SCRIPT WEB APP URL DIRECTLY BELOW inside quotes
+                await fetch("https://script.google.com/macros/s/AKfycbwMAF7GDWulv5VXrcGIYrNsfL7Z_Ps6k9FrfvDayY0FfdbV5TkMm7yw5r8ZCakcSB_Vqg/exec", {
                     method: 'POST',
-                    mode: 'no-cors', /* Bypasses security restrictions locally safely inside asynchronous operations */
+                    mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payloadData)
-                })
-                .then(() => {
-                    submitBtn.textContent = 'Transmission Successful!';
-                    alert('Data transmission operational framework completed successfully! Your architectural drafting assets have entered tracking pipelines.');
-                    intakeForm.reset();
-                    dropzoneText.innerHTML = `Drag & Drop your sketch here, or <strong>browse local storage</strong>`;
-                    selectedFileBlob = null;
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Send to Lavientra Studio';
-                })
-                .catch(err => {
-                    console.error(err);
-                    alert('Data communication drop alert detected. Please verify your script deployment endpoints rules configurations.');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Send to Lavientra Studio';
                 });
-            };
-            
-            reader.readAsDataURL(selectedFileBlob);
+
+                submitBtn.textContent = 'Transmission Successful!';
+                alert('Data transmission operational framework completed successfully! Your architectural drafting assets have entered tracking pipelines.');
+                intakeForm.reset();
+                dropzoneText.innerHTML = `Drag & Drop your sketches here, or <strong>browse local storage</strong>`;
+                stagedFilesList = [];
+            } catch (err) {
+                console.error(err);
+                alert('Data communication drop alert detected. Please verify your script deployment parameters configurations.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send to Lavientra Studio';
+            }
         });
 
         fetchLiveExchangeRates();
