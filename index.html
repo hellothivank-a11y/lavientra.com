@@ -21,7 +21,7 @@
             --apple-bg: #ffffff;
             --apple-secondary-bg: #f5f5f7;
             --apple-text: #1d1d1f;
-            --apple-muted: #515154; /* Darker tone for crisp contrast visibility */
+            --apple-muted: #515154; 
             --apple-border: rgba(0, 0, 0, 0.1);
             --luxury-black: #000000;
             --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -43,12 +43,12 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Typography Hierarchy */
+        /* Typography */
         h1 {
             font-weight: 700;
-            font-size: clamp(42px, 6vw, 64px); 
+            font-size: clamp(38px, 5vw, 54px); 
             letter-spacing: -0.03em;
-            line-height: 1.1;
+            line-height: 1.15;
             color: var(--luxury-black);
         }
 
@@ -67,7 +67,6 @@
             color: var(--luxury-black);
         }
 
-        /* Clear, highly readable dark-gray body copy */
         p {
             font-weight: 400; 
             color: var(--apple-muted);
@@ -100,6 +99,18 @@
         .delay-2 { transition-delay: 0.2s; }
         .delay-3 { transition-delay: 0.3s; }
 
+        /* Premium Right-to-Left Slide Animation for Hero SVG */
+        @keyframes slideFromRight {
+            0% {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
         /* Navigation Bar */
         nav {
             position: fixed;
@@ -124,7 +135,7 @@
         }
 
         .nav-logo-img {
-            height: 28px; /* High-end visibility upgrade */
+            height: 28px; 
             width: auto;
             display: block;
         }
@@ -161,6 +172,7 @@
             border-radius: 980px;
             font-size: 13px !important;
             font-weight: 500 !important;
+            text-transform: capitalize;
             transition: all 0.3s ease;
         }
 
@@ -169,21 +181,46 @@
             transform: scale(1.02);
         }
 
-        /* Hero Section */
+        /* Hero Section Grid Overhaul */
         .hero {
-            padding: 200px 0 100px 0;
-            text-align: center;
+            padding: 180px 0 100px 0;
         }
 
-        .hero h1 {
-            max-width: 800px;
-            margin: 0 auto 24px auto;
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 64px;
+            align-items: center;
         }
 
-        .hero p {
-            font-size: 20px;
-            max-width: 720px;
-            margin: 0 auto 48px auto;
+        .hero-left {
+            text-align: left;
+        }
+
+        .hero-left h1 {
+            margin-bottom: 20px;
+        }
+
+        .hero-left p {
+            font-size: 17px; /* Reduced typography footprint */
+            max-width: 100%;
+            margin-bottom: 36px;
+        }
+
+        .hero-right {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            opacity: 0;
+            animation: slideFromRight 1.2s var(--apple-bezier) 0.2s forwards;
+        }
+
+        .hero-svg-display {
+            width: 100%;
+            max-width: 460px;
+            height: auto;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.04));
         }
 
         .btn-primary {
@@ -207,7 +244,7 @@
 
         /* Seamless Continuity Spacing Framework */
         .section {
-            padding: 100px 0; /* Balanced, seamless alignment */
+            padding: 100px 0; 
             border-top: 1px solid var(--apple-border);
             position: relative;
             clear: both;
@@ -234,7 +271,7 @@
             position: relative;
             width: 100%;
             height: 0;
-            padding-bottom: 62.5%; /* Lock exact architectural 16:10 standard proportions */
+            padding-bottom: 62.5%; 
             border-radius: var(--radius-premium);
             overflow: hidden;
             box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.08);
@@ -258,11 +295,13 @@
             color: transparent;
         }
 
+        /* Corrected Base Layering Symmetry Setup */
         .img-before { z-index: 1; }
         .img-after {
             z-index: 2;
             width: 50%;
             overflow: hidden;
+            border-right: 1px solid rgba(0, 0, 0, 0.25);
         }
 
         .img-after img {
@@ -270,7 +309,7 @@
             height: 100%;
         }
 
-        /* Minimalist Structural Labels inside Slider */
+        /* Minimalist Labels inside Slider */
         .slider-badge-label {
             position: absolute;
             top: 24px;
@@ -289,7 +328,7 @@
         .label-before { left: 24px; }
         .label-after { right: 24px; }
 
-        /* Complete Default Range Thumb Elimination Framework (Removes Blue Dot permanently) */
+        /* Input controller configuration track settings */
         .slider-input {
             position: absolute;
             -webkit-appearance: none !important;
@@ -334,26 +373,28 @@
             pointer-events: none;
         }
 
-        /* Apple Dial Interface Badge Element (Centered on Mobile and Desktop) */
+        /* Perfect Center Framework Premium Handle Dial Badge Object */
         .slider-handle-badge {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
             background: #ffffff;
             border-radius: 50%;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
             z-index: 4;
             pointer-events: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--luxury-black);
-            letter-spacing: -0.05em;
+        }
+
+        .slider-handle-badge svg {
+            width: 20px;
+            height: 12px;
+            display: block;
         }
 
         /* Core Standards Matrix Grid Layout */
@@ -426,7 +467,7 @@
             letter-spacing: -0.02em;
         }
 
-        /* Pricing Architecture Toggle Matrix */
+        /* Pricing Architecture Minimalist Switch Array */
         .pricing-toggle-zone {
             display: flex;
             justify-content: center;
@@ -445,12 +486,13 @@
         .toggle-btn {
             background: none;
             border: none;
-            padding: 10px 26px;
-            font-size: 14px;
-            font-weight: 500;
+            padding: 10px 24px;
+            font-size: 13px;
+            font-weight: 600;
             color: var(--apple-muted);
             cursor: pointer;
             border-radius: 980px;
+            letter-spacing: 0.03em;
             transition: all 0.3s ease;
         }
 
@@ -508,7 +550,7 @@
 
         .pricing-features li::before { content: "—"; color: var(--luxury-black); }
 
-        /* Technical Specification Layout Block */
+        /* Technical Specification Block Layout */
         .specs-layout {
             display: grid;
             grid-template-columns: 1fr 1.6fr;
@@ -564,7 +606,7 @@
             border: 1px solid var(--apple-border);
         }
 
-        /* High-fidelity Google Intake Form */
+        /* Form Layout Box Container */
         .form-container-box {
             max-width: 680px;
             margin: 0 auto;
@@ -595,12 +637,12 @@
         .direct-channels { text-align: center; margin-top: 40px; font-size: 15px; }
         .direct-channels a { color: var(--luxury-black); text-decoration: none; font-weight: 600; border-bottom: 1px solid var(--luxury-black); }
 
-        /* Brand Profile About Narrative Block */
+        /* Brand Narrative Profile Section */
         .about-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; }
         .about-layout h2 { font-size: 48px; }
         .about-content p { font-size: 19px; margin-bottom: 28px; color: var(--apple-text); }
 
-        /* Refined Editorial Brand Footer */
+        /* Editorial Brand Footer Frame */
         footer { padding: 80px 0 40px 0; border-top: 1px solid var(--apple-border); background: var(--apple-secondary-bg); }
         .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1.6fr; gap: 60px; margin-bottom: 60px; }
         .footer-col h5 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 20px; color: var(--luxury-black); font-weight: 600; }
@@ -609,11 +651,12 @@
         .footer-col a:hover { color: var(--luxury-black); }
         .footer-bottom { text-align: center; font-size: 13px; color: var(--apple-muted); padding-top: 40px; border-top: 1px solid rgba(0, 0, 0, 0.05); }
 
-        /* Responsive Layout Overrides */
-        @media (max-width: 900px) {
-            .standards-grid { grid-template-columns: 1fr; gap: 50px; }
-        }
+        /* Responsive Architecture Grid Breaks */
         @media (max-width: 768px) {
+            .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 40px; }
+            .hero-left { text-align: center; }
+            .hero-right { order: -1; } /* Displays SVG plan on top layout context for mobile screens */
+            .standards-grid { grid-template-columns: 1fr; gap: 50px; }
             .specs-layout, .about-layout, .footer-grid { grid-template-columns: 1fr; gap: 48px; }
             .nav-right-block { display: none; }
         }
@@ -621,7 +664,7 @@
 </head>
 <body>
 
-    <!-- Responsive Transparent Header Frame Asset Placement -->
+    <!-- Transparent Navigation Frame Overlay -->
     <nav>
         <div class="container">
             <div class="nav-container">
@@ -633,22 +676,30 @@
                         <li><a href="#portfolio">portfolio</a></li>
                         <li><a href="#pricing">pricing</a></li>
                     </ul>
-                    <a href="#upload" class="nav-cta">upload sketch</a>
+                    <a href="#upload" class="nav-cta">submit sketch</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Ultra-Minimalist Shorter Hero Framework Block -->
+    <!-- Two-Column Interactive Hero Grid Section -->
     <section class="hero reveal-node">
         <div class="container">
-            <h1>High-Precision 2D Floor Plans.</h1>
-            <p>Drafted exclusively for UK & AUS real estate markets. Turn rough sketches into marketing-ready, RICS-compliant layouts within 24 hours.</p>
-            <a href="#upload" class="btn-primary">Submit Sketch</a>
+            <div class="hero-grid">
+                <div class="hero-left">
+                    <h1>High-Precision 2D Floor Plans.</h1>
+                    <p>Drafted exclusively for UK & AUS real estate markets. Turn rough sketches into marketing-ready, RICS-compliant layouts within 24 hours.</p>
+                    <a href="#upload" class="btn-primary">Submit Sketch</a>
+                </div>
+                <div class="hero-right">
+                    <!-- Target source pointing directly to your dynamic inline vector flow asset -->
+                    <img src="assets/hero-plan.svg" alt="Lavientra Vector Blueprint Asset" class="hero-svg-display">
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Interactive Plan Presentation Engine (Flapped correctly with SVG source configurations) -->
+    <!-- Interactive Plan Presentation Slider Engine (Corrected Alignment Configurations) -->
     <section id="showcase" class="section reveal-node" style="padding-top: 0; border-top: none;">
         <div class="container">
             <div class="section-header">
@@ -657,28 +708,34 @@
             </div>
             
             <div class="slider-wrapper" id="sliderContainer">
-                <!-- Exact Left / Right Context Positioning Minimalist Labels -->
                 <div class="slider-badge-label label-before">Before</div>
                 <div class="slider-badge-label label-after">After</div>
                 
-                <!-- Left (Background) Asset - Rough Draft Drawing -->
+                <!-- Base Layer Frame: Plan Image correctly positioned on the right background alignment -->
                 <div class="slider-img img-before">
-                    <img src="assets/sketch-before.webp" alt="Draft Field Sketch">
-                </div>
-                
-                <!-- Right (Sliding Overlay Layer) Asset - RECONFIGURED FOR HIGH ACCURACY CRISP SVG FILES -->
-                <div class="slider-img img-after" id="afterImg">
                     <img src="assets/plan-after.svg" alt="Finished Clean Vector SVG Layout">
                 </div>
                 
+                <!-- Sliding Layer Mask Frame: Sketch Image correctly rendered leftwards overlay window -->
+                <div class="slider-img img-after" id="afterImg">
+                    <img src="assets/sketch-before.webp" alt="Draft Field Sketch">
+                </div>
+                
                 <div class="slider-line" id="sliderLine"></div>
-                <div class="slider-handle-badge" id="sliderHandleIcon">&larr;&rarr;</div>
+                
+                <!-- Premium Custom Filled Double-Arrow SVG Component Overlay Integration -->
+                <div class="slider-handle-badge" id="sliderHandleIcon">
+                    <svg viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 1L1 6L6 11" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M14 1L19 6L14 11" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
                 <input type="range" min="0" max="100" value="50" class="slider-input" id="sliderRange">
             </div>
         </div>
     </section>
 
-    <!-- Core Compliance Standards Block Matrix (Balanced 2x2 Structure Framework) -->
+    <!-- Core Compliance Standards Block Matrix (Balanced 2x2 Layout Frame) -->
     <section id="standards" class="section reveal-node">
         <div class="container">
             <div class="section-header">
@@ -710,7 +767,7 @@
         </div>
     </section>
 
-    <!-- Continuous Vector Media Portfolio Magazine Grid Layout (UPGRADED TO RENDER SHARP VECTOR .SVG PLANS) -->
+    <!-- Continuous Vector Portfolio Magazine Layout Block -->
     <section id="portfolio" class="section reveal-node">
         <div class="container">
             <div class="section-header">
@@ -720,42 +777,42 @@
 
             <div class="gallery-grid">
                 <div class="gallery-item reveal-node delay-1">
-                    <div class="gallery-img-container"><img src="assets/portfolio-bw.svg" alt="SVG Plan"></div>
+                    <div class="gallery-img-container"><img src="assets/portfolio-bw.svg" alt="SVG Vector Document"></div>
                     <div class="gallery-meta">
                         <h4>Standard Editorial B&W</h4>
                         <p>High-contrast vector lineage, ideal for traditional print brochures.</p>
                     </div>
                 </div>
                 <div class="gallery-item reveal-node delay-2">
-                    <div class="gallery-img-container"><img src="assets/portfolio-color.svg" alt="SVG Plan"></div>
+                    <div class="gallery-img-container"><img src="assets/portfolio-color.svg" alt="SVG Vector Document"></div>
                     <div class="gallery-meta">
                         <h4>Color Zoned Marketing Layout</h4>
                         <p>Soft color-coded zones to help buyers visualize property flow instantly.</p>
                     </div>
                 </div>
                 <div class="gallery-item reveal-node delay-3">
-                    <div class="gallery-img-container"><img src="assets/portfolio-furniture.svg" alt="SVG Plan"></div>
+                    <div class="gallery-img-container"><img src="assets/portfolio-furniture.svg" alt="SVG Vector Document"></div>
                     <div class="gallery-meta">
                         <h4>Premium Furnished Space</h4>
                         <p>Includes accurate, modern CAD blocks to showcase property scale and potential.</p>
                     </div>
                 </div>
                 <div class="gallery-item reveal-node delay-1">
-                    <div class="gallery-img-container"><img src="assets/portfolio-commercial.svg" alt="SVG Plan"></div>
+                    <div class="gallery-img-container"><img src="assets/portfolio-commercial.svg" alt="SVG Vector Document"></div>
                     <div class="gallery-meta">
                         <h4>Commercial Property Specification</h4>
                         <p>Drafted cleanly to showcase complex corporate layouts and massive square footage.</p>
                     </div>
                 </div>
                 <div class="gallery-item reveal-node delay-2">
-                    <div class="gallery-img-container"><img src="assets/portfolio-complex.svg" alt="SVG Plan"></div>
+                    <div class="gallery-img-container"><img src="assets/portfolio-complex.svg" alt="SVG Vector Document"></div>
                     <div class="gallery-meta">
                         <h4>Complex Multi-Level Blueprint</h4>
                         <p>Absolute geometrical precision for intricate layouts, split-levels, and period properties.</p>
                     </div>
                 </div>
                 <div class="gallery-item reveal-node delay-3">
-                    <div class="gallery-img-container"><img src="assets/portfolio-siteplan.svg" alt="SVG Plan"></div>
+                    <div class="gallery-img-container"><img src="assets/portfolio-siteplan.svg" alt="SVG Vector Document"></div>
                     <div class="gallery-meta">
                         <h4>Overall Site & Boundary Layout</h4>
                         <p>Clear mapping of external perimeters, gardens, and outbuildings.</p>
@@ -765,7 +822,7 @@
         </div>
     </section>
 
-    <!-- Dynamic B2B Multi-currency Engine Block Section -->
+    <!-- Dynamic B2B Currency Engine Switcher Section Block (Refactored Minimalist Text Switches) -->
     <section id="pricing" class="section reveal-node">
         <div class="container">
             <div class="section-header">
@@ -775,9 +832,9 @@
 
             <div class="pricing-toggle-zone">
                 <div class="pill-toggle">
-                    <button class="toggle-btn active" id="btn-uk" onclick="setMarket('uk')">🇬🇧 UK (GBP)</button>
-                    <button class="toggle-btn" id="btn-aus" onclick="setMarket('aus')">🇦🇺 AUS (AUD)</button>
-                    <button class="toggle-btn" id="btn-usd" onclick="setMarket('usd')">🇺🇸 Global (USD)</button>
+                    <button class="toggle-btn active" id="btn-uk" onclick="setMarket('uk')">UK (GBP)</button>
+                    <button class="toggle-btn" id="btn-aus" onclick="setMarket('aus')">AUS (AUD)</button>
+                    <button class="toggle-btn" id="btn-usd" onclick="setMarket('usd')">GLOBAL (USD)</button>
                 </div>
             </div>
 
@@ -816,7 +873,7 @@
         </div>
     </section>
 
-    <!-- Technical Metrics Checkpoint Block Grid -->
+    <!-- Technical Metrics Checkpoint Blocks Layout -->
     <section class="section reveal-node">
         <div class="container">
             <div class="specs-layout">
@@ -856,7 +913,7 @@
         </div>
     </section>
 
-    <!-- Interactive Pipeline Architecture Workflow Section -->
+    <!-- Interactive Production Pipeline Workflow Channels Section -->
     <section class="section reveal-node">
         <div class="container">
             <div class="section-header">
@@ -887,7 +944,7 @@
         </div>
     </section>
 
-    <!-- Project Intake Google UX Compliance Form Section -->
+    <!-- Project Intake Data Collection Pipeline Form Box Section -->
     <section id="upload" class="section reveal-node">
         <div class="container">
             <div class="section-header">
@@ -951,7 +1008,7 @@
         </div>
     </section>
 
-    <!-- Architectural Narrative Profile Section Layout Block -->
+    <!-- Brand Profile Narrative Block Section Layout -->
     <section class="section reveal-node">
         <div class="container">
             <div class="about-layout">
@@ -966,7 +1023,7 @@
         </div>
     </section>
 
-    <!-- Editorial High-end Visual Brand Identity Footer Frame Element -->
+    <!-- High-end Editorial Visual Footer Layout Frame -->
     <footer>
         <div class="container">
             <div class="footer-grid">
@@ -999,7 +1056,7 @@
         </div>
     </footer>
 
-    <!-- Interactive Engine Operations Scripts Grid Block -->
+    <!-- Interactive Runtime Operation Engine Scripts -->
     <script>
         const sliderRange = document.getElementById('sliderRange');
         const afterImg = document.getElementById('afterImg');
@@ -1014,18 +1071,17 @@
             sliderHandleIcon.style.left = val + '%';
         }
 
-        updateSlider(); // Default positioning call logic setup
+        updateSlider(); 
         
         sliderRange.addEventListener('input', updateSlider);
         
-        // Dynamic viewport container scale synchronization tracking metric mapping logic
         window.addEventListener('resize', () => {
             const containerWidth = sliderContainer.offsetWidth;
             const absoluteImg = afterImg.querySelector('img');
             if (absoluteImg) absoluteImg.style.width = containerWidth + 'px';
         });
 
-        // High-end Intersection Animation Scroll Mapping Configuration Call Engine
+        // Intersection Reveal Viewport Engine Logic Calls
         const observeOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -1036,7 +1092,7 @@
         }, observeOptions);
         document.querySelectorAll('.reveal-node').forEach(node => observer.observe(node));
         
-        // Dynamic International B2B Pricing Conversion Pipelines Values Configurations
+        // Multi-currency Pipeline Engine System Data Call matrices
         const baseUSD = { standard: 35.00, advanced: 75.00, express: 20.00 };
         let currentMarket = 'uk';
         let exchangeRates = { GBP: 0.78, AUD: 1.52, USD: 1.00 }; 
@@ -1075,9 +1131,7 @@
 
         fetchLiveExchangeRates();
         
-        // Execute dynamic initialization metrics sizing triggers loop setup instantly
         setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
     </script>
 </body>
 </html>
-
