@@ -18,7 +18,6 @@ const portfolioData = [
 function renderPortfolio() {
     const track = document.getElementById('portfolioTrack');
     let htmlContent = '';
-    // Duplicate arrays for smooth infinite structural scrolling looping mechanics
     for(let i = 0; i < 2; i++) {
         portfolioData.forEach(item => {
             htmlContent += `
@@ -116,7 +115,7 @@ let exchangeRates = { GBP: 0.78, AUD: 1.52, USD: 1.00 };
 async function fetchLiveExchangeRates() {
     const CACHE_KEY = 'lavientra_exchange_rates';
     const CACHE_TIME_KEY = 'lavientra_rates_timestamp';
-    const ONE_HOUR = 60 * 60 * 1000; // Cache duration threshold parameter
+    const ONE_HOUR = 60 * 60 * 1000; 
 
     const cachedRates = localStorage.getItem(CACHE_KEY);
     const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
@@ -231,7 +230,6 @@ intakeForm.addEventListener('submit', async function(e) {
 
         for (let i = 0; i < stagedFilesList.length; i++) {
             totalSize += stagedFilesList[i].size;
-            // 45MB safety margin block limit verification check to avoid Google Payload crash
             if (totalSize > 45 * 1024 * 1024) {
                 throw new Error("Total payload allocation volume exceeds limit (45MB). Please upload smaller files.");
             }
@@ -255,15 +253,14 @@ intakeForm.addEventListener('submit', async function(e) {
             files: encodedFilesArray
         };
 
-        // Fire-and-forget payload via no-cors to prevent browser redirect blocks
-        await fetch("https://script.google.com/macros/s/AKfycbymzH1zVuVz7R5hv4TWh4T8UEwcJHGp_SQ5z3odvd6OSLGHdg0LQX6U46oFSOL4ALR9Ag/exec", {
+        // Fire-and-forget payload via no-cors to prevent redirect blocks
+        await fetch("මhttps://script.google.com/macros/s/AKfycbymzH1zVuVz7R5hv4TWh4T8UEwcJHGp_SQ5z3odvd6OSLGHdg0LQX6U46oFSOL4ALR9Ag/exec", {
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'text/plain' },
             body: JSON.stringify(payloadData)
         });
 
-        // Since no-cors hides the response, we assume success if the fetch didn't throw a network crash error.
         showSuccessPopup();
         intakeForm.reset();
         dropzoneText.innerHTML = `Drag & Drop your sketches here, or <strong>browse local storage</strong>`;
