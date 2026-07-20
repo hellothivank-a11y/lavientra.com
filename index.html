@@ -76,8 +76,8 @@
         .slider-img img { 
             width: 100%; 
             height: 100%; 
-            object-fit: cover; /* contain එක cover කරන්න. එතකොට frame එක පුරාම fill වෙනවා */
-            object-position: center; /* ඉමේජ් එක frame එකේ මදටම alignment වෙනවා */
+            object-fit: cover; 
+            object-position: center; 
             display: block; 
             color: transparent; 
         }
@@ -99,7 +99,7 @@
         .standard-num { font-size: 12px; font-weight: 600; color: var(--luxury-black); margin-bottom: 16px; display: block; text-transform: uppercase; letter-spacing: 0.08em; }
         .standard-card h3 { font-size: 24px; margin-bottom: 16px; }
 
-        /* NEW: Horizontal Infinite Auto-Scroll Portfolio */
+        /* Horizontal Infinite Auto-Scroll Portfolio */
         .portfolio-scroller-container {
             width: 100%;
             overflow: hidden;
@@ -107,7 +107,6 @@
             padding: 20px 0;
             white-space: nowrap;
         }
-        /* Fade edges for Apple look */
         .portfolio-scroller-container::before, .portfolio-scroller-container::after {
             content: ''; position: absolute; top: 0; width: 150px; height: 100%; z-index: 2; pointer-events: none;
         }
@@ -120,18 +119,17 @@
             width: max-content;
             animation: infiniteScroll 80s linear infinite;
         }
-        /* Pause on Hover */
         .portfolio-track:hover {
             animation-play-state: paused;
         }
         
         @keyframes infiniteScroll {
             0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); } /* Scrolls exactly half, making it perfectly infinite */
+            100% { transform: translateX(-50%); }
         }
 
         .gallery-item { 
-            width: 380px; /* Fixed width for horizontal scrolling */
+            width: 380px; 
             flex-shrink: 0;
             display: flex; flex-direction: column; text-decoration: none; cursor: zoom-in; white-space: normal; 
         }
@@ -221,6 +219,26 @@
         .direct-channels { text-align: center; margin-top: 40px; font-size: 15px; }
         .direct-channels a { color: var(--luxury-black); text-decoration: none; font-weight: 600; border-bottom: 1px solid var(--luxury-black); }
 
+        /* Premium Success Popup Styles */
+        .success-popup-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            display: none; align-items: center; justify-content: center;
+            z-index: 10000; opacity: 0; transition: opacity 0.4s var(--apple-bezier);
+        }
+        .success-popup-overlay.active { display: flex; opacity: 1; }
+        .success-popup-card {
+            background: #ffffff; border: 1px solid var(--apple-border);
+            padding: 48px; border-radius: var(--radius-premium); text-align: center;
+            max-width: 440px; width: 90%; box-shadow: 0 30px 60px rgba(0,0,0,0.08);
+            transform: translateY(20px); transition: transform 0.4s var(--apple-bezier);
+        }
+        .success-popup-overlay.active .success-popup-card { transform: translateY(0); }
+        .success-icon-wrap { font-size: 40px; margin-bottom: 24px; color: var(--luxury-black); }
+        .success-popup-card h3 { font-size: 24px; margin-bottom: 12px; }
+        .success-popup-card p { font-size: 15px; margin-bottom: 32px; }
+
         /* Profile Layout */
         .about-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: center; }
         .about-left-heading h2 { font-size: 48px; line-height: 1.6; letter-spacing: -0.03em; }
@@ -243,7 +261,7 @@
             .specs-layout, .about-layout, .footer-grid { grid-template-columns: 1fr; gap: 48px; }
             .premium-pricing-card { padding: 32px 20px; }
             .nav-right-block { display: none; }
-            .portfolio-scroller-container::before, .portfolio-scroller-container::after { width: 40px; } /* Smaller fade on mobile */
+            .portfolio-scroller-container::before, .portfolio-scroller-container::after { width: 40px; }
         }
     </style>
 </head>
@@ -344,7 +362,6 @@
         </div>
     </section>
 
-    <!-- NEW SMART PORTFOLIO SECTION -->
     <section id="portfolio" class="section reveal-node">
         <div class="container">
             <div class="section-header">
@@ -352,10 +369,7 @@
                 <p>Explore our diverse drafting structures tailored completely to international marketing specs.</p>
             </div>
         </div>
-        
-        <!-- Full width Auto-Scrolling Container -->
         <div class="portfolio-scroller-container">
-            <!-- Items are injected here via JS -->
             <div class="portfolio-track" id="portfolioTrack"></div>
         </div>
     </section>
@@ -647,11 +661,20 @@
         <img id="lightbox-img" src="" alt="Zoomed Portfolio View">
     </div>
 
+    <!-- Success Notification Popup Container -->
+    <div id="successPopup" class="success-popup-overlay">
+        <div class="success-popup-card">
+            <div class="success-icon-wrap">✓</div>
+            <h3>Submission Successful</h3>
+            <p>Your architectural assets have entered our tracking pipeline. A production strategist will verify documentation shortly.</p>
+            <button class="btn-primary" style="font-size: 14px; padding: 12px 28px;" onclick="closeSuccessPopup()">Dismiss</button>
+        </div>
+    </div>
+
     <script>
         // =========================================================
         // 1. SMART PORTFOLIO GENERATOR (EASY TO UPDATE)
         // =========================================================
-        // අලුත් ඉමේජ් එකක් ආවොත් මේ ලිස්ට් එකට නම එකතු කරන්න විතරයි තියෙන්නේ!
         const portfolioData = [
             { img: 'assets/portfolio-bw.svg', title: 'Standard Editorial B&W', desc: 'High-contrast vector lineage, ideal for traditional print brochures.' },
             { img: 'assets/portfolio-color.svg', title: 'Color Zoned Marketing Layout', desc: 'Soft color-coded zones to help buyers visualize property flow instantly.' },
@@ -669,7 +692,6 @@
         function renderPortfolio() {
             const track = document.getElementById('portfolioTrack');
             let htmlContent = '';
-            // Loop twice to create the infinite scroll illusion
             for(let i = 0; i < 2; i++) {
                 portfolioData.forEach(item => {
                     htmlContent += `
@@ -782,7 +804,7 @@
         }
 
         // =========================================================
-        // 6. FORM & UPLOAD PIPELINE
+        // 6. FORM, UPLOAD & PREMIUM POPUP ENGINE
         // =========================================================
         const dropzoneArea = document.getElementById('dropzoneArea');
         const fileInput = document.getElementById('sketchFiles');
@@ -864,7 +886,8 @@
                     body: JSON.stringify(payloadData)
                 });
 
-                alert('Data transmission operational framework completed successfully! Your architectural drafting assets have entered tracking pipelines.');
+                // Triggering Premium Dynamic Modal Popup Instead of Alert Engine
+                showSuccessPopup();
                 intakeForm.reset();
                 dropzoneText.innerHTML = `Drag & Drop your sketches here, or <strong>browse local storage</strong>`;
                 stagedFilesList = [];
@@ -877,6 +900,21 @@
                 btnText.textContent = 'Send to Lavientra Studio';
             }
         });
+
+        // Popup Open/Close Operational Logic
+        function showSuccessPopup() {
+            const popup = document.getElementById('successPopup');
+            popup.style.display = 'flex';
+            setTimeout(() => { popup.classList.add('active'); }, 10);
+        }
+        function closeSuccessPopup() {
+            const popup = document.getElementById('successPopup');
+            popup.classList.remove('active');
+            setTimeout(() => { 
+                popup.style.display = 'none'; 
+                window.location.reload(); 
+            }, 400);
+        }
 
         fetchLiveExchangeRates();
         setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
