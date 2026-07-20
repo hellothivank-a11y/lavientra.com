@@ -36,7 +36,7 @@
 
         .container { width: 100%; max-width: 1140px; margin: 0 auto; padding: 0 24px; }
 
-        .reveal-node { opacity: 0; transform: translateY(40px); transition: opacity 0.8s var(--apple-bezier), transform 0.8s var(--apple-bezier); will-change: transform, opacity; }
+        .reveal-node { opacity: 0; transform: translateY(30px); transition: opacity 0.7s var(--apple-bezier), transform 0.7s var(--apple-bezier); will-change: transform, opacity; }
         .reveal-node.active { opacity: 1; transform: translateY(0); }
         .delay-1 { transition-delay: 0.1s; } .delay-2 { transition-delay: 0.2s; } .delay-3 { transition-delay: 0.3s; }
 
@@ -64,8 +64,9 @@
         .btn-primary { display: inline-block; background: var(--luxury-black); color: #fff; text-decoration: none; padding: 16px 36px; border-radius: 980px; font-size: 16px; font-weight: 500; letter-spacing: 0.02em; transition: all 0.3s ease; }
         .btn-primary:hover { background: #2d2d2f; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
 
-        .section { padding: 100px 0; border-top: 1px solid var(--apple-border); position: relative; clear: both; }
-        .section-header { text-align: center; margin-bottom: 50px; }
+        /* Adjusted Spacing */
+        .section { padding: 60px 0; border-top: 1px solid var(--apple-border); position: relative; clear: both; }
+        .section-header { text-align: center; margin-bottom: 40px; }
         .section-header h2 { margin-bottom: 16px; }
         .section-header p { max-width: 650px; margin: 0 auto; }
 
@@ -91,18 +92,50 @@
         .standard-num { font-size: 12px; font-weight: 600; color: var(--luxury-black); margin-bottom: 16px; display: block; text-transform: uppercase; letter-spacing: 0.08em; }
         .standard-card h3 { font-size: 24px; margin-bottom: 16px; }
 
-        /* Portfolio */
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 56px 32px; }
-        .gallery-item { display: flex; flex-direction: column; text-decoration: none; cursor: pointer; }
+        /* NEW: Horizontal Infinite Auto-Scroll Portfolio */
+        .portfolio-scroller-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            padding: 20px 0;
+            white-space: nowrap;
+        }
+        /* Fade edges for Apple look */
+        .portfolio-scroller-container::before, .portfolio-scroller-container::after {
+            content: ''; position: absolute; top: 0; width: 150px; height: 100%; z-index: 2; pointer-events: none;
+        }
+        .portfolio-scroller-container::before { left: 0; background: linear-gradient(to right, var(--apple-bg) 0%, transparent 100%); }
+        .portfolio-scroller-container::after { right: 0; background: linear-gradient(to left, var(--apple-bg) 0%, transparent 100%); }
+        
+        .portfolio-track {
+            display: flex;
+            gap: 40px;
+            width: max-content;
+            animation: infiniteScroll 45s linear infinite;
+        }
+        /* Pause on Hover */
+        .portfolio-track:hover {
+            animation-play-state: paused;
+        }
+        
+        @keyframes infiniteScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* Scrolls exactly half, making it perfectly infinite */
+        }
+
+        .gallery-item { 
+            width: 380px; /* Fixed width for horizontal scrolling */
+            flex-shrink: 0;
+            display: flex; flex-direction: column; text-decoration: none; cursor: zoom-in; white-space: normal; 
+        }
         .gallery-img-container { 
             background: #ffffff; 
             border-radius: var(--radius-premium); 
             overflow: hidden; 
-            aspect-ratio: 30 / 20; /* UPDATED: Changed back to 30/20 */
+            aspect-ratio: 30 / 20; 
             border: 1px solid var(--apple-border); 
             margin-bottom: 22px; 
             display: flex; align-items: center; justify-content: center;
-            cursor: zoom-in;
         }
         .gallery-item img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); color: transparent; }
         .gallery-item:hover img { transform: scale(1.02); }
@@ -135,20 +168,15 @@
         .pricing-footnote-list li { font-size: 14px; font-weight: 500; color: var(--apple-muted); display: flex; gap: 10px; align-items: flex-start; line-height: 1.5; }
         .pricing-footnote-list li::before { content: "•"; color: var(--luxury-black); font-weight: 700; }
 
-        /* Specs (UPDATED: Box Height & Centered Text) */
-        .specs-layout { 
-            display: grid; 
-            grid-template-columns: 1fr 1.6fr; 
-            gap: 64px; 
-            /* align-items: start; - REMOVED this so the boxes stretch to equal height */
-        }
+        /* Specs */
+        .specs-layout { display: grid; grid-template-columns: 1fr 1.6fr; gap: 64px; }
         .specs-highlight-card { 
             background: var(--apple-secondary-bg); 
             padding: 64px 54px; 
             border-radius: var(--radius-premium); 
             display: flex; 
             flex-direction: column; 
-            justify-content: center; /* ADDED this to center the text vertically */
+            justify-content: center; 
             gap: 24px; 
             border: 1px solid var(--apple-border); 
             height: 100%; 
@@ -156,15 +184,6 @@
         .specs-highlight-icon { width: 32px; height: 32px; color: var(--luxury-black); display: block; }
         .specs-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 48px; list-style: none; }
         .specs-list strong { color: var(--luxury-black); display: block; margin-bottom: 10px; font-size: 16px; font-weight: 600; }
-
-        /* Client Reviews Section (NEW) */
-        .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-bottom: 40px; }
-        .review-card { background: var(--apple-secondary-bg); padding: 40px; border-radius: var(--radius-premium); border: 1px solid var(--apple-border); display: flex; flex-direction: column; justify-content: space-between; }
-        .review-stars { color: var(--luxury-black); font-size: 18px; margin-bottom: 20px; letter-spacing: 2px; }
-        .review-text { font-size: 16px; color: var(--luxury-black); font-style: italic; margin-bottom: 30px; line-height: 1.6; }
-        .review-author strong { display: block; font-size: 15px; color: var(--luxury-black); }
-        .review-author span { font-size: 13px; color: var(--apple-muted); }
-        .review-cta { text-align: center; margin-top: 30px; }
 
         /* Workflow */
         .workflow-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 48px; margin-bottom: 54px; }
@@ -217,6 +236,7 @@
             .specs-layout, .about-layout, .footer-grid { grid-template-columns: 1fr; gap: 48px; }
             .premium-pricing-card { padding: 32px 20px; }
             .nav-right-block { display: none; }
+            .portfolio-scroller-container::before, .portfolio-scroller-container::after { width: 40px; } /* Smaller fade on mobile */
         }
     </style>
 </head>
@@ -317,57 +337,19 @@
         </div>
     </section>
 
+    <!-- NEW SMART PORTFOLIO SECTION -->
     <section id="portfolio" class="section reveal-node">
         <div class="container">
             <div class="section-header">
                 <h2>Our Portfolio.</h2>
                 <p>Explore our diverse drafting structures tailored completely to international marketing specs.</p>
             </div>
-
-            <div class="gallery-grid">
-                <div class="gallery-item reveal-node delay-1" onclick="openLightbox('assets/portfolio-bw.svg')">
-                    <div class="gallery-img-container"><img src="assets/portfolio-bw.svg" alt="SVG Plan Asset"></div>
-                    <div class="gallery-meta">
-                        <h4>Standard Editorial B&W</h4>
-                        <p>High-contrast vector lineage, ideal for traditional print brochures.</p>
-                    </div>
-                </div>
-                <div class="gallery-item reveal-node delay-2" onclick="openLightbox('assets/portfolio-color.svg')">
-                    <div class="gallery-img-container"><img src="assets/portfolio-color.svg" alt="SVG Plan Asset"></div>
-                    <div class="gallery-meta">
-                        <h4>Color Zoned Marketing Layout</h4>
-                        <p>Soft color-coded zones to help buyers visualize property flow instantly.</p>
-                    </div>
-                </div>
-                <div class="gallery-item reveal-node delay-3" onclick="openLightbox('assets/portfolio-furniture.svg')">
-                    <div class="gallery-img-container"><img src="assets/portfolio-furniture.svg" alt="SVG Plan Asset"></div>
-                    <div class="gallery-meta">
-                        <h4>Premium Furnished Space</h4>
-                        <p>Includes accurate, modern CAD blocks to showcase property scale and potential.</p>
-                    </div>
-                </div>
-                <div class="gallery-item reveal-node delay-1" onclick="openLightbox('assets/portfolio-commercial.svg')">
-                    <div class="gallery-img-container"><img src="assets/portfolio-commercial.svg" alt="SVG Plan Asset"></div>
-                    <div class="gallery-meta">
-                        <h4>Commercial Property Specification</h4>
-                        <p>Drafted cleanly to showcase complex corporate layouts and massive square footage.</p>
-                    </div>
-                </div>
-                <div class="gallery-item reveal-node delay-2" onclick="openLightbox('assets/portfolio-complex.svg')">
-                    <div class="gallery-img-container"><img src="assets/portfolio-complex.svg" alt="SVG Plan Asset"></div>
-                    <div class="gallery-meta">
-                        <h4>Complex Multi-Level Blueprint</h4>
-                        <p>Absolute geometrical precision for intricate layouts, split-levels, and period properties.</p>
-                    </div>
-                </div>
-                <div class="gallery-item reveal-node delay-3" onclick="openLightbox('assets/portfolio-siteplan.svg')">
-                    <div class="gallery-img-container"><img src="assets/portfolio-siteplan.svg" alt="SVG Plan Asset"></div>
-                    <div class="gallery-meta">
-                        <h4>Overall Site & Boundary Layout</h4>
-                        <p>Clear mapping of external perimeters, gardens, and outbuildings.</p>
-                    </div>
-                </div>
-            </div>
+        </div>
+        
+        <!-- Full width Auto-Scrolling Container -->
+        <div class="portfolio-scroller-container">
+            <!-- Items are injected here via JS -->
+            <div class="portfolio-track" id="portfolioTrack"></div>
         </div>
     </section>
 
@@ -424,9 +406,16 @@
                         </div>
                     </div>
 
-                    <div class="price-sub-section-title">Add-On</div>
+                    <div class="price-sub-section-title">Add-Ons</div>
                     
                     <div class="price-list-rows">
+                        <div class="price-row-item">
+                            <div class="price-item-info">
+                                <h4>6h Express Delivery</h4>
+                                <p>Accelerated priority pipeline turnaround processing</p>
+                            </div>
+                            <div class="price-item-value" id="price-addon-express">--</div>
+                        </div>
                         <div class="price-row-item">
                             <div class="price-item-info">
                                 <h4>Color</h4>
@@ -452,7 +441,6 @@
         </div>
     </section>
 
-    <!-- Specs Section (Updated Box Styling) -->
     <section class="section reveal-node">
         <div class="container">
             <div class="specs-layout">
@@ -492,37 +480,6 @@
                         </li>
                     </ul>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- NEW: Client Reviews Section -->
-    <section class="section reveal-node">
-        <div class="container">
-            <div class="section-header">
-                <h2>Client Feedback.</h2>
-                <p>What our global real estate partners say about our precision and speed.</p>
-            </div>
-            <div class="reviews-grid">
-                <div class="review-card">
-                    <div class="review-stars">★★★★★</div>
-                    <p class="review-text">"Lavientra Studio transformed our field sketches into flawless marketing assets within hours. The geometric precision is unmatched."</p>
-                    <div class="review-author">
-                        <strong>James Rutherford</strong>
-                        <span>Director, Aspect Studios UK</span>
-                    </div>
-                </div>
-                <div class="review-card">
-                    <div class="review-stars">★★★★★</div>
-                    <p class="review-text">"The quiet luxury aesthetic and absolute compliance to Property Council Guidelines makes them our go-to drafting partner in Australia."</p>
-                    <div class="review-author">
-                        <strong>Sarah Jenkins</strong>
-                        <span>Lead Agent, Horizon Real Estate AUS</span>
-                    </div>
-                </div>
-            </div>
-            <div class="review-cta">
-                <a href="mailto:hello@lavientra.com?subject=Lavientra Studio Review" class="btn-primary" style="padding: 12px 28px; font-size: 15px;">Submit Your Review</a>
             </div>
         </div>
     </section>
@@ -578,6 +535,10 @@
                         <input type="email" id="agencyEmail" class="form-control" placeholder="e.g. contact@aspectstudios.co.uk" required>
                     </div>
                     <div class="form-group">
+                        <label for="propertyAddress">Property Address (To display on the floor plan metadata)</label>
+                        <input type="text" id="propertyAddress" class="form-control" placeholder="e.g. 42 Baker Street, London NW1 6XE" required>
+                    </div>
+                    <div class="form-group">
                         <label for="targetCountry">Target Country</label>
                         <select id="targetCountry" class="form-control">
                             <option value="United Kingdom">United Kingdom</option>
@@ -588,7 +549,7 @@
                         <label for="serviceNeeded">Service Needed</label>
                         <select id="serviceNeeded" class="form-control">
                             <option value="24h Standard">24h Standard</option>
-                            <option value="6h Express">6h Express</option>
+                            <option value="6h Express">6h Express (+$2.00)</option>
                             <option value="General Inquiry">General Inquiry / Question</option>
                         </select>
                     </div>
@@ -680,6 +641,42 @@
     </div>
 
     <script>
+        // =========================================================
+        // 1. SMART PORTFOLIO GENERATOR (EASY TO UPDATE)
+        // =========================================================
+        // අලුත් ඉමේජ් එකක් ආවොත් මේ ලිස්ට් එකට නම එකතු කරන්න විතරයි තියෙන්නේ!
+        const portfolioData = [
+            { img: 'assets/portfolio-bw.svg', title: 'Standard Editorial B&W', desc: 'High-contrast vector lineage, ideal for traditional print brochures.' },
+            { img: 'assets/portfolio-color.svg', title: 'Color Zoned Marketing Layout', desc: 'Soft color-coded zones to help buyers visualize property flow instantly.' },
+            { img: 'assets/portfolio-furniture.svg', title: 'Premium Furnished Space', desc: 'Includes accurate, modern CAD blocks to showcase property scale and potential.' },
+            { img: 'assets/portfolio-commercial.svg', title: 'Commercial Property Specification', desc: 'Drafted cleanly to showcase complex corporate layouts and massive square footage.' },
+            { img: 'assets/portfolio-complex.svg', title: 'Complex Multi-Level Blueprint', desc: 'Absolute geometrical precision for intricate layouts, split-levels, and period properties.' },
+            { img: 'assets/portfolio-siteplan.svg', title: 'Overall Site & Boundary Layout', desc: 'Clear mapping of external perimeters, gardens, and outbuildings.' }
+        ];
+
+        function renderPortfolio() {
+            const track = document.getElementById('portfolioTrack');
+            let htmlContent = '';
+            // Loop twice to create the infinite scroll illusion
+            for(let i = 0; i < 2; i++) {
+                portfolioData.forEach(item => {
+                    htmlContent += `
+                    <div class="gallery-item" onclick="openLightbox('${item.img}')">
+                        <div class="gallery-img-container"><img src="${item.img}" alt="${item.title}"></div>
+                        <div class="gallery-meta">
+                            <h4>${item.title}</h4>
+                            <p>${item.desc}</p>
+                        </div>
+                    </div>`;
+                });
+            }
+            track.innerHTML = htmlContent;
+        }
+        renderPortfolio();
+
+        // =========================================================
+        // 2. BEFORE/AFTER SLIDER
+        // =========================================================
         const sliderRange = document.getElementById('sliderRange');
         const afterImg = document.getElementById('afterImg');
         const sliderLine = document.getElementById('sliderLine');
@@ -692,7 +689,6 @@
             sliderLine.style.left = val + '%';
             sliderHandleIcon.style.left = val + '%';
         }
-
         updateSlider(); 
         sliderRange.addEventListener('input', updateSlider);
         
@@ -702,7 +698,10 @@
             if (absoluteImg) absoluteImg.style.width = containerWidth + 'px';
         });
 
-        const observeOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        // =========================================================
+        // 3. SCROLL ANIMATION REVEAL
+        // =========================================================
+        const observeOptions = { threshold: 0.05, rootMargin: "0px 0px -10px 0px" };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) { entry.target.classList.add('active'); }
@@ -710,25 +709,25 @@
         }, observeOptions);
         document.querySelectorAll('.reveal-node').forEach(node => observer.observe(node));
         
-        /* Lightbox Engine Functions */
+        // =========================================================
+        // 4. LIGHTBOX ZOOM ENGINE
+        // =========================================================
         function openLightbox(imgSrc) {
             const lightbox = document.getElementById('lightbox');
             document.getElementById('lightbox-img').src = imgSrc;
             lightbox.style.display = 'flex';
             setTimeout(() => lightbox.classList.add('active'), 10); 
         }
-
         function closeLightbox() {
             const lightbox = document.getElementById('lightbox');
             lightbox.classList.remove('active');
             setTimeout(() => lightbox.style.display = 'none', 400); 
         }
 
-        const baseUSD = { 
-            small: 8.00, mid: 12.00, premium: 18.00, large: 24.00,
-            incremental: 4.00, color: 2.00, furniture: 4.00
-        };
-        
+        // =========================================================
+        // 5. LIVE PRICING ENGINE
+        // =========================================================
+        const baseUSD = { small: 8.00, mid: 12.00, premium: 18.00, large: 24.00, incremental: 4.00, express: 2.00, color: 2.00, furniture: 4.00 };
         let currentMarket = 'usd'; 
         let exchangeRates = { GBP: 0.78, AUD: 1.52, USD: 1.00 }; 
 
@@ -755,7 +754,6 @@
         function updatePricingDisplay() {
             let symbol = '$';
             let rate = exchangeRates.USD;
-            
             if (currentMarket === 'uk') { symbol = '£'; rate = exchangeRates.GBP; }
             else if (currentMarket === 'aus') { symbol = '$'; rate = exchangeRates.AUD; }
             
@@ -763,14 +761,17 @@
             document.getElementById('price-mid').textContent = symbol + (baseUSD.mid * rate).toFixed(2);
             document.getElementById('price-premium').textContent = symbol + (baseUSD.premium * rate).toFixed(2);
             document.getElementById('price-large').textContent = symbol + (baseUSD.large * rate).toFixed(2);
+            document.getElementById('price-addon-express').textContent = symbol + (baseUSD.express * rate).toFixed(2);
             document.getElementById('price-addon-color').textContent = symbol + (baseUSD.color * rate).toFixed(2);
             document.getElementById('price-addon-furniture').textContent = symbol + (baseUSD.furniture * rate).toFixed(2);
             
             const convertedIncremental = symbol + (baseUSD.incremental * rate).toFixed(2);
-            document.getElementById('pricing-note-incremental').textContent = 
-                `${convertedIncremental} additional charge applies for every incremental 2,500 sq ft beyond the initial 5,000 sq ft.`;
+            document.getElementById('pricing-note-incremental').textContent = `${convertedIncremental} additional charge applies for every incremental 2,500 sq ft beyond the initial 5,000 sq ft.`;
         }
 
+        // =========================================================
+        // 6. FORM & UPLOAD PIPELINE
+        // =========================================================
         const dropzoneArea = document.getElementById('dropzoneArea');
         const fileInput = document.getElementById('sketchFiles');
         const dropzoneText = document.getElementById('dropzoneText');
@@ -839,11 +840,12 @@
                 const payloadData = {
                     name: document.getElementById('fullName').value,
                     email: document.getElementById('agencyEmail').value,
+                    propertyAddress: document.getElementById('propertyAddress').value,
                     description: `[Country: ${document.getElementById('targetCountry').value}] [Pipeline: ${document.getElementById('serviceNeeded').value}] [Styles: ${selectedStyles.join(', ')}] Notes: ${document.getElementById('instructions').value}`,
                     files: encodedFilesArray
                 };
 
-                await fetch("https://script.google.com/macros/s/AKfycbzXbYy8FyQwR42Kt99spJ8TBNJ6tyGNougXfskIXujVTGgPWUy3gSQ_eI2-hQdd0Qc-Ig/exec", {
+                await fetch("https://script.google.com/macros/s/AKfycbzpy0sg4tndGh041fp-B8ptW4ZdYQvGPSYqrRAJlzO8jEmmj0gKBU4HvzCAfV1YDP4vdA/exec", {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
