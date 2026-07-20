@@ -256,7 +256,7 @@ intakeForm.addEventListener('submit', async function(e) {
         };
 
         // UI/UX Fix: Explicit CORS Mode with plain text encapsulation to secure Google App Engine responses parsing
-        const response = await fetch("https://script.google.com/macros/s/AKfycbzpy0sg4tndGh041fp-B8ptW4ZdYQvGPSYqrRAJlzO8jEmmj0gKBU4HvzCAfV1YDP4vdA/exec", {
+        const response = await fetch("https://script.google.com/macros/s/AKfycbymzH1zVuVz7R5hv4TWh4T8UEwcJHGp_SQ5z3odvd6OSLGHdg0LQX6U46oFSOL4ALR9Ag/exec", {
             method: 'POST',
             mode: 'cors',
             headers: { 'Content-Type': 'text/plain' },
