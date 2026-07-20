@@ -172,7 +172,7 @@ function updatePricingDisplay() {
 }
 
 // =========================================================
-// 7. SECURE ADVANCED UPLOAD PIPELINE WITH TRUE CORS VALIDATION
+// 7. SECURE ADVANCED UPLOAD PIPELINE (NO-CORS FIRE-AND-FORGET)
 // =========================================================
 const dropzoneArea = document.getElementById('dropzoneArea');
 const fileInput = document.getElementById('sketchFiles');
@@ -233,7 +233,7 @@ intakeForm.addEventListener('submit', async function(e) {
             totalSize += stagedFilesList[i].size;
             // 45MB safety margin block limit verification check to avoid Google Payload crash
             if (totalSize > 45 * 1024 * 1024) {
-                throw new Error("Total payload allocation volume exceeds Google Drive script batch boundaries (45MB limit).");
+                throw new Error("Total payload allocation volume exceeds limit (45MB). Please upload smaller files.");
             }
 
             let base64String = await toBase64(stagedFilesList[i]);
@@ -255,29 +255,23 @@ intakeForm.addEventListener('submit', async function(e) {
             files: encodedFilesArray
         };
 
-        // UI/UX Fix: Explicit CORS Mode with plain text encapsulation to secure Google App Engine responses parsing
-        const response = await fetch("https://script.google.com/macros/s/AKfycbymzH1zVuVz7R5hv4TWh4T8UEwcJHGp_SQ5z3odvd6OSLGHdg0LQX6U46oFSOL4ALR9Ag/exec", {
+        // Fire-and-forget payload via no-cors to prevent browser redirect blocks
+        await fetch("https://script.google.com/macros/s/AKfycbymzH1zVuVz7R5hv4TWh4T8UEwcJHGp_SQ5z3odvd6OSLGHdg0LQX6U46oFSOL4ALR9Ag/exec", {
             method: 'POST',
-            mode: 'cors',
+            mode: 'no-cors',
             headers: { 'Content-Type': 'text/plain' },
             body: JSON.stringify(payloadData)
         });
 
-        const result = await response.json();
-
-        // Check explicit backend confirmation metrics status payload object fields
-        if (result.status === 'success') {
-            showSuccessPopup();
-            intakeForm.reset();
-            dropzoneText.innerHTML = `Drag & Drop your sketches here, or <strong>browse local storage</strong>`;
-            stagedFilesList = [];
-        } else {
-            alert('Drafting Pipeline Error: ' + (result.message || 'Verification matrix failed. Please reduce file scale.'));
-        }
+        // Since no-cors hides the response, we assume success if the fetch didn't throw a network crash error.
+        showSuccessPopup();
+        intakeForm.reset();
+        dropzoneText.innerHTML = `Drag & Drop your sketches here, or <strong>browse local storage</strong>`;
+        stagedFilesList = [];
         
     } catch (err) {
         console.error(err);
-        alert(err.message || 'Network architecture communication error. Please try uploading smaller individual image files.');
+        alert(err.message || 'Network communication error. Please try uploading smaller individual image files.');
     } finally {
         submitBtn.classList.remove('loading');
         btnText.textContent = 'Send to Lavientra Studio';
