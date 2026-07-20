@@ -253,8 +253,10 @@ intakeForm.addEventListener('submit', async function(e) {
             files: encodedFilesArray
         };
 
-        // Fire-and-forget payload via no-cors to prevent redirect blocks
-        await fetch("මhttps://script.google.com/macros/s/AKfycbymzH1zVuVz7R5hv4TWh4T8UEwcJHGp_SQ5z3odvd6OSLGHdg0LQX6U46oFSOL4ALR9Ag/exec", {
+        // WARNING: Replace 'YOUR_WEB_APP_URL_HERE' with your actual Google Apps Script Deployment URL
+        const APP_URL = "https://script.google.com/macros/s/AKfycbymzH1zVuVz7R5hv4TWh4T8UEwcJHGp_SQ5z3odvd6OSLGHdg0LQX6U46oFSOL4ALR9Ag/exec";
+
+        await fetch(APP_URL, {
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'text/plain' },
