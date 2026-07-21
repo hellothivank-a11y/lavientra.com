@@ -1,5 +1,5 @@
 // =========================================================
-// 1. SMART PORTFOLIO GENERATOR
+// 1. SMART PORTFOLIO GENERATOR & LAZY LOADING INTEGRATION
 // =========================================================
 const portfolioData = [
     { img: 'assets/portfolio-bw.svg', title: 'Standard Editorial B&W', desc: 'High-contrast vector lineage, ideal for traditional print brochures.' },
@@ -37,33 +37,7 @@ function renderPortfolio() {
 renderPortfolio();
 
 // =========================================================
-// 2. CLEAN & STABLE LIGHTBOX
-// =========================================================
-function openLightbox(imgSrc) {
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    lightboxImg.src = imgSrc;
-    lightbox.style.display = 'flex';
-    setTimeout(() => lightbox.classList.add('active'), 10); 
-}
-
-function closeLightbox() {
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    lightbox.classList.remove('active');
-    setTimeout(() => { 
-        lightbox.style.display = 'none'; 
-        lightboxImg.src = '';
-    }, 300); 
-}
-
-// Esc Key Shortcut to Close Lightbox
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') { closeLightbox(); }
-});
-
-// =========================================================
-// 3. MOBILE MENU INTERACTION LOGIC
+// 2. MOBILE MENU INTERACTION LOGIC
 // =========================================================
 const mobileToggle = document.getElementById('mobileToggle');
 const navMenu = document.getElementById('navMenu');
@@ -82,7 +56,7 @@ mobileLinks.forEach(link => {
 });
 
 // =========================================================
-// 4. BEFORE/AFTER SLIDER INTERACTION
+// 3. BEFORE/AFTER SLIDER INTERACTION
 // =========================================================
 const sliderRange = document.getElementById('sliderRange');
 const afterImg = document.getElementById('afterImg');
@@ -106,7 +80,7 @@ window.addEventListener('resize', () => {
 });
 
 // =========================================================
-// 5. SCROLL ANIMATION REVEAL ENGINE
+// 4. SCROLL ANIMATION REVEAL ENGINE
 // =========================================================
 const observeOptions = { threshold: 0.05, rootMargin: "0px 0px -10px 0px" };
 const observer = new IntersectionObserver((entries) => {
@@ -115,6 +89,21 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observeOptions);
 document.querySelectorAll('.reveal-node').forEach(node => observer.observe(node));
+
+// =========================================================
+// 5. LIGHTBOX MODAL CONTROL
+// =========================================================
+function openLightbox(imgSrc) {
+    const lightbox = document.getElementById('lightbox');
+    document.getElementById('lightbox-img').src = imgSrc;
+    lightbox.style.display = 'flex';
+    setTimeout(() => lightbox.classList.add('active'), 10); 
+}
+function closeLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    lightbox.classList.remove('active');
+    setTimeout(() => lightbox.style.display = 'none', 400); 
+}
 
 // =========================================================
 // 6. DYNAMIC PRICING ENGINE WITH LOCALSTORAGE CACHING
@@ -182,7 +171,7 @@ function updatePricingDisplay() {
 }
 
 // =========================================================
-// 7. SECURE ADVANCED UPLOAD PIPELINE
+// 7. SECURE ADVANCED UPLOAD PIPELINE (NO-CORS FIRE-AND-FORGET)
 // =========================================================
 const dropzoneArea = document.getElementById('dropzoneArea');
 const fileInput = document.getElementById('sketchFiles');
@@ -264,7 +253,8 @@ intakeForm.addEventListener('submit', async function(e) {
             files: encodedFilesArray
         };
 
-        const APP_URL = "YOUR_WEB_APP_URL_HERE";
+        // WARNING: Replace 'YOUR_WEB_APP_URL_HERE' with your actual Google Apps Script Deployment URL
+        const APP_URL = "https://script.google.com/macros/s/AKfycbymzH1zVuVz7R5hv4TWh4T8UEwcJHGp_SQ5z3odvd6OSLGHdg0LQX6U46oFSOL4ALR9Ag/exec";
 
         await fetch(APP_URL, {
             method: 'POST',
