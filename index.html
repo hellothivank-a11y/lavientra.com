@@ -119,7 +119,6 @@
                 <p>Explore our diverse drafting structures tailored completely to international marketing specs.</p>
             </div>
         </div>
-        
         <div class="portfolio-scroller-container">
             <div class="portfolio-track" id="portfolioTrack"></div>
         </div>
@@ -407,15 +406,12 @@
         </div>
     </footer>
 
-    <!-- Clean Solid Lightbox Modal -->
-    <div id="lightbox" class="lightbox-overlay" onclick="closeLightbox()">
-        <button class="lightbox-close-btn" onclick="closeLightbox()" aria-label="Close">✕</button>
-        <div class="lightbox-img-card" onclick="event.stopPropagation()">
-            <img id="lightbox-img" src="" alt="Blueprint Asset Full View">
-        </div>
+    <!-- Premium Lightbox Container -->
+    <div id="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="Zoomed Portfolio View">
     </div>
 
-    <!-- Success Notification Popup -->
+    <!-- Success Notification Popup Container -->
     <div id="successPopup" class="success-popup-overlay">
         <div class="success-popup-card">
             <div class="success-icon-wrap">✓</div>
@@ -425,6 +421,7 @@
         </div>
     </div>
 
+    <!-- Load JavaScript globally -->
     <script src="js/main.js"></script>
 </body>
 </html>
