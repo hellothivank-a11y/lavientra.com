@@ -89,26 +89,105 @@ nav { position: fixed; top: 0; left: 0; width: 100%; height: 56px; background: r
 .standard-num { font-size: 12px; font-weight: 600; color: var(--luxury-black); margin-bottom: 16px; display: block; text-transform: uppercase; letter-spacing: 0.08em; }
 .standard-card h3 { font-size: 24px; margin-bottom: 16px; }
 
-/* Infinite Scroll Portfolio Track Rules */
-.portfolio-scroller-container { width: 100%; overflow: hidden; position: relative; padding: 20px 0; white-space: nowrap; }
+/* Dynamic Portfolio Scroller (With Speed Boost & Interactive Drag) */
+.portfolio-scroller-container { 
+    width: 100%; 
+    overflow-x: auto; 
+    position: relative; 
+    padding: 20px 0; 
+    white-space: nowrap; 
+    cursor: grab;
+    user-select: none;
+    scrollbar-width: none; /* Hide standard scrollbars for clean look */
+}
+.portfolio-scroller-container::-webkit-scrollbar { display: none; }
+.portfolio-scroller-container.active-drag { cursor: grabbing; }
+
 .portfolio-scroller-container::before, .portfolio-scroller-container::after { content: ''; position: absolute; top: 0; width: 150px; height: 100%; z-index: 2; pointer-events: none; }
 .portfolio-scroller-container::before { left: 0; background: linear-gradient(to right, var(--apple-bg) 0%, transparent 100%); }
 .portfolio-scroller-container::after { right: 0; background: linear-gradient(to left, var(--apple-bg) 0%, transparent 100%); }
-.portfolio-track { display: flex; gap: 40px; width: max-content; animation: infiniteScroll 80s linear infinite; }
-.portfolio-track:hover { animation-play-state: paused; }
+
+.portfolio-track { 
+    display: flex; 
+    gap: 40px; 
+    width: max-content; 
+    animation: infiniteScroll 71s linear infinite; /* Increased speed by 12% */
+    will-change: transform;
+}
+.portfolio-scroller-container:hover .portfolio-track,
+.portfolio-scroller-container.active-drag .portfolio-track { 
+    animation-play-state: paused; 
+}
+
 @keyframes infiniteScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-.gallery-item { width: 380px; flex-shrink: 0; display: flex; flex-direction: column; text-decoration: none; cursor: zoom-in; white-space: normal; }
-.gallery-img-container { background: #ffffff; border-radius: var(--radius-premium); overflow: hidden; aspect-ratio: 30 / 20; border: 1px solid var(--apple-border); margin-bottom: 22px; display: flex; align-items: center; justify-content: center; }
+/* Portfolio Item Cards (Slightly Increased Size, Same Ratio 30/20) */
+.gallery-item { 
+    width: 440px; /* Increased card box size */
+    flex-shrink: 0; 
+    display: flex; 
+    flex-direction: column; 
+    text-decoration: none; 
+    cursor: zoom-in; 
+    white-space: normal; 
+}
+.gallery-img-container { 
+    background: #ffffff; 
+    border-radius: var(--radius-premium); 
+    overflow: hidden; 
+    aspect-ratio: 30 / 20; /* Maintained original geometrical aspect ratio */
+    border: 1px solid var(--apple-border); 
+    margin-bottom: 22px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+}
 .gallery-item img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
 .gallery-item:hover img { transform: scale(1.02); }
 .gallery-meta h4 { font-size: 18px; font-weight: 600; margin-bottom: 6px; color: var(--luxury-black); letter-spacing: -0.02em; }
 
-/* Lightbox Modal */
-#lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.96); display: none; align-items: center; justify-content: center; z-index: 9999; cursor: zoom-out; opacity: 0; transition: opacity 0.4s var(--apple-bezier); }
-#lightbox.active { opacity: 1; }
-#lightbox img { max-width: 90%; max-height: 90%; border-radius: 8px; box-shadow: 0 30px 60px rgba(0,0,0,0.12); transform: scale(0.95); transition: transform 0.4s var(--apple-bezier); }
-#lightbox.active img { transform: scale(1); }
+/* Interactive Zoom Lightbox Engine */
+.lightbox-overlay { 
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+    background: rgba(255, 255, 255, 0.96); 
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    display: none; flex-direction: column; align-items: center; justify-content: center; 
+    z-index: 10000; opacity: 0; transition: opacity 0.4s var(--apple-bezier); 
+}
+.lightbox-overlay.active { display: flex; opacity: 1; }
+
+.lightbox-close-btn { 
+    position: absolute; top: 28px; right: 36px; 
+    background: var(--apple-secondary-bg); border: 1px solid var(--apple-border); 
+    width: 44px; height: 44px; border-radius: 50%; font-size: 20px; 
+    color: var(--luxury-black); cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s ease; z-index: 10001;
+}
+.lightbox-close-btn:hover { background: var(--luxury-black); color: #ffffff; transform: scale(1.05); }
+
+.lightbox-img-wrapper { 
+    max-width: 85vw; max-height: 75vh; display: flex; align-items: center; justify-content: center; 
+    cursor: pointer; overflow: hidden; border-radius: 12px;
+}
+.lightbox-img-wrapper img { 
+    max-width: 100%; max-height: 75vh; object-fit: contain; 
+    transition: transform 0.15s ease-out; transform-origin: center center;
+}
+
+.lightbox-zoom-bar { 
+    position: absolute; bottom: 36px; display: flex; align-items: center; gap: 20px; 
+    background: rgba(245, 245, 247, 0.92); padding: 12px 28px; border-radius: 980px; 
+    border: 1px solid var(--apple-border); box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+.zoom-value-badge { font-size: 13px; font-weight: 600; color: var(--luxury-black); min-width: 76px; letter-spacing: 0.02em; }
+.lightbox-zoom-slider { 
+    -webkit-appearance: none; appearance: none; width: 180px; height: 4px; 
+    background: rgba(0,0,0,0.15); border-radius: 2px; outline: none; 
+}
+.lightbox-zoom-slider::-webkit-slider-thumb { 
+    -webkit-appearance: none; appearance: none; width: 16px; height: 16px; 
+    border-radius: 50%; background: var(--luxury-black); cursor: pointer; 
+}
 
 /* Pricing Architecture */
 .pricing-toggle-zone { display: flex; justify-content: center; margin-bottom: 54px; }
@@ -221,4 +300,5 @@ footer { padding: 80px 0 40px 0; border-top: 1px solid var(--apple-border); back
     .specs-layout, .about-layout, .footer-grid { grid-template-columns: 1fr; gap: 48px; }
     .premium-pricing-card { padding: 32px 20px; }
     .portfolio-scroller-container::before, .portfolio-scroller-container::after { width: 40px; }
+    .gallery-item { width: 320px; }
 }
