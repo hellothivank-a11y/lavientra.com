@@ -120,7 +120,7 @@
             </div>
         </div>
         
-        <div class="portfolio-scroller-container" id="portfolioScroller">
+        <div class="portfolio-scroller-container">
             <div class="portfolio-track" id="portfolioTrack"></div>
         </div>
     </section>
@@ -407,15 +407,11 @@
         </div>
     </footer>
 
-    <!-- Zoom Lightbox Modal -->
-    <div id="lightbox" class="lightbox-overlay">
+    <!-- Clean Solid Lightbox Modal -->
+    <div id="lightbox" class="lightbox-overlay" onclick="closeLightbox()">
         <button class="lightbox-close-btn" onclick="closeLightbox()" aria-label="Close">✕</button>
-        <div class="lightbox-img-wrapper" id="lightboxImgWrapper" onclick="closeLightbox()">
-            <img id="lightbox-img" src="" alt="Zoomed Blueprint Asset">
-        </div>
-        <div class="lightbox-zoom-bar" onclick="event.stopPropagation()">
-            <span class="zoom-value-badge" id="zoomValBadge">Zoom: 0%</span>
-            <input type="range" min="0" max="60" value="0" class="lightbox-zoom-slider" id="lightboxZoomSlider">
+        <div class="lightbox-img-card" onclick="event.stopPropagation()">
+            <img id="lightbox-img" src="" alt="Blueprint Asset Full View">
         </div>
     </div>
 
