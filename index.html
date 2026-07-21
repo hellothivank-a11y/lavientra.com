@@ -119,7 +119,7 @@
                 <p>Explore our diverse drafting structures tailored completely to international marketing specs.</p>
             </div>
         </div>
-        <div class="portfolio-scroller-container">
+        <div class="portfolio-scroller-container" id="portfolioScroller">
             <div class="portfolio-track" id="portfolioTrack"></div>
         </div>
     </section>
@@ -406,9 +406,16 @@
         </div>
     </footer>
 
-    <!-- Premium Lightbox Container -->
-    <div id="lightbox" onclick="closeLightbox()">
-        <img id="lightbox-img" src="" alt="Zoomed Portfolio View">
+    <!-- Advanced Interactive Zoom Lightbox -->
+    <div id="lightbox" class="lightbox-overlay">
+        <button class="lightbox-close-btn" onclick="closeLightbox()" aria-label="Close">✕</button>
+        <div class="lightbox-img-wrapper" id="lightboxImgWrapper">
+            <img id="lightbox-img" src="" alt="Zoomed Blueprint Asset">
+        </div>
+        <div class="lightbox-zoom-bar">
+            <span class="zoom-value-badge" id="zoomValBadge">Zoom: 0%</span>
+            <input type="range" min="0" max="60" value="0" class="lightbox-zoom-slider" id="lightboxZoomSlider">
+        </div>
     </div>
 
     <!-- Success Notification Popup Container -->
