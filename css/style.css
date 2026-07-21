@@ -81,20 +81,24 @@ nav { position: fixed; top: 0; left: 0; width: 100%; height: 56px; background: r
 .standard-num { font-size: 12px; font-weight: 600; color: var(--luxury-black); margin-bottom: 16px; display: block; text-transform: uppercase; letter-spacing: 0.08em; }
 .standard-card h3 { font-size: 24px; margin-bottom: 16px; }
 
-/* Custom Native Scrollbar Portfolio Track */
+/* Dynamic Portfolio Scroller (Hidden Scrollbar by default, Hover to Reveal) */
 .portfolio-scroller-container { 
     width: 100%; 
     overflow-x: auto; 
     position: relative; 
-    padding: 20px 0 30px 0; /* Extra bottom padding for scrollbar */
+    padding: 20px 0 30px 0; 
     white-space: nowrap; 
 }
 
-/* Elegant Bottom Scrollbar Styles */
-.portfolio-scroller-container::-webkit-scrollbar { height: 8px; }
-.portfolio-scroller-container::-webkit-scrollbar-track { background: var(--apple-secondary-bg); border-radius: 10px; margin: 0 24px; }
-.portfolio-scroller-container::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; }
-.portfolio-scroller-container::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.4); }
+/* Hide Scrollbar completely by default */
+.portfolio-scroller-container::-webkit-scrollbar { height: 8px; opacity: 0; }
+.portfolio-scroller-container::-webkit-scrollbar-track { background: transparent; }
+.portfolio-scroller-container::-webkit-scrollbar-thumb { background: transparent; border-radius: 10px; }
+
+/* Show Scrollbar ONLY on Mouse Hover */
+.portfolio-scroller-container:hover::-webkit-scrollbar-track { background: var(--apple-secondary-bg); margin: 0 24px; }
+.portfolio-scroller-container:hover::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.25); }
+.portfolio-scroller-container:hover::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.5); }
 
 .portfolio-scroller-container::before, .portfolio-scroller-container::after { content: ''; position: absolute; top: 0; width: 100px; height: calc(100% - 15px); z-index: 2; pointer-events: none; }
 .portfolio-scroller-container::before { left: 0; background: linear-gradient(to right, var(--apple-bg) 0%, transparent 100%); }
@@ -102,28 +106,57 @@ nav { position: fixed; top: 0; left: 0; width: 100%; height: 56px; background: r
 
 .portfolio-track { display: flex; gap: 40px; width: max-content; padding: 0 24px; }
 
-/* Slightly larger, ratio maintained images */
 .gallery-item { width: 400px; flex-shrink: 0; display: flex; flex-direction: column; text-decoration: none; cursor: zoom-in; white-space: normal; }
 .gallery-img-container { background: #ffffff; border-radius: var(--radius-premium); overflow: hidden; aspect-ratio: 30 / 20; border: 1px solid var(--apple-border); margin-bottom: 22px; display: flex; align-items: center; justify-content: center; }
 .gallery-item img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
 .gallery-item:hover img { transform: scale(1.02); }
 .gallery-meta h4 { font-size: 18px; font-weight: 600; margin-bottom: 6px; color: var(--luxury-black); letter-spacing: -0.02em; }
 
-/* Fixed Bug-Free Lightbox Engine */
-.lightbox-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255, 255, 255, 0.98); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; opacity: 0; transition: opacity 0.3s var(--apple-bezier); }
+/* Fixed High-Contrast Lightbox Overlay (Dark Blur Background to pop vectors) */
+.lightbox-overlay { 
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+    background: rgba(18, 18, 20, 0.88); /* Subtle Dark Glass overlay for ultra contrast */
+    backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
+    display: none; flex-direction: column; align-items: center; justify-content: center; 
+    z-index: 10000; opacity: 0; transition: opacity 0.3s var(--apple-bezier); 
+}
 .lightbox-overlay.active { display: flex; opacity: 1; }
 
-.lightbox-close-btn { position: absolute; top: 28px; right: 36px; background: var(--apple-secondary-bg); border: 1px solid var(--apple-border); width: 44px; height: 44px; border-radius: 50%; font-size: 20px; color: var(--luxury-black); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; z-index: 10001; }
-.lightbox-close-btn:hover { background: var(--luxury-black); color: #ffffff; transform: scale(1.05); }
+.lightbox-close-btn { 
+    position: absolute; top: 28px; right: 36px; 
+    background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255,255,255,0.2); 
+    width: 44px; height: 44px; border-radius: 50%; font-size: 20px; 
+    color: #ffffff; cursor: pointer; display: flex; align-items: center; justify-content: center; 
+    transition: all 0.2s ease; z-index: 10001; 
+}
+.lightbox-close-btn:hover { background: #ffffff; color: #000000; transform: scale(1.05); }
 
-/* The wrapper handles normal limits, image scales properly inside */
-.lightbox-img-wrapper { max-width: 90vw; max-height: 80vh; display: flex; align-items: center; justify-content: center; cursor: zoom-out; }
-.lightbox-img-wrapper img { max-width: 100%; max-height: 80vh; object-fit: contain; transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1); border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
+/* Solid White High-End Container Card for Images to make SVGs POP */
+.lightbox-img-wrapper { 
+    max-width: 85vw; max-height: 75vh; 
+    background: #ffffff; 
+    padding: 24px; 
+    border-radius: var(--radius-premium); 
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5); 
+    display: flex; align-items: center; justify-content: center; 
+    cursor: zoom-out; 
+    border: 1px solid rgba(255,255,255,0.2);
+}
+.lightbox-img-wrapper img { 
+    max-width: 100%; max-height: 68vh; 
+    object-fit: contain; 
+    transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1); 
+}
 
-.lightbox-zoom-bar { position: absolute; bottom: 36px; display: flex; align-items: center; gap: 20px; background: rgba(245, 245, 247, 0.92); padding: 12px 28px; border-radius: 980px; border: 1px solid var(--apple-border); box-shadow: 0 10px 30px rgba(0,0,0,0.06); z-index: 10001; }
-.zoom-value-badge { font-size: 13px; font-weight: 600; color: var(--luxury-black); min-width: 76px; letter-spacing: 0.02em; }
-.lightbox-zoom-slider { -webkit-appearance: none; appearance: none; width: 180px; height: 4px; background: rgba(0,0,0,0.15); border-radius: 2px; outline: none; }
-.lightbox-zoom-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--luxury-black); cursor: pointer; }
+.lightbox-zoom-bar { 
+    position: absolute; bottom: 36px; display: flex; align-items: center; gap: 20px; 
+    background: rgba(255, 255, 255, 0.95); padding: 12px 28px; border-radius: 980px; 
+    border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+    z-index: 10001; 
+}
+.zoom-value-badge { font-size: 13px; font-weight: 600; color: #000000; min-width: 76px; letter-spacing: 0.02em; }
+.lightbox-zoom-slider { -webkit-appearance: none; appearance: none; width: 180px; height: 4px; background: rgba(0,0,0,0.2); border-radius: 2px; outline: none; }
+.lightbox-zoom-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #000000; cursor: pointer; }
 
 /* Pricing */
 .pricing-toggle-zone { display: flex; justify-content: center; margin-bottom: 54px; }
