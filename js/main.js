@@ -18,7 +18,8 @@ const portfolioData = [
 function renderPortfolio() {
     const track = document.getElementById('portfolioTrack');
     let htmlContent = '';
-    for(let i = 0; i < 2; i++) {
+    // Loaded 3 times to allow smooth infinite loop without visual jumps
+    for(let i = 0; i < 3; i++) {
         portfolioData.forEach(item => {
             htmlContent += `
             <div class="gallery-item" onclick="openLightbox('${item.img}')">
@@ -37,45 +38,43 @@ function renderPortfolio() {
 renderPortfolio();
 
 // =========================================================
-// 2. INTERACTIVE MOUSE DRAG & SCROLL LOGIC FOR PORTFOLIO
+// 2. SMOOTH NATIVE AUTO-SCROLL (FIXED BUG)
 // =========================================================
 const scroller = document.getElementById('portfolioScroller');
-let isMouseDown = false;
-let startX, scrollLeft;
+let scrollInterval;
 
-scroller.addEventListener('mousedown', (e) => {
-    isMouseDown = true;
-    scroller.classList.add('active-drag');
-    startX = e.pageX - scroller.offsetLeft;
-    scrollLeft = scroller.scrollLeft;
-});
+function startAutoScroll() {
+    scrollInterval = setInterval(() => {
+        scroller.scrollLeft += 1.5; // Optimized speed
+        
+        // Seamless loop resetting
+        if (scroller.scrollLeft >= scroller.scrollWidth / 2) {
+            scroller.scrollLeft = 0; 
+        }
+    }, 16); // Butter smooth 60fps
+}
 
-scroller.addEventListener('mouseleave', () => {
-    isMouseDown = false;
-    scroller.classList.remove('active-drag');
-});
+function stopAutoScroll() {
+    clearInterval(scrollInterval);
+}
 
-scroller.addEventListener('mouseup', () => {
-    isMouseDown = false;
-    scroller.classList.remove('active-drag');
-});
+// Pause on hover, allowing the user to use the bottom scrollbar naturally
+scroller.addEventListener('mouseenter', stopAutoScroll);
+scroller.addEventListener('mouseleave', startAutoScroll);
+scroller.addEventListener('touchstart', stopAutoScroll);
+scroller.addEventListener('touchend', startAutoScroll);
 
-scroller.addEventListener('mousemove', (e) => {
-    if (!isMouseDown) return;
-    e.preventDefault();
-    const x = e.pageX - scroller.offsetLeft;
-    const walk = (x - startX) * 1.5; // Drag speed multiplier
-    scroller.scrollLeft = scrollLeft - walk;
-});
+// Initiate auto-scroll
+startAutoScroll();
+
 
 // =========================================================
-// 3. ADVANCED INTERACTIVE ZOOM LIGHTBOX ENGINE
+// 3. ADVANCED BUG-FREE ZOOM LIGHTBOX
 // =========================================================
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightbox-img');
 const lightboxZoomSlider = document.getElementById('lightboxZoomSlider');
 const zoomValBadge = document.getElementById('zoomValBadge');
-const lightboxImgWrapper = document.getElementById('lightboxImgWrapper');
 
 function openLightbox(imgSrc) {
     lightboxImg.src = imgSrc;
@@ -90,7 +89,7 @@ function closeLightbox() {
     setTimeout(() => { 
         lightbox.style.display = 'none'; 
         lightboxImg.src = '';
-    }, 400); 
+    }, 300); 
 }
 
 function updateZoom(val) {
@@ -103,12 +102,6 @@ lightboxZoomSlider.addEventListener('input', (e) => {
     updateZoom(e.target.value);
 });
 
-// If zoom is 0%, clicking the image closes the lightbox
-lightboxImgWrapper.addEventListener('click', () => {
-    if (parseInt(lightboxZoomSlider.value) === 0) {
-        closeLightbox();
-    }
-});
 
 // =========================================================
 // 4. MOBILE MENU INTERACTION LOGIC
