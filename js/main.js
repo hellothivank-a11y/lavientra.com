@@ -1,5 +1,5 @@
 // =========================================================
-// 1. SMART PORTFOLIO GENERATOR & LAZY LOADING INTEGRATION
+// 1. SMART PORTFOLIO GENERATOR
 // =========================================================
 const portfolioData = [
     { img: 'assets/portfolio-bw.svg', title: 'Standard Editorial B&W', desc: 'High-contrast vector lineage, ideal for traditional print brochures.' },
@@ -37,7 +37,81 @@ function renderPortfolio() {
 renderPortfolio();
 
 // =========================================================
-// 2. MOBILE MENU INTERACTION LOGIC
+// 2. INTERACTIVE MOUSE DRAG & SCROLL LOGIC FOR PORTFOLIO
+// =========================================================
+const scroller = document.getElementById('portfolioScroller');
+let isMouseDown = false;
+let startX, scrollLeft;
+
+scroller.addEventListener('mousedown', (e) => {
+    isMouseDown = true;
+    scroller.classList.add('active-drag');
+    startX = e.pageX - scroller.offsetLeft;
+    scrollLeft = scroller.scrollLeft;
+});
+
+scroller.addEventListener('mouseleave', () => {
+    isMouseDown = false;
+    scroller.classList.remove('active-drag');
+});
+
+scroller.addEventListener('mouseup', () => {
+    isMouseDown = false;
+    scroller.classList.remove('active-drag');
+});
+
+scroller.addEventListener('mousemove', (e) => {
+    if (!isMouseDown) return;
+    e.preventDefault();
+    const x = e.pageX - scroller.offsetLeft;
+    const walk = (x - startX) * 1.5; // Drag speed multiplier
+    scroller.scrollLeft = scrollLeft - walk;
+});
+
+// =========================================================
+// 3. ADVANCED INTERACTIVE ZOOM LIGHTBOX ENGINE
+// =========================================================
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+const lightboxZoomSlider = document.getElementById('lightboxZoomSlider');
+const zoomValBadge = document.getElementById('zoomValBadge');
+const lightboxImgWrapper = document.getElementById('lightboxImgWrapper');
+
+function openLightbox(imgSrc) {
+    lightboxImg.src = imgSrc;
+    lightboxZoomSlider.value = 0;
+    updateZoom(0);
+    lightbox.style.display = 'flex';
+    setTimeout(() => lightbox.classList.add('active'), 10); 
+}
+
+function closeLightbox() {
+    lightbox.classList.remove('active');
+    setTimeout(() => { 
+        lightbox.style.display = 'none'; 
+        lightboxImg.src = '';
+    }, 400); 
+}
+
+function updateZoom(val) {
+    zoomValBadge.textContent = `Zoom: ${val}%`;
+    const scaleFactor = 1 + (val / 100);
+    lightboxImg.style.transform = `scale(${scaleFactor})`;
+}
+
+lightboxZoomSlider.addEventListener('input', (e) => {
+    updateZoom(e.target.value);
+});
+
+// If zoom is 0%, clicking the image closes the lightbox
+lightboxImgWrapper.addEventListener('click', () => {
+    if (parseInt(lightboxZoomSlider.value) === 0) {
+        closeLightbox();
+    }
+});
+
+// =========================================================
+// 4. MOBILE MENU INTERACTION LOGIC
 // =========================================================
 const mobileToggle = document.getElementById('mobileToggle');
 const navMenu = document.getElementById('navMenu');
@@ -56,7 +130,7 @@ mobileLinks.forEach(link => {
 });
 
 // =========================================================
-// 3. BEFORE/AFTER SLIDER INTERACTION
+// 5. BEFORE/AFTER SLIDER INTERACTION
 // =========================================================
 const sliderRange = document.getElementById('sliderRange');
 const afterImg = document.getElementById('afterImg');
@@ -80,7 +154,7 @@ window.addEventListener('resize', () => {
 });
 
 // =========================================================
-// 4. SCROLL ANIMATION REVEAL ENGINE
+// 6. SCROLL ANIMATION REVEAL ENGINE
 // =========================================================
 const observeOptions = { threshold: 0.05, rootMargin: "0px 0px -10px 0px" };
 const observer = new IntersectionObserver((entries) => {
@@ -91,22 +165,7 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll('.reveal-node').forEach(node => observer.observe(node));
 
 // =========================================================
-// 5. LIGHTBOX MODAL CONTROL
-// =========================================================
-function openLightbox(imgSrc) {
-    const lightbox = document.getElementById('lightbox');
-    document.getElementById('lightbox-img').src = imgSrc;
-    lightbox.style.display = 'flex';
-    setTimeout(() => lightbox.classList.add('active'), 10); 
-}
-function closeLightbox() {
-    const lightbox = document.getElementById('lightbox');
-    lightbox.classList.remove('active');
-    setTimeout(() => lightbox.style.display = 'none', 400); 
-}
-
-// =========================================================
-// 6. DYNAMIC PRICING ENGINE WITH LOCALSTORAGE CACHING
+// 7. DYNAMIC PRICING ENGINE WITH LOCALSTORAGE CACHING
 // =========================================================
 const baseUSD = { small: 8.00, mid: 12.00, premium: 18.00, large: 24.00, incremental: 4.00, express: 2.00, color: 2.00, furniture: 4.00 };
 let currentMarket = 'usd'; 
@@ -171,7 +230,7 @@ function updatePricingDisplay() {
 }
 
 // =========================================================
-// 7. SECURE ADVANCED UPLOAD PIPELINE (NO-CORS FIRE-AND-FORGET)
+// 8. SECURE ADVANCED UPLOAD PIPELINE
 // =========================================================
 const dropzoneArea = document.getElementById('dropzoneArea');
 const fileInput = document.getElementById('sketchFiles');
@@ -254,7 +313,7 @@ intakeForm.addEventListener('submit', async function(e) {
         };
 
         // WARNING: Replace 'YOUR_WEB_APP_URL_HERE' with your actual Google Apps Script Deployment URL
-        const APP_URL = "https://script.google.com/macros/s/AKfycbymzH1zVuVz7R5hv4TWh4T8UEwcJHGp_SQ5z3odvd6OSLGHdg0LQX6U46oFSOL4ALR9Ag/exec";
+        const APP_URL = "YOUR_WEB_APP_URL_HERE";
 
         await fetch(APP_URL, {
             method: 'POST',
