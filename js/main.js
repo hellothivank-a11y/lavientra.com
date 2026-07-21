@@ -18,7 +18,6 @@ const portfolioData = [
 function renderPortfolio() {
     const track = document.getElementById('portfolioTrack');
     let htmlContent = '';
-    // Loaded 3 times to allow smooth infinite loop without visual jumps
     for(let i = 0; i < 3; i++) {
         portfolioData.forEach(item => {
             htmlContent += `
@@ -38,38 +37,33 @@ function renderPortfolio() {
 renderPortfolio();
 
 // =========================================================
-// 2. SMOOTH NATIVE AUTO-SCROLL (FIXED BUG)
+// 2. SMOOTH NATIVE AUTO-SCROLL
 // =========================================================
 const scroller = document.getElementById('portfolioScroller');
 let scrollInterval;
 
 function startAutoScroll() {
     scrollInterval = setInterval(() => {
-        scroller.scrollLeft += 1.5; // Optimized speed
-        
-        // Seamless loop resetting
+        scroller.scrollLeft += 1.5;
         if (scroller.scrollLeft >= scroller.scrollWidth / 2) {
             scroller.scrollLeft = 0; 
         }
-    }, 16); // Butter smooth 60fps
+    }, 16);
 }
 
 function stopAutoScroll() {
     clearInterval(scrollInterval);
 }
 
-// Pause on hover, allowing the user to use the bottom scrollbar naturally
 scroller.addEventListener('mouseenter', stopAutoScroll);
 scroller.addEventListener('mouseleave', startAutoScroll);
 scroller.addEventListener('touchstart', stopAutoScroll);
 scroller.addEventListener('touchend', startAutoScroll);
 
-// Initiate auto-scroll
 startAutoScroll();
 
-
 // =========================================================
-// 3. ADVANCED BUG-FREE ZOOM LIGHTBOX
+// 3. ADVANCED ZOOM LIGHTBOX ENGINE
 // =========================================================
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightbox-img');
@@ -101,7 +95,6 @@ function updateZoom(val) {
 lightboxZoomSlider.addEventListener('input', (e) => {
     updateZoom(e.target.value);
 });
-
 
 // =========================================================
 // 4. MOBILE MENU INTERACTION LOGIC
@@ -305,7 +298,6 @@ intakeForm.addEventListener('submit', async function(e) {
             files: encodedFilesArray
         };
 
-        // WARNING: Replace 'YOUR_WEB_APP_URL_HERE' with your actual Google Apps Script Deployment URL
         const APP_URL = "YOUR_WEB_APP_URL_HERE";
 
         await fetch(APP_URL, {
