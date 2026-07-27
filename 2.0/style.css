@@ -388,8 +388,9 @@ nav {
 .slider-wrapper {
     position: relative;
     width: 100%;
-    height: 540px;
-    background: var(--bg-secondary);
+    aspect-ratio: 1920 / 1200;
+    max-height: 640px;
+    background: #FFFFFF;
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -399,7 +400,8 @@ nav {
 
 @media (max-width: 768px) {
     .slider-wrapper {
-        height: 380px;
+        aspect-ratio: 1920 / 1200;
+        max-height: 480px;
     }
 }
 
@@ -414,9 +416,9 @@ nav {
 .slider-img img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    padding: 24px;
-    background: var(--bg-secondary);
+    object-fit: cover;
+    padding: 0;
+    background: #FFFFFF;
 }
 
 .img-after {
