@@ -1,1466 +1,913 @@
-/* ==========================================================================
-   LAVIENTRA STUDIO - APPLE MINIMALIST LIGHT THEME (GOOGLE UX & APPLE POLISH)
-   ========================================================================== */
+// =========================================================
+// 1. ALL ORIGINAL PORTFOLIO DATA & CAROUSEL ENGINE
+// =========================================================
+const portfolioData = [
+    { 
+        img: 'assets/portfolio-bw.svg', 
+        category: 'Editorial Vector', 
+        title: 'Standard Editorial B&W', 
+        desc: 'High-contrast vector lineage drafted to RICS standards, ideal for traditional print brochures.' 
+    },
+    { 
+        img: 'assets/portfolio-color.svg', 
+        category: 'Marketing Visual', 
+        title: 'Color Zoned Marketing Layout', 
+        desc: 'Soft color-coded zones to help buyers visualize property flow and room functions instantly.' 
+    },
+    { 
+        img: 'assets/portfolio-furniture.svg', 
+        category: 'High-Fidelity CAD', 
+        title: 'Premium Furnished Space', 
+        desc: 'Includes accurate, modern CAD blocks for furniture to showcase property scale and potential.' 
+    },
+    { 
+        img: 'assets/portfolio-commercial.svg', 
+        category: 'Commercial Corporate', 
+        title: 'Commercial Property Specification', 
+        desc: 'Drafted cleanly to showcase complex corporate layouts and massive square footage.' 
+    },
+    { 
+        img: 'assets/portfolio-complex.svg', 
+        category: 'Architectural Blueprint', 
+        title: 'Complex Multi-Level Blueprint', 
+        desc: 'Absolute geometrical precision for intricate layouts, split-levels, and period properties.' 
+    },
+    { 
+        img: 'assets/portfolio-siteplan.svg', 
+        category: 'Site Mapping', 
+        title: 'Overall Site & Boundary Layout', 
+        desc: 'Clear mapping of external perimeters, gardens, driveways, and outbuildings.' 
+    },
+    { 
+        img: 'assets/portfolio-siteplan-2.svg', 
+        category: 'Site Mapping II', 
+        title: 'Overall Site & Boundary Layout II', 
+        desc: 'Enhanced site boundary layout showing lap pool, pavilion, and landscaped grounds.' 
+    },
+    { 
+        img: 'assets/portfolio-complex-2.svg', 
+        category: 'Architectural Blueprint II', 
+        title: 'Complex Multi-Level Blueprint II', 
+        desc: 'Multi-level duplex layout with high-precision architectural detailing.' 
+    },
+    { 
+        img: 'assets/portfolio-color-2.svg', 
+        category: 'Marketing Visual II', 
+        title: 'Color Zoned Marketing Layout II', 
+        desc: 'Vibrant color-coded zoning for luxury open-plan residential living.' 
+    },
+    { 
+        img: 'assets/portfolio-commercial-2.svg', 
+        category: 'Commercial Corporate II', 
+        title: 'Commercial Property Specification II', 
+        desc: '12,000 sq ft office hub specification with open-plan workstation zones.' 
+    },
+    { 
+        img: 'assets/portfolio-curve.svg', 
+        category: 'Curved Architecture', 
+        title: 'Standard Editorial B&W Curve', 
+        desc: 'Specialized curved wall lineage for bespoke architectural designs.' 
+    }
+];
 
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+function renderPortfolio() {
+    const track = document.getElementById('portfolioTrack');
+    if (!track) return;
+    
+    let htmlContent = '';
+    portfolioData.forEach((item, index) => {
+        htmlContent += `
+        <div class="portfolio-card" data-index="${index}">
+            <div class="portfolio-card-img-wrap">
+                <span class="portfolio-card-badge">${item.category}</span>
+                <img src="${item.img}" alt="${escapeHtml(item.title)}" loading="lazy">
+            </div>
+            <div class="portfolio-card-meta">
+                <h4>${item.title}</h4>
+                <p>${item.desc}</p>
+            </div>
+        </div>`;
+    });
+    track.innerHTML = htmlContent;
+
+    initPortfolioInteractivity();
 }
 
-:root {
-    --bg-primary: #FFFFFF;
-    --bg-secondary: #F5F5F7;
-    --bg-tertiary: #E5E5EA;
-    --text-primary: #1D1D1F;
-    --text-secondary: #515154;
-    --text-muted: #86868B;
-    --border-subtle: rgba(0, 0, 0, 0.08);
-    --border-strong: rgba(0, 0, 0, 0.2);
-    --accent-black: #000000;
-    --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', sans-serif;
-    --apple-bezier: cubic-bezier(0.16, 1, 0.3, 1);
-    --radius-lg: 20px;
-    --radius-md: 12px;
-    --radius-sm: 6px;
-    --radius-pill: 980px;
-    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.04);
-    --shadow-hover: 0 16px 36px rgba(0, 0, 0, 0.1);
+function escapeHtml(str) {
+    return str.replace(/'/g, "\\'").replace(/"/g, "&quot;");
 }
 
-html {
-    scroll-behavior: smooth;
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    scroll-padding-top: 90px;
-    font-family: var(--font-main);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+// =========================================================
+// 2. FULL-WIDTH CONTINUOUS AUTO-SCROLL & DRAG INTERACTIVITY
+// =========================================================
+let isMouseOverContainer = false;
+let isMouseDown = false;
+let isDragging = false;
+let startX = 0;
+let scrollLeftStart = 0;
+let autoScrollAnimId = null;
+
+function initPortfolioInteractivity() {
+    const container = document.getElementById('portfolioTrackContainer');
+    if (!container) return;
+
+    // Mouse Pointer Auto-Pause
+    container.addEventListener('mouseenter', () => { isMouseOverContainer = true; });
+    container.addEventListener('mouseleave', () => { 
+        isMouseOverContainer = false; 
+        isMouseDown = false; 
+        isDragging = false;
+        container.classList.remove('dragging');
+    });
+
+    // Click and Drag to Scroll
+    container.addEventListener('mousedown', (e) => {
+        isMouseDown = true;
+        isDragging = false;
+        startX = e.pageX - container.offsetLeft;
+        scrollLeftStart = container.scrollLeft;
+        container.classList.add('dragging');
+    });
+
+    container.addEventListener('mousemove', (e) => {
+        if (!isMouseDown) return;
+        const x = e.pageX - container.offsetLeft;
+        const walk = (x - startX) * 1.6;
+        if (Math.abs(x - startX) > 6) {
+            isDragging = true;
+        }
+        container.scrollLeft = scrollLeftStart - walk;
+    });
+
+    container.addEventListener('mouseup', () => {
+        isMouseDown = false;
+        container.classList.remove('dragging');
+        setTimeout(() => { isDragging = false; }, 50);
+    });
+
+    // Touch events for mobile
+    container.addEventListener('touchstart', () => { isMouseOverContainer = true; }, { passive: true });
+    container.addEventListener('touchend', () => { isMouseOverContainer = false; }, { passive: true });
+
+    // Lightbox trigger on card click (prevented if user was dragging)
+    const cards = container.querySelectorAll('.portfolio-card');
+    cards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            if (isDragging) {
+                e.preventDefault();
+                return;
+            }
+            const idx = parseInt(card.getAttribute('data-index'), 10);
+            if (!isNaN(idx) && portfolioData[idx]) {
+                const item = portfolioData[idx];
+                openLightbox(item.img, item.title, item.desc, idx);
+            }
+        });
+    });
+
+    startContinuousAutoScroll();
 }
 
-body {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    overflow-x: hidden;
-    line-height: 1.6;
-    font-size: 16px;
+function startContinuousAutoScroll() {
+    const container = document.getElementById('portfolioTrackContainer');
+    if (!container) return;
+
+    function step() {
+        if (!isMouseOverContainer && !isMouseDown && !isDragging) {
+            container.scrollLeft += 0.8;
+            
+            if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 5) {
+                container.scrollLeft = 0;
+            }
+        }
+        autoScrollAnimId = requestAnimationFrame(step);
+    }
+
+    if (autoScrollAnimId) cancelAnimationFrame(autoScrollAnimId);
+    autoScrollAnimId = requestAnimationFrame(step);
 }
 
-/* Container & Typography */
-.container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 32px;
-}
+// =========================================================
+// 3. FULL-SCREEN LIGHTBOX MODAL ENGINE WITH ZOOM & PAN
+// =========================================================
+let currentLightboxIndex = 0;
+let touchStartX = 0;
+let touchStartY = 0;
+let touchCurrentX = 0;
+let touchCurrentY = 0;
+let isTouchingModal = false;
+let isNavigatingModal = false;
 
-@media (max-width: 768px) {
-    .container {
-        padding: 0 20px;
+// Zoom & Pan State Variables
+let zoomScale = 1.0;
+let panX = 0;
+let panY = 0;
+let panStartX = 0;
+let panStartY = 0;
+let initialPinchDistance = 0;
+let initialPinchScale = 1.0;
+let lastTapTime = 0;
+let isWheelCooldown = false;
+let wheelTimer = null;
+
+function resetLightboxZoom(animated = false) {
+    zoomScale = 1.0;
+    panX = 0;
+    panY = 0;
+    const modalImg = document.getElementById('lightbox-img');
+    const imgWrapper = document.getElementById('lightboxImgWrapper');
+
+    if (imgWrapper) imgWrapper.classList.remove('zoomed');
+
+    if (modalImg) {
+        if (animated) {
+            modalImg.style.transition = 'transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1)';
+        } else {
+            modalImg.style.transition = 'none';
+        }
+        modalImg.style.transform = 'translate3d(0, 0, 0) scale(1)';
     }
 }
 
-h1 {
-    font-weight: 700;
-    font-size: clamp(40px, 5.5vw, 64px);
-    letter-spacing: -0.035em;
-    line-height: 1.1;
-    color: var(--text-primary);
+function updateZoomTransform(animated = false) {
+    const modalImg = document.getElementById('lightbox-img');
+    const imgWrapper = document.getElementById('lightboxImgWrapper');
+    if (!modalImg) return;
+
+    // Limit Panning Bounds based on scale
+    if (zoomScale > 1.05) {
+        if (imgWrapper) imgWrapper.classList.add('zoomed');
+        const maxPanX = (modalImg.offsetWidth * (zoomScale - 1)) / 2;
+        const maxPanY = (modalImg.offsetHeight * (zoomScale - 1)) / 2;
+        panX = Math.max(-maxPanX, Math.min(maxPanX, panX));
+        panY = Math.max(-maxPanY, Math.min(maxPanY, panY));
+    } else {
+        if (imgWrapper) imgWrapper.classList.remove('zoomed');
+        zoomScale = 1.0;
+        panX = 0;
+        panY = 0;
+    }
+
+    if (animated) {
+        modalImg.style.transition = 'transform 0.35s cubic-bezier(0.25, 1, 0.5, 1)';
+    } else {
+        modalImg.style.transition = 'none';
+    }
+
+    modalImg.style.transform = `translate3d(${panX}px, ${panY}px, 0) scale(${zoomScale})`;
 }
 
-h2 {
-    font-weight: 700;
-    font-size: clamp(30px, 4.2vw, 44px);
-    letter-spacing: -0.03em;
-    line-height: 1.15;
-    color: var(--text-primary);
+function openLightbox(imgSrc, title, desc, index) {
+    const modal = document.getElementById('lightboxModal');
+    const modalImg = document.getElementById('lightbox-img');
+    const modalTitle = document.getElementById('lightbox-title');
+    const modalDesc = document.getElementById('lightbox-desc');
+
+    if (!modal || !modalImg) return;
+
+    resetLightboxZoom(false);
+
+    currentLightboxIndex = typeof index === 'number' ? index : 0;
+    const item = portfolioData[currentLightboxIndex] || { img: imgSrc, title: title, desc: desc };
+
+    modalImg.style.transition = 'transform 0.52s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1)';
+    modalImg.style.transform = 'translate3d(0, 0, 0) scale(1)';
+    modalImg.style.opacity = '1';
+    modalImg.src = item.img;
+
+    if (modalTitle) modalTitle.textContent = item.title || 'Floor Plan View';
+    if (modalDesc) modalDesc.textContent = item.desc || '';
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    document.addEventListener('keydown', handleLightboxKeyDown);
+    setupLightboxDragEvents();
+    setupLightboxWheelEvents();
+    setupDoubleTapZoomEvents();
 }
 
-h3 {
-    font-weight: 600;
-    font-size: clamp(20px, 2.5vw, 26px);
-    letter-spacing: -0.02em;
-    color: var(--text-primary);
+function closeLightbox() {
+    const modal = document.getElementById('lightboxModal');
+    if (!modal) return;
+    
+    resetLightboxZoom(false);
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', handleLightboxKeyDown);
 }
 
-p {
-    font-weight: 400;
-    color: var(--text-secondary);
-    line-height: 1.65;
-    font-size: 17px;
-    letter-spacing: -0.01em;
+function navigateLightbox(direction, userDeltaX = 0) {
+    if (portfolioData.length === 0 || isNavigatingModal) return;
+    
+    // Disable image swipe switching while zoomed in!
+    if (zoomScale > 1.05) return;
+
+    isNavigatingModal = true;
+
+    if (direction === 'next') {
+        currentLightboxIndex = (currentLightboxIndex + 1) % portfolioData.length;
+    } else if (direction === 'prev') {
+        currentLightboxIndex = (currentLightboxIndex - 1 + portfolioData.length) % portfolioData.length;
+    }
+
+    performMinimalAppleAnimation(direction, userDeltaX);
 }
 
-/* Sections - Tightened Apple/Google UX Spacing */
-.section {
-    padding: 70px 0;
-    background-color: var(--bg-primary);
-}
+function performMinimalAppleAnimation(direction, userDeltaX) {
+    const modalImg = document.getElementById('lightbox-img');
+    const modalTitle = document.getElementById('lightbox-title');
+    const modalDesc = document.getElementById('lightbox-desc');
+    const caption = document.querySelector('.lightbox-caption');
 
-.section-ash {
-    background-color: #F5F5F7;
-}
+    resetLightboxZoom(false);
+    const newItem = portfolioData[currentLightboxIndex];
 
-/* Crisp Pure White Card Adaptations inside Ash Sections */
-.section-ash .standard-card,
-.section-ash .bento-card,
-.section-ash .premium-pricing-card {
-    background: #FFFFFF;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    border-radius: 16px;
-}
+    if (modalImg) {
+        const slideOutOffset = direction === 'next' ? '-28px' : '28px';
+        const slideInOffset = direction === 'next' ? '28px' : '-28px';
 
-@media (max-width: 768px) {
-    .section {
-        padding: 50px 0;
+        modalImg.style.transition = 'transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1)';
+        modalImg.style.transform = `translate3d(${slideOutOffset}, 0, 0) scale(0.985)`;
+        modalImg.style.opacity = '0.15';
+        if (caption) caption.style.opacity = '0.3';
+
+        setTimeout(() => {
+            modalImg.src = newItem.img;
+            if (modalTitle) modalTitle.textContent = newItem.title;
+            if (modalDesc) modalDesc.textContent = newItem.desc;
+
+            modalImg.style.transition = 'none';
+            modalImg.style.transform = `translate3d(${slideInOffset}, 0, 0) scale(0.985)`;
+            modalImg.style.opacity = '0.15';
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    modalImg.style.transition = 'transform 0.52s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1)';
+                    modalImg.style.transform = 'translate3d(0, 0, 0) scale(1)';
+                    modalImg.style.opacity = '1';
+                    if (caption) caption.style.opacity = '1';
+
+                    setTimeout(() => {
+                        isNavigatingModal = false;
+                    }, 280);
+                });
+            });
+        }, 150);
+    } else {
+        isNavigatingModal = false;
     }
 }
 
-.section-header {
-    max-width: 680px;
-    margin-bottom: 48px;
+// =========================================================
+// 4. DOUBLE-CLICK & DOUBLE-TAP TO TOGGLE ZOOM (2.5x)
+// =========================================================
+function setupDoubleTapZoomEvents() {
+    const imgWrapper = document.getElementById('lightboxImgWrapper');
+    if (!imgWrapper || imgWrapper.dataset.doubleTapInit) return;
+    imgWrapper.dataset.doubleTapInit = "true";
+
+    // Double-click for desktop mouse
+    imgWrapper.addEventListener('dblclick', (e) => {
+        e.preventDefault();
+        toggleZoomAtPoint(e.clientX, e.clientY);
+    });
+
+    // Double-tap for mobile touch
+    imgWrapper.addEventListener('touchend', (e) => {
+        if (e.touches.length > 0) return;
+        const now = Date.now();
+        if (now - lastTapTime < 300) {
+            e.preventDefault();
+            const touch = e.changedTouches[0];
+            toggleZoomAtPoint(touch.clientX, touch.clientY);
+        }
+        lastTapTime = now;
+    });
 }
 
-.section-header h2 {
-    margin-bottom: 16px;
-}
+function toggleZoomAtPoint(clientX, clientY) {
+    const modalImg = document.getElementById('lightbox-img');
+    if (!modalImg) return;
 
-.section-header p {
-    font-size: 18px;
-    color: var(--text-secondary);
-}
+    if (zoomScale > 1.05) {
+        // Reset Zoom back to 1.0
+        resetLightboxZoom(true);
+    } else {
+        // Zoom in to 2.5x
+        zoomScale = 2.5;
+        const rect = modalImg.getBoundingClientRect();
+        const offsetX = clientX - (rect.left + rect.width / 2);
+        const offsetY = clientY - (rect.top + rect.height / 2);
 
-/* Scroll Animations */
-.reveal-node {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.8s var(--apple-bezier), transform 0.8s var(--apple-bezier);
-    will-change: transform, opacity;
-}
+        panX = -offsetX * 1.5;
+        panY = -offsetY * 1.5;
 
-.reveal-node.active {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Nav Architecture */
-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 64px;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-bottom: 1px solid var(--border-subtle);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-}
-
-.nav-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
-
-.nav-logo-img {
-    height: 32px;
-    width: auto;
-    display: block;
-}
-
-.nav-right-block {
-    display: flex;
-    align-items: center;
-    gap: 40px;
-}
-
-.nav-links {
-    display: flex;
-    gap: 32px;
-    list-style: none;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: var(--text-secondary);
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    transition: color 0.25s ease;
-}
-
-.nav-links a:hover {
-    color: var(--text-primary);
-}
-
-.nav-cta {
-    background: var(--accent-black);
-    color: var(--bg-primary) !important;
-    padding: 10px 22px;
-    border-radius: var(--radius-pill);
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    text-decoration: none !important;
-    transition: transform 0.25s var(--apple-bezier), background-color 0.25s ease;
-}
-
-.nav-cta:hover {
-    background: #2C2C2E;
-    transform: scale(1.03);
-}
-
-.mobile-toggle {
-    display: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: var(--text-primary);
-    user-select: none;
-}
-
-/* Mobile Nav Menu Drawer */
-@media (max-width: 860px) {
-    .mobile-toggle {
-        display: block;
-    }
-    .nav-right-block {
-        position: fixed;
-        top: 64px;
-        left: 0;
-        width: 100%;
-        height: calc(100vh - 64px);
-        background: #FFFFFF;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        padding: 40px 24px;
-        gap: 32px;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-10px);
-        transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
-    }
-    .nav-right-block.active {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-    }
-    .nav-links {
-        flex-direction: column;
-        width: 100%;
-        gap: 24px;
-    }
-    .nav-links a {
-        font-size: 20px;
-        font-weight: 600;
-    }
-    .nav-cta {
-        width: 100%;
-        text-align: center;
-        padding: 16px;
-        font-size: 16px !important;
+        updateZoomTransform(true);
     }
 }
 
-/* Hero Section */
-.hero {
-    padding: 90px 0 50px 0;
-    display: flex;
-    align-items: center;
+// =========================================================
+// 5. REAL-TIME TOUCH / MOUSE SWIPE & PAN ENGINE
+// =========================================================
+function setupLightboxDragEvents() {
+    const imgWrapper = document.getElementById('lightboxImgWrapper');
+    const modalImg = document.getElementById('lightbox-img');
+    if (!imgWrapper || !modalImg || imgWrapper.dataset.dragInit) return;
+
+    imgWrapper.dataset.dragInit = "true";
+
+    // --- NATIVE TOUCH EVENTS (Swipe when 1x, Pan when Zoomed, Pinch to Zoom) ---
+    imgWrapper.addEventListener('touchstart', (e) => {
+        if (isNavigatingModal) return;
+
+        if (e.touches.length === 2) {
+            // Pinch to Zoom start
+            isTouchingModal = false;
+            initialPinchDistance = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+            initialPinchScale = zoomScale;
+            return;
+        }
+
+        if (e.touches.length === 1) {
+            isTouchingModal = true;
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchCurrentX = touchStartX;
+            touchCurrentY = touchStartY;
+            panStartX = panX;
+            panStartY = panY;
+
+            if (zoomScale <= 1.05) {
+                modalImg.style.transition = 'none';
+            }
+        }
+    }, { passive: false });
+
+    imgWrapper.addEventListener('touchmove', (e) => {
+        if (isNavigatingModal) return;
+
+        // Two-Finger Pinch to Zoom Tracking
+        if (e.touches.length === 2 && initialPinchDistance > 0) {
+            e.preventDefault();
+            const currentDist = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+            zoomScale = Math.max(1.0, Math.min(4.0, initialPinchScale * (currentDist / initialPinchDistance)));
+            updateZoomTransform(false);
+            return;
+        }
+
+        // Single Finger Drag / Pan / Swipe
+        if (isTouchingModal && e.touches.length === 1) {
+            touchCurrentX = e.touches[0].clientX;
+            touchCurrentY = e.touches[0].clientY;
+            const deltaX = touchCurrentX - touchStartX;
+            const deltaY = touchCurrentY - touchStartY;
+
+            if (zoomScale > 1.05) {
+                // Pan around zoomed floor plan image
+                e.preventDefault();
+                panX = panStartX + deltaX;
+                panY = panStartY + deltaY;
+                updateZoomTransform(false);
+            } else {
+                // Horizontal 1:1 Swipe tracking
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    if (e.cancelable) e.preventDefault();
+                    modalImg.style.transform = `translate3d(${deltaX}px, 0, 0) scale(1)`;
+                    const opacityVal = Math.max(0.4, 1 - Math.abs(deltaX) / 700);
+                    modalImg.style.opacity = opacityVal.toString();
+                }
+            }
+        }
+    }, { passive: false });
+
+    imgWrapper.addEventListener('touchend', (e) => {
+        initialPinchDistance = 0;
+        if (!isTouchingModal || isNavigatingModal) return;
+        isTouchingModal = false;
+
+        if (zoomScale <= 1.05) {
+            handleSwipeEnd();
+        } else {
+            updateZoomTransform(true);
+        }
+    });
+
+    // --- MOUSE DRAG EVENTS (Pan when Zoomed, Swipe when 1x) ---
+    imgWrapper.addEventListener('mousedown', (e) => {
+        if (isNavigatingModal) return;
+        isTouchingModal = true;
+        touchStartX = e.clientX;
+        touchStartY = e.clientY;
+        touchCurrentX = touchStartX;
+        touchCurrentY = touchStartY;
+        panStartX = panX;
+        panStartY = panY;
+
+        if (zoomScale <= 1.05) {
+            modalImg.style.transition = 'none';
+        }
+        imgWrapper.classList.add('dragging');
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (!isTouchingModal || isNavigatingModal) return;
+        touchCurrentX = e.clientX;
+        touchCurrentY = e.clientY;
+        const deltaX = touchCurrentX - touchStartX;
+        const deltaY = touchCurrentY - touchStartY;
+
+        if (zoomScale > 1.05) {
+            panX = panStartX + deltaX;
+            panY = panStartY + deltaY;
+            updateZoomTransform(false);
+        } else {
+            modalImg.style.transform = `translate3d(${deltaX}px, 0, 0) scale(1)`;
+            const opacityVal = Math.max(0.4, 1 - Math.abs(deltaX) / 700);
+            modalImg.style.opacity = opacityVal.toString();
+        }
+    });
+
+    window.addEventListener('mouseup', () => {
+        if (!isTouchingModal) return;
+        isTouchingModal = false;
+        imgWrapper.classList.remove('dragging');
+
+        if (zoomScale <= 1.05) {
+            handleSwipeEnd();
+        } else {
+            updateZoomTransform(true);
+        }
+    });
 }
 
-.hero-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 64px;
-    align-items: center;
-    width: 100%;
-}
+function handleSwipeEnd() {
+    const modalImg = document.getElementById('lightbox-img');
+    if (!modalImg) return;
 
-@media (max-width: 960px) {
-    .hero-grid {
-        grid-template-columns: 1fr;
-        gap: 40px;
+    const deltaX = touchCurrentX - touchStartX;
+    const threshold = 50;
+
+    if (deltaX < -threshold) {
+        navigateLightbox('next', deltaX);
+    } else if (deltaX > threshold) {
+        navigateLightbox('prev', deltaX);
+    } else {
+        resetLightboxZoom(true);
     }
 }
 
-.hero-left h1 {
-    margin-bottom: 24px;
+// =========================================================
+// 6. TRACKPAD WHEEL (PINCH TO ZOOM & 2-FINGER SCROLL)
+// =========================================================
+function setupLightboxWheelEvents() {
+    const modal = document.getElementById('lightboxModal');
+    if (!modal || modal.dataset.wheelInit) return;
+    modal.dataset.wheelInit = "true";
+
+    modal.addEventListener('wheel', (e) => {
+        if (!modal.classList.contains('active')) return;
+
+        // Trackpad Pinch-to-Zoom (Ctrl key pressed during wheel gesture)
+        if (e.ctrlKey) {
+            e.preventDefault();
+            const zoomDelta = -e.deltaY * 0.015;
+            zoomScale = Math.max(1.0, Math.min(4.0, zoomScale + zoomDelta));
+            updateZoomTransform(false);
+            return;
+        }
+
+        // If currently zoomed in, trackpad wheel pans the image vertically/horizontally
+        if (zoomScale > 1.05) {
+            e.preventDefault();
+            panX -= e.deltaX * 1.2;
+            panY -= e.deltaY * 1.2;
+            updateZoomTransform(false);
+            return;
+        }
+
+        // If 1x scale, trackpad wheel performs 2-finger image swipe navigation
+        const deltaX = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : (e.shiftKey ? e.deltaY : 0);
+
+        if (Math.abs(deltaX) > 5) {
+            e.preventDefault();
+        }
+
+        if (Math.abs(deltaX) > 20 && !isWheelCooldown && !isNavigatingModal) {
+            isWheelCooldown = true;
+
+            if (deltaX > 0) {
+                navigateLightbox('next');
+            } else {
+                navigateLightbox('prev');
+            }
+
+            clearTimeout(wheelTimer);
+            wheelTimer = setTimeout(() => {
+                isWheelCooldown = false;
+            }, 450);
+        }
+    }, { passive: false });
 }
 
-.hero-left p {
-    font-size: 19px;
-    margin-bottom: 36px;
-    max-width: 520px;
-}
-
-.hero-buttons {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-}
-
-.btn-primary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--accent-black);
-    color: #FFFFFF;
-    padding: 14px 32px;
-    border-radius: var(--radius-pill);
-    font-size: 16px;
-    font-weight: 600;
-    text-decoration: none;
-    border: 1px solid var(--accent-black);
-    cursor: pointer;
-    transition: transform 0.25s var(--apple-bezier), background-color 0.25s ease;
-}
-
-.btn-primary:hover {
-    background: #2C2C2E;
-    border-color: #2C2C2E;
-    transform: scale(1.03);
-}
-
-.btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    color: var(--text-primary);
-    padding: 14px 32px;
-    border-radius: var(--radius-pill);
-    font-size: 16px;
-    font-weight: 600;
-    text-decoration: none;
-    border: 1px solid var(--border-strong);
-    cursor: pointer;
-    transition: transform 0.25s var(--apple-bezier), background-color 0.25s ease, border-color 0.25s ease;
-}
-
-.btn-secondary:hover {
-    background: var(--bg-secondary);
-    border-color: var(--text-primary);
-    transform: scale(1.03);
-}
-
-@media (max-width: 600px) {
-    .hero-buttons {
-        flex-direction: column;
-        width: 100%;
-    }
-    .hero-buttons .btn-primary,
-    .hero-buttons .btn-secondary {
-        width: 100%;
-        text-align: center;
+function handleLightboxKeyDown(e) {
+    if (e.key === 'Escape') {
+        closeLightbox();
+    } else if (e.key === 'ArrowRight' && zoomScale <= 1.05) {
+        navigateLightbox('next');
+    } else if (e.key === 'ArrowLeft' && zoomScale <= 1.05) {
+        navigateLightbox('prev');
     }
 }
 
-.hero-right {
-    background: transparent;
-    border: none;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: none;
-    transition: transform 0.3s var(--apple-bezier);
+document.addEventListener('DOMContentLoaded', () => {
+    renderPortfolio();
+
+    const modal = document.getElementById('lightboxModal');
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeLightbox();
+            }
+        });
+    }
+});
+
+// =========================================================
+// 7. MOBILE MENU INTERACTION LOGIC
+// =========================================================
+const mobileToggle = document.getElementById('mobileToggle');
+const navMenu = document.getElementById('navMenu');
+const mobileLinks = document.querySelectorAll('.mobile-link');
+
+if (mobileToggle && navMenu) {
+    mobileToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+        mobileToggle.innerHTML = navMenu.classList.contains('active') ? '✕' : '☰';
+    });
+
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            navMenu.classList.remove('active');
+            mobileToggle.innerHTML = '☰';
+        });
+    });
 }
 
-.hero-right:hover {
-    transform: scale(1.01);
-}
+// =========================================================
+// 8. BEFORE/AFTER SLIDER INTERACTION
+// =========================================================
+const sliderRange = document.getElementById('sliderRange');
+const afterImg = document.getElementById('afterImg');
+const sliderLine = document.getElementById('sliderLine');
+const sliderHandleIcon = document.getElementById('sliderHandleIcon');
+const sliderContainer = document.getElementById('sliderContainer');
 
-.hero-svg-display {
-    width: 100%;
-    height: auto;
-    max-height: 480px;
-    object-fit: contain;
-}
-
-/* Before / After Showcase Slider */
-.slider-wrapper {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1920 / 1200;
-    max-height: 640px;
-    background: #FFFFFF;
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    user-select: none;
-    box-shadow: var(--shadow-card);
-}
-
-@media (max-width: 768px) {
-    .slider-wrapper {
-        aspect-ratio: 1920 / 1200;
-        max-height: 480px;
+function updateSlider() {
+    if (!sliderRange || !afterImg || !sliderLine || !sliderHandleIcon) return;
+    const val = sliderRange.value;
+    afterImg.style.width = val + '%';
+    sliderLine.style.left = val + '%';
+    sliderHandleIcon.style.left = val + '%';
+    if (sliderContainer) {
+        const absoluteImg = afterImg.querySelector('img');
+        if (absoluteImg) absoluteImg.style.width = sliderContainer.offsetWidth + 'px';
     }
 }
 
-.slider-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+if (sliderRange) {
+    updateSlider();
+    sliderRange.addEventListener('input', updateSlider);
 }
 
-.slider-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    padding: 0;
-    background: #FFFFFF;
-}
+window.addEventListener('resize', () => {
+    if (!sliderContainer || !afterImg) return;
+    const containerWidth = sliderContainer.offsetWidth;
+    const absoluteImg = afterImg.querySelector('img');
+    if (absoluteImg) absoluteImg.style.width = containerWidth + 'px';
+});
 
-.img-after {
-    width: 50%;
-    overflow: hidden;
-    z-index: 2;
-    border-right: 2px solid var(--accent-black);
-}
+// =========================================================
+// 9. SCROLL ANIMATION REVEAL ENGINE
+// =========================================================
+const observeOptions = { threshold: 0.08, rootMargin: "0px 0px -20px 0px" };
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) { entry.target.classList.add('active'); }
+    });
+}, observeOptions);
+document.querySelectorAll('.reveal-node').forEach(node => observer.observe(node));
 
-.img-after img {
-    width: 100%;
-    max-width: none;
-}
+// =========================================================
+// 10. DYNAMIC PRICING ENGINE WITH LOCALSTORAGE CACHING
+// =========================================================
+const baseUSD = { small: 8.00, mid: 12.00, premium: 18.00, large: 24.00, incremental: 4.00, express: 2.00, color: 2.00, furniture: 4.00 };
+let currentMarket = 'usd';
+let exchangeRates = { GBP: 0.78, AUD: 1.52, USD: 1.00 };
 
-.slider-line {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    width: 2px;
-    background: var(--accent-black);
-    z-index: 3;
-    pointer-events: none;
-}
+async function fetchLiveExchangeRates() {
+    const CACHE_KEY = 'lavientra_exchange_rates';
+    const CACHE_TIME_KEY = 'lavientra_rates_timestamp';
+    const ONE_HOUR = 60 * 60 * 1000;
 
-.slider-handle-badge {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: var(--accent-black);
-    color: #FFFFFF;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 4;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-    pointer-events: none;
-}
+    const cachedRates = localStorage.getItem(CACHE_KEY);
+    const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+    const now = new Date().getTime();
 
-.slider-handle-badge svg {
-    width: 20px;
-    height: 20px;
-}
+    if (cachedRates && cachedTime && (now - cachedTime < ONE_HOUR)) {
+        exchangeRates = JSON.parse(cachedRates);
+        updatePricingDisplay();
+        return;
+    }
 
-.slider-input {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: ew-resize;
-    z-index: 5;
-}
+    try {
+        const res = await fetch('https://open.er-api.com/v6/latest/USD');
+        const data = await res.json();
+        if (data && data.rates) {
+            exchangeRates.GBP = data.rates.GBP || exchangeRates.GBP;
+            exchangeRates.AUD = data.rates.AUD || exchangeRates.AUD;
 
-.slider-badge-label {
-    position: absolute;
-    top: 20px;
-    padding: 6px 14px;
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-pill);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--text-primary);
-    backdrop-filter: blur(10px);
-    z-index: 6;
-}
-
-.label-before { left: 24px; }
-.label-after { right: 24px; }
-
-/* Standards Grid */
-.standards-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 32px;
-}
-
-@media (max-width: 768px) {
-    .standards-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
+            localStorage.setItem(CACHE_KEY, JSON.stringify(exchangeRates));
+            localStorage.setItem(CACHE_TIME_KEY, now.toString());
+            updatePricingDisplay();
+        }
+    } catch (e) {
+        console.warn("Exchange rate API fallback triggered.");
+        updatePricingDisplay();
     }
 }
 
-.standard-card {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: 40px;
-    transition: transform 0.3s var(--apple-bezier), border-color 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: var(--shadow-card);
+function setMarket(market) {
+    currentMarket = market;
+    const btnUk = document.getElementById('btn-uk');
+    const btnAus = document.getElementById('btn-aus');
+    const btnUsd = document.getElementById('btn-usd');
+
+    if (btnUk) btnUk.classList.toggle('active', market === 'uk');
+    if (btnAus) btnAus.classList.toggle('active', market === 'aus');
+    if (btnUsd) btnUsd.classList.toggle('active', market === 'usd');
+    
+    updatePricingDisplay();
 }
 
-.standard-card:hover {
-    transform: scale(1.02);
-    border-color: var(--border-strong);
-    box-shadow: var(--shadow-hover);
-}
+function updatePricingDisplay() {
+    let symbol = '$';
+    let rate = exchangeRates.USD;
+    if (currentMarket === 'uk') { symbol = '£'; rate = exchangeRates.GBP; }
+    else if (currentMarket === 'aus') { symbol = '$'; rate = exchangeRates.AUD; }
 
-.standard-num {
-    display: inline-block;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--text-secondary);
-    margin-bottom: 20px;
-}
+    const smallEl = document.getElementById('price-small');
+    const midEl = document.getElementById('price-mid');
+    const premEl = document.getElementById('price-premium');
+    const largeEl = document.getElementById('price-large');
+    const expressEl = document.getElementById('price-addon-express');
+    const colorEl = document.getElementById('price-addon-color');
+    const furnEl = document.getElementById('price-addon-furniture');
 
-.standard-card h3 {
-    margin-bottom: 12px;
-}
+    if (smallEl) smallEl.textContent = symbol + (baseUSD.small * rate).toFixed(2);
+    if (midEl) midEl.textContent = symbol + (baseUSD.mid * rate).toFixed(2);
+    if (premEl) premEl.textContent = symbol + (baseUSD.premium * rate).toFixed(2);
+    if (largeEl) largeEl.textContent = symbol + (baseUSD.large * rate).toFixed(2);
+    if (expressEl) expressEl.textContent = symbol + (baseUSD.express * rate).toFixed(2);
+    if (colorEl) colorEl.textContent = symbol + (baseUSD.color * rate).toFixed(2);
+    if (furnEl) furnEl.textContent = symbol + (baseUSD.furniture * rate).toFixed(2);
 
-/* Portfolio Section - Full Width Viewport Track (4:3 Aspect Ratio Cards) */
-.portfolio-fullwidth-wrapper {
-    width: 100vw;
-    position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-    overflow: hidden;
-}
-
-.portfolio-track-container {
-    overflow-x: auto;
-    scroll-behavior: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    padding: 12px 32px 32px 32px;
-    cursor: grab;
-    user-select: none;
-}
-
-.portfolio-track-container.dragging {
-    cursor: grabbing;
-}
-
-.portfolio-track-container::-webkit-scrollbar {
-    display: none;
-}
-
-.portfolio-track {
-    display: flex;
-    gap: 28px;
-    width: max-content;
-}
-
-/* Cards adjusted to 4:3 Aspect Ratio (480px x 360px image view) */
-.portfolio-card {
-    background: #FFFFFF;
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.35s var(--apple-bezier), border-color 0.35s ease, box-shadow 0.35s ease;
-    display: flex;
-    flex-direction: column;
-    width: 480px;
-    box-shadow: var(--shadow-card);
-    flex-shrink: 0;
-    padding: 6px;
-}
-
-@media (max-width: 600px) {
-    .portfolio-card {
-        width: 320px;
+    const noteEl = document.getElementById('pricing-note-incremental');
+    if (noteEl) {
+        const convertedIncremental = symbol + (baseUSD.incremental * rate).toFixed(2);
+        noteEl.textContent = `${convertedIncremental} additional charge applies for every incremental 2,500 sq ft beyond the initial 5,000 sq ft.`;
     }
 }
 
-.portfolio-card:hover {
-    transform: scale(1.02);
-    border-color: var(--border-strong);
-    box-shadow: var(--shadow-hover);
+// =========================================================
+// 11. SECURE UPLOAD PIPELINE FORM
+// =========================================================
+const dropzoneArea = document.getElementById('dropzoneArea');
+const fileInput = document.getElementById('sketchFiles');
+const dropzoneText = document.getElementById('dropzoneText');
+const intakeForm = document.getElementById('projectIntakeForm');
+let stagedFilesList = [];
+
+if (dropzoneArea && fileInput) {
+    dropzoneArea.addEventListener('click', () => fileInput.click());
+    dropzoneArea.addEventListener('dragover', (e) => { e.preventDefault(); dropzoneArea.classList.add('dragover'); });
+    ['dragleave', 'dragend'].forEach(type => { dropzoneArea.addEventListener(type, () => dropzoneArea.classList.remove('dragover')); });
+
+    dropzoneArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzoneArea.classList.remove('dragover');
+        if (e.dataTransfer.files.length > 0) { handleFilesIntegration(e.dataTransfer.files); }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) { handleFilesIntegration(e.target.files); }
+    });
 }
 
-.portfolio-card-img-wrap {
-    position: relative;
-    width: 100%;
-    height: 360px;
-    aspect-ratio: 4 / 3;
-    background: #FAFAFC;
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    padding: 6px;
-}
-
-@media (max-width: 600px) {
-    .portfolio-card-img-wrap {
-        height: 240px;
-        padding: 4px;
+function handleFilesIntegration(filesList) {
+    stagedFilesList = Array.from(filesList);
+    if (!dropzoneText) return;
+    if (stagedFilesList.length === 1) {
+        dropzoneText.innerHTML = `📄 Staged file: <strong>${stagedFilesList[0].name}</strong>`;
+    } else {
+        dropzoneText.innerHTML = `📚 Total <strong>${stagedFilesList.length} files staged</strong> for queue processing.`;
     }
 }
 
-.portfolio-card-img-wrap img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    transition: transform 0.4s var(--apple-bezier);
-    pointer-events: none;
+function toBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
 }
 
-.portfolio-card:hover .portfolio-card-img-wrap img {
-    transform: scale(1.02);
+if (intakeForm) {
+    intakeForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const submitBtn = document.getElementById('submitActionBtn');
+        const btnText = submitBtn ? submitBtn.querySelector('.btn-text') : null;
+
+        if (stagedFilesList.length === 0) {
+            alert('Please upload or drag a sketch file before submitting.');
+            return;
+        }
+
+        if (submitBtn) submitBtn.classList.add('loading');
+        if (btnText) btnText.textContent = 'Uploading...';
+
+        try {
+            let encodedFilesArray = [];
+            let totalSize = 0;
+
+            for (let i = 0; i < stagedFilesList.length; i++) {
+                totalSize += stagedFilesList[i].size;
+                if (totalSize > 45 * 1024 * 1024) {
+                    throw new Error("Total payload allocation exceeds limit (45MB). Please upload smaller files.");
+                }
+
+                let base64String = await toBase64(stagedFilesList[i]);
+                encodedFilesArray.push({
+                    data: base64String,
+                    name: stagedFilesList[i].name,
+                    mimeType: stagedFilesList[i].type
+                });
+            }
+
+            let selectedStyles = [];
+            document.querySelectorAll('input[name="style"]:checked').forEach(cb => { selectedStyles.push(cb.value); });
+
+            const payloadData = {
+                name: document.getElementById('fullName').value,
+                email: document.getElementById('agencyEmail').value,
+                propertyAddress: document.getElementById('propertyAddress').value,
+                description: `[Country: ${document.getElementById('targetCountry').value}] [Pipeline: ${document.getElementById('serviceNeeded').value}] [Styles: ${selectedStyles.join(', ')}] Notes: ${document.getElementById('instructions').value}`,
+                files: encodedFilesArray
+            };
+
+            const APP_URL = "https://script.google.com/macros/s/AKfycbymzH1zVuVz7R5hv4TWh4T8UEwcJHGp_SQ5z3odvd6OSLGHdg0LQX6U46oFSOL4ALR9Ag/exec";
+
+            await fetch(APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(payloadData)
+            });
+
+            showSuccessPopup();
+            intakeForm.reset();
+            if (dropzoneText) dropzoneText.innerHTML = `Drag & Drop your sketches here, or <strong>browse local storage</strong>`;
+            stagedFilesList = [];
+
+        } catch (err) {
+            console.error(err);
+            alert(err.message || 'Network communication error. Please try uploading smaller individual image files.');
+        } finally {
+            if (submitBtn) submitBtn.classList.remove('loading');
+            if (btnText) btnText.textContent = 'Send to Lavientra Studio';
+        }
+    });
 }
 
-.portfolio-card-badge {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid var(--border-subtle);
-    backdrop-filter: blur(10px);
-    color: var(--text-primary);
-    font-size: 11px;
-    font-weight: 600;
-    padding: 5px 12px;
-    border-radius: var(--radius-pill);
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
+function showSuccessPopup() {
+    const popup = document.getElementById('successPopup');
+    if (popup) {
+        popup.classList.add('active');
+    }
 }
-
-.portfolio-card-meta {
-    padding: 18px 20px 18px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.portfolio-card-meta h4 {
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--text-primary);
-    letter-spacing: -0.015em;
-}
-
-.portfolio-card-meta p {
-    font-size: 14px;
-    color: var(--text-secondary);
-    line-height: 1.5;
-}
-
-/* Pricing Cards & Toggle */
-.pricing-toggle-zone {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 48px;
-}
-
-.pill-toggle {
-    display: inline-flex;
-    background: var(--bg-secondary);
-    padding: 6px;
-    border-radius: var(--radius-pill);
-    border: 1px solid var(--border-subtle);
-    gap: 6px;
-}
-
-.toggle-btn {
-    background: transparent;
-    border: none;
-    color: var(--text-secondary);
-    padding: 10px 24px;
-    border-radius: var(--radius-pill);
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.25s ease;
-}
-
-.toggle-btn.active {
-    background: var(--accent-black);
-    color: #FFFFFF;
-}
-
-.premium-pricing-card {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: 48px;
-    max-width: 840px;
-    margin: 0 auto;
-    box-shadow: var(--shadow-card);
-}
-
-@media (max-width: 768px) {
-    .premium-pricing-card {
-        padding: 28px;
+function closeSuccessPopup() {
+    const popup = document.getElementById('successPopup');
+    if (popup) {
+        popup.classList.remove('active');
     }
 }
 
-.pricing-card-title-area {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    margin-bottom: 32px;
-    border-bottom: 1px solid var(--border-subtle);
-    padding-bottom: 20px;
-}
-
-.pricing-card-title-area h3 {
-    font-size: 22px;
-    letter-spacing: 1px;
-}
-
-.pricing-card-title-area span {
-    font-size: 13px;
-    color: var(--text-secondary);
-    font-weight: 600;
-}
-
-.price-list-rows {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.price-row-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--border-subtle);
-}
-
-.price-item-info h4 {
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--text-primary);
-}
-
-.price-item-info p {
-    font-size: 14px;
-    color: var(--text-secondary);
-}
-
-.price-item-value {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--text-primary);
-}
-
-.price-sub-section-title {
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--text-secondary);
-    margin: 36px 0 20px 0;
-}
-
-.pricing-footnote-list {
-    margin-top: 32px;
-    padding-left: 20px;
-    color: var(--text-muted);
-    font-size: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-/* Apple Bento Grid Layout for Standards */
-.bento-specs-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-}
-
-.bento-hero-card {
-    grid-column: 1 / -1;
-    background: #FFFFFF;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    border-radius: 16px;
-    padding: 44px 48px;
-    display: flex;
-    align-items: center;
-    gap: 40px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-    transition: transform 0.3s var(--apple-bezier), border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-}
-
-.bento-hero-card:hover {
-    transform: translateY(-2px);
-    border-color: rgba(0, 0, 0, 0.15);
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
-}
-
-.bento-hero-icon-wrap {
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-subtle);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.bento-hero-icon {
-    width: 36px;
-    height: 36px;
-    color: var(--text-primary);
-}
-
-.bento-hero-body {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.bento-badge {
-    display: inline-block;
-    width: fit-content;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    color: var(--text-secondary);
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-subtle);
-    padding: 4px 12px;
-    border-radius: var(--radius-pill);
-}
-
-.bento-hero-body h3 {
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-}
-
-.bento-hero-body p {
-    font-size: 17px;
-    color: var(--text-secondary);
-    max-width: 720px;
-}
-
-.bento-card {
-    background: #FAFAFC;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    border-radius: 16px;
-    padding: 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
-    transition: transform 0.25s var(--apple-bezier), border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-}
-
-.bento-card:hover {
-    transform: translateY(-2px);
-    background: #FFFFFF;
-    border-color: rgba(0, 0, 0, 0.15);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
-}
-
-.bento-card-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.bento-card-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    background: #FFFFFF;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-primary);
-    flex-shrink: 0;
-}
-
-.bento-card-icon svg {
-    width: 18px;
-    height: 18px;
-}
-
-.bento-card h4 {
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--text-primary);
-    letter-spacing: -0.01em;
-}
-
-.bento-card p {
-    font-size: 14px;
-    color: var(--text-secondary);
-    line-height: 1.6;
-}
-
-@media (max-width: 960px) {
-    .bento-specs-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 680px) {
-    .bento-specs-grid {
-        grid-template-columns: 1fr;
-    }
-    .bento-hero-card {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 32px 24px;
-        gap: 20px;
-    }
-    .bento-card {
-        padding: 24px;
-    }
-}
-
-
-.workflow-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
-}
-
-@media (max-width: 860px) {
-    .workflow-grid {
-        grid-template-columns: 1fr;
-        gap: 24px;
-    }
-}
-
-.step-card {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: 36px;
-    box-shadow: var(--shadow-card);
-}
-
-.step-num {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--text-secondary);
-    display: block;
-    margin-bottom: 16px;
-}
-
-.billing-banner {
-    margin-top: 48px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    padding: 28px 36px;
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    box-shadow: var(--shadow-card);
-}
-
-/* Upload & Form Section */
-.form-container-box {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: 48px;
-    max-width: 800px;
-    margin: 0 auto;
-    box-shadow: var(--shadow-card);
-}
-
-@media (max-width: 768px) {
-    .form-container-box {
-        padding: 28px;
-    }
-}
-
-.form-group {
-    margin-bottom: 28px;
-}
-
-.form-group label {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 10px;
-}
-
-.form-control {
-    width: 100%;
-    background: #FFFFFF;
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    padding: 14px 18px;
-    color: var(--text-primary);
-    font-family: var(--font-main);
-    font-size: 16px;
-    transition: border-color 0.25s ease, box-shadow 0.25s ease;
-}
-
-.form-control:focus {
-    outline: none;
-    border-color: var(--text-primary);
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
-}
-
-.checkbox-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-}
-
-.checkbox-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    color: var(--text-secondary);
-    background: #FFFFFF;
-    padding: 10px 16px;
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-pill);
-    cursor: pointer;
-    user-select: none;
-}
-
-.checkbox-label input[type="checkbox"] {
-    accent-color: var(--accent-black);
-    width: 16px;
-    height: 16px;
-}
-
-.dropzone-area {
-    background: #FFFFFF;
-    border: 2px dashed var(--border-subtle);
-    border-radius: var(--radius-md);
-    padding: 40px 24px;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color 0.25s ease, background 0.25s ease;
-}
-
-.dropzone-area:hover,
-.dropzone-area.dragover {
-    border-color: var(--text-primary);
-    background: #FAFAFC;
-}
-
-.dropzone-area p {
-    font-size: 15px;
-    color: var(--text-secondary);
-}
-
-.dropzone-area strong {
-    color: var(--text-primary);
-    text-decoration: underline;
-}
-
-.dropzone-note {
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-top: 8px;
-    text-align: center;
-}
-
-.submit-btn {
-    width: 100%;
-    padding: 16px;
-    font-size: 17px;
-    font-weight: 600;
-    border-radius: var(--radius-pill);
-    background: var(--accent-black);
-    color: #FFFFFF;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.25s var(--apple-bezier), background-color 0.25s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-.submit-btn:hover {
-    background: #2C2C2E;
-    transform: scale(1.01);
-}
-
-.direct-channels {
-    margin-top: 24px;
-    text-align: center;
-}
-
-.direct-channels p {
-    font-size: 14px;
-}
-
-.direct-channels a {
-    color: var(--text-primary);
-    text-decoration: underline;
-}
-
-/* About Section - Apple Product Highlight Style */
-.about-section {
-    padding: 70px 0;
-}
-
-.about-layout {
-    display: grid;
-    grid-template-columns: 1fr 1.5fr;
-    gap: 64px;
-    align-items: start;
-}
-
-.about-hero-title {
-    font-size: clamp(2.5rem, 4.2vw, 3.5rem);
-    font-weight: 700;
-    line-height: 1.05;
-    letter-spacing: -0.035em;
-    color: var(--text-primary);
-}
-
-.about-right-content {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-}
-
-.about-intro-summary {
-    font-size: clamp(18px, 2.2vw, 22px);
-    font-weight: 400;
-    line-height: 1.55;
-    letter-spacing: -0.015em;
-    color: var(--text-secondary);
-}
-
-.about-stats-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-top: 8px;
-}
-
-.stat-card {
-    background: #F5F5F7;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    border-radius: 16px;
-    padding: 20px 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    transition: transform 0.25s var(--apple-bezier), border-color 0.25s ease, box-shadow 0.25s ease;
-}
-
-.stat-card:hover {
-    transform: translateY(-2px);
-    border-color: rgba(0, 0, 0, 0.15);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
-}
-
-.stat-number {
-    font-size: 26px;
-    font-weight: 700;
-    color: #1D1D1F;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    white-space: nowrap;
-}
-
-.stat-label {
-    font-size: 13px;
-    color: #515154;
-    margin-top: 4px;
-    line-height: 1.4;
-    font-weight: 500;
-}
-
-@media (max-width: 900px) {
-    .about-layout {
-        grid-template-columns: 1fr;
-        gap: 36px;
-    }
-}
-
-@media (max-width: 768px) {
-    .about-stats-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-}
-
-
-
-/* Footer */
-footer {
-    padding: 80px 0 40px 0;
-    border-top: 1px solid var(--border-subtle);
-    background: #FFFFFF;
-}
-
-.footer-grid {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr;
-    gap: 48px;
-    margin-bottom: 60px;
-}
-
-@media (max-width: 768px) {
-    .footer-grid {
-        grid-template-columns: 1fr;
-        gap: 36px;
-    }
-}
-
-.footer-col h5 {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 16px;
-}
-
-.footer-col ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.footer-col a {
-    color: var(--text-secondary);
-    text-decoration: none;
-    font-size: 14px;
-    transition: color 0.25s ease;
-}
-
-.footer-col a:hover {
-    color: var(--text-primary);
-}
-
-.footer-bottom {
-    border-top: 1px solid var(--border-subtle);
-    padding-top: 32px;
-    text-align: center;
-    color: var(--text-muted);
-}
-
-/* Lightbox Modal System (Expanded Max Viewport Dimensions) */
-.lightbox-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.96);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.35s var(--apple-bezier), visibility 0.35s;
-    user-select: none;
-    overscroll-behavior: contain;
-    overscroll-behavior-x: none;
-    touch-action: none;
-}
-
-.lightbox-modal.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Overlay Navigation Controls */
-.lightbox-close-btn {
-    position: absolute;
-    top: 20px;
-    right: 24px;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.88);
-    border: 1px solid var(--border-subtle);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    color: var(--text-primary);
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    margin: 0;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    transition: transform 0.25s var(--apple-bezier), background 0.25s ease, box-shadow 0.25s ease;
-    z-index: 10001;
-}
-
-.lightbox-close-btn:hover {
-    transform: scale(1.1);
-    background: #FFFFFF;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-}
-
-.lightbox-side-nav-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.88);
-    border: 1px solid var(--border-subtle);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    color: var(--text-primary);
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    margin: 0;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    transition: transform 0.25s var(--apple-bezier), background 0.25s ease, box-shadow 0.25s ease;
-    z-index: 10001;
-}
-
-.lightbox-prev-btn { left: 24px; }
-.lightbox-next-btn { right: 24px; }
-
-.lightbox-side-nav-btn svg {
-    display: block;
-    width: 24px;
-    height: 24px;
-}
-
-.lightbox-side-nav-btn:hover {
-    transform: translateY(-50%) scale(1.1);
-    background: #FFFFFF;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15);
-}
-
-@media (max-width: 768px) {
-    .lightbox-side-nav-btn {
-        width: 42px;
-        height: 42px;
-    }
-    .lightbox-side-nav-btn svg {
-        width: 18px;
-        height: 18px;
-    }
-    .lightbox-prev-btn { left: 12px; }
-    .lightbox-next-btn { right: 12px; }
-}
-
-/* Full Viewport Size Box (95vw x 92vh, No Restrictive Fixed Pixel Max-Width) */
-.lightbox-content-box {
-    width: 95vw;
-    height: 92vh;
-    max-width: 96vw;
-    max-height: 94vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    position: relative;
-}
-
-.lightbox-img-wrapper {
-    width: 100%;
-    height: 84vh;
-    max-height: 86vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #FFFFFF;
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: 16px;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.08);
-    cursor: grab;
-    overflow: hidden;
-    overscroll-behavior: contain;
-    overscroll-behavior-x: none;
-    touch-action: none;
-}
-
-.lightbox-img-wrapper.dragging {
-    cursor: grabbing;
-}
-
-.lightbox-img-wrapper.zoomed {
-    cursor: move;
-    cursor: grab;
-}
-
-.lightbox-img-wrapper.zoomed.dragging {
-    cursor: grabbing;
-}
-
-/* Uncropped High-Clarity Image View (Fills Container while Preserving Natural Aspect Ratio) */
-.lightbox-img-wrapper img {
-    width: 100%;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    border-radius: var(--radius-sm);
-    pointer-events: none;
-    will-change: transform, opacity;
-    transform: translate3d(0, 0, 0) scale(1);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    transition: transform 0.52s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.lightbox-caption {
-    text-align: center;
-    max-width: 800px;
-    transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.lightbox-caption h3 {
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 2px;
-}
-
-.lightbox-caption p {
-    font-size: 14px;
-    color: var(--text-secondary);
-}
+fetchLiveExchangeRates();
+setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
