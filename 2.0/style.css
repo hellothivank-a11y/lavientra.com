@@ -1,5 +1,5 @@
 /* ==========================================================================
-   LAVIENTRA STUDIO - APPLE MINIMALIST CINEMATIC THEME
+   LAVIENTRA STUDIO - APPLE MINIMALIST LIGHT THEME (GOOGLE UX & APPLE POLISH)
    ========================================================================== */
 
 *,
@@ -38,20 +38,17 @@ html {
     font-family: var(--font-main);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    width: 100%;
 }
 
 body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
     overflow-x: hidden;
-    width: 100%;
-    min-height: 100vh;
     line-height: 1.6;
     font-size: 16px;
 }
 
-/* Container & Editorial Typography */
+/* Container & Typography */
 .container {
     width: 100%;
     max-width: 1200px;
@@ -96,7 +93,7 @@ p {
     letter-spacing: -0.01em;
 }
 
-/* Sections */
+/* Sections - Tightened Apple/Google UX Spacing */
 .section {
     padding: 70px 0;
     background-color: var(--bg-primary);
@@ -106,6 +103,7 @@ p {
     background-color: #F5F5F7;
 }
 
+/* Crisp Pure White Card Adaptations inside Ash Sections */
 .section-ash .standard-card,
 .section-ash .bento-card,
 .section-ash .premium-pricing-card,
@@ -146,18 +144,20 @@ p {
     color: var(--text-secondary);
 }
 
-/* Safe Apple Reveal System (No GSAP / No Overflow Locks) */
-.reveal {
+/* Apple Signature Scroll Reveal Engine (All Sections) */
+.reveal-node,
+.reveal-card {
     opacity: 0;
-    transform: translateY(22px) scale(0.98);
+    transform: translateY(20px) scale(0.97);
     filter: blur(4px);
-    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-                filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: opacity, transform, filter;
 }
 
-.reveal.active {
+.reveal-node.active,
+.reveal-card.active {
     opacity: 1;
     transform: translateY(0) scale(1);
     filter: blur(0px);
@@ -241,6 +241,7 @@ nav {
     user-select: none;
 }
 
+/* Mobile Nav Menu Drawer */
 @media (max-width: 860px) {
     .mobile-toggle {
         display: block;
@@ -284,9 +285,9 @@ nav {
     }
 }
 
-/* Hero Section & 3D Interactive Setup */
+/* Hero Section */
 .hero {
-    padding: 110px 0 50px 0;
+    padding: 90px 0 50px 0;
     display: flex;
     align-items: center;
 }
@@ -382,10 +383,18 @@ nav {
 }
 
 .hero-right {
-    perspective: 1000px;
+    background: transparent;
+    border: none;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: none;
+    transition: transform 0.3s var(--apple-bezier);
+}
+
+.hero-right:hover {
+    transform: scale(1.01);
 }
 
 .hero-svg-display {
@@ -393,8 +402,6 @@ nav {
     height: auto;
     max-height: 480px;
     object-fit: contain;
-    transition: transform 0.15s ease-out;
-    transform-style: preserve-3d;
 }
 
 /* Before / After Showcase Slider */
@@ -413,6 +420,7 @@ nav {
 
 @media (max-width: 768px) {
     .slider-wrapper {
+        aspect-ratio: 1920 / 1200;
         max-height: 480px;
     }
 }
@@ -429,6 +437,7 @@ nav {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    padding: 0;
     background: #FFFFFF;
 }
 
@@ -508,7 +517,7 @@ nav {
 .label-before { left: 24px; }
 .label-after { right: 24px; }
 
-/* Standards Grid & Services */
+/* Standards Grid & Core Services Section (Pure White Background) */
 #services {
     background-color: #FFFFFF;
 }
@@ -566,7 +575,8 @@ nav {
     line-height: 1.6;
 }
 
-/* Portfolio Section Track */
+
+/* Portfolio Section - Full Width Viewport Track (4:3 Aspect Ratio Cards) */
 .portfolio-fullwidth-wrapper {
     width: 100vw;
     position: relative;
@@ -601,6 +611,7 @@ nav {
     width: max-content;
 }
 
+/* Cards adjusted to 4:3 Aspect Ratio (480px x 360px image view) */
 .portfolio-card {
     background: #FFFFFF;
     border: 1px solid var(--border-subtle);
@@ -816,7 +827,15 @@ nav {
     gap: 8px;
 }
 
-/* Continuous Dark Zone */
+/* Seamless Dark Zone for Standards & Workflow */
+#standards,
+#workflow {
+    background-color: #0D0D0E;
+    color: #F5F5F7;
+    border: none;
+}
+
+/* Continuous Unbroken Dark Zone (Precision Standards + The Workflow) */
 .continuous-dark-zone {
     background-color: #0D0D0E;
     color: #F5F5F7;
@@ -980,6 +999,8 @@ nav {
     line-height: 1.6;
 }
 
+
+
 @media (max-width: 960px) {
     .bento-specs-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -1000,6 +1021,7 @@ nav {
         padding: 24px;
     }
 }
+
 
 .workflow-grid {
     display: grid;
@@ -1022,7 +1044,7 @@ nav {
     border-radius: 20px;
     padding: 36px;
     color: #F5F5F7;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
@@ -1222,7 +1244,7 @@ nav {
     text-decoration: underline;
 }
 
-/* About Section */
+/* About Section - Apple Product Highlight Style */
 .about-section {
     padding: 70px 0;
 }
@@ -1311,6 +1333,8 @@ nav {
     }
 }
 
+
+
 /* Footer */
 footer {
     padding: 80px 0 40px 0;
@@ -1364,7 +1388,7 @@ footer {
     color: var(--text-muted);
 }
 
-/* Lightbox Modal System */
+/* Lightbox Modal System (Expanded Max Viewport Dimensions) */
 .lightbox-modal {
     position: fixed;
     top: 0;
@@ -1385,6 +1409,7 @@ footer {
     transition: opacity 0.35s var(--apple-bezier), visibility 0.35s;
     user-select: none;
     overscroll-behavior: contain;
+    overscroll-behavior-x: none;
     touch-action: none;
 }
 
@@ -1393,6 +1418,7 @@ footer {
     visibility: visible;
 }
 
+/* Overlay Navigation Controls */
 .lightbox-close-btn {
     position: absolute;
     top: 20px;
@@ -1409,14 +1435,17 @@ footer {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    padding: 0;
+    margin: 0;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    transition: transform 0.25s var(--apple-bezier), background 0.25s ease;
+    transition: transform 0.25s var(--apple-bezier), background 0.25s ease, box-shadow 0.25s ease;
     z-index: 10001;
 }
 
 .lightbox-close-btn:hover {
     transform: scale(1.1);
     background: #FFFFFF;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .lightbox-side-nav-btn {
@@ -1435,8 +1464,10 @@ footer {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    padding: 0;
+    margin: 0;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    transition: transform 0.25s var(--apple-bezier), background 0.25s ease;
+    transition: transform 0.25s var(--apple-bezier), background 0.25s ease, box-shadow 0.25s ease;
     z-index: 10001;
 }
 
@@ -1452,6 +1483,7 @@ footer {
 .lightbox-side-nav-btn:hover {
     transform: translateY(-50%) scale(1.1);
     background: #FFFFFF;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15);
 }
 
 @media (max-width: 768px) {
@@ -1467,6 +1499,7 @@ footer {
     .lightbox-next-btn { right: 12px; }
 }
 
+/* Full Viewport Size Box (95vw x 92vh, No Restrictive Fixed Pixel Max-Width) */
 .lightbox-content-box {
     width: 95vw;
     height: 92vh;
@@ -1494,6 +1527,8 @@ footer {
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.08);
     cursor: grab;
     overflow: hidden;
+    overscroll-behavior: contain;
+    overscroll-behavior-x: none;
     touch-action: none;
 }
 
@@ -1501,6 +1536,16 @@ footer {
     cursor: grabbing;
 }
 
+.lightbox-img-wrapper.zoomed {
+    cursor: move;
+    cursor: grab;
+}
+
+.lightbox-img-wrapper.zoomed.dragging {
+    cursor: grabbing;
+}
+
+/* Uncropped High-Clarity Image View (Fills Container while Preserving Natural Aspect Ratio) */
 .lightbox-img-wrapper img {
     width: 100%;
     height: 100%;
@@ -1511,6 +1556,8 @@ footer {
     pointer-events: none;
     will-change: transform, opacity;
     transform: translate3d(0, 0, 0) scale(1);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     transition: transform 0.52s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
