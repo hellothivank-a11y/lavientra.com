@@ -111,6 +111,7 @@ function initPortfolioInteractivity() {
     const container = document.getElementById('portfolioTrackContainer');
     if (!container) return;
 
+    // Mouse Pointer Auto-Pause
     container.addEventListener('mouseenter', () => { isMouseOverContainer = true; });
     container.addEventListener('mouseleave', () => { 
         isMouseOverContainer = false; 
@@ -119,6 +120,7 @@ function initPortfolioInteractivity() {
         container.classList.remove('dragging');
     });
 
+    // Click and Drag to Scroll
     container.addEventListener('mousedown', (e) => {
         isMouseDown = true;
         isDragging = false;
@@ -143,9 +145,11 @@ function initPortfolioInteractivity() {
         setTimeout(() => { isDragging = false; }, 50);
     });
 
+    // Touch events for mobile
     container.addEventListener('touchstart', () => { isMouseOverContainer = true; }, { passive: true });
     container.addEventListener('touchend', () => { isMouseOverContainer = false; }, { passive: true });
 
+    // Lightbox trigger on card click (prevented if user was dragging)
     const cards = container.querySelectorAll('.portfolio-card');
     cards.forEach(card => {
         card.addEventListener('click', (e) => {
@@ -184,7 +188,7 @@ function startContinuousAutoScroll() {
 }
 
 // =========================================================
-// 3. LIGHTBOX MODAL ENGINE WITH ZOOM & PAN
+// 3. FULL-SCREEN LIGHTBOX MODAL ENGINE WITH ZOOM & PAN
 // =========================================================
 let currentLightboxIndex = 0;
 let touchStartX = 0;
@@ -194,6 +198,7 @@ let touchCurrentY = 0;
 let isTouchingModal = false;
 let isNavigatingModal = false;
 
+// Zoom & Pan State Variables
 let zoomScale = 1.0;
 let panX = 0;
 let panY = 0;
@@ -229,6 +234,7 @@ function updateZoomTransform(animated = false) {
     const imgWrapper = document.getElementById('lightboxImgWrapper');
     if (!modalImg) return;
 
+    // Limit Panning Bounds based on scale
     if (zoomScale > 1.05) {
         if (imgWrapper) imgWrapper.classList.add('zoomed');
         const maxPanX = (modalImg.offsetWidth * (zoomScale - 1)) / 2;
@@ -293,6 +299,8 @@ function closeLightbox() {
 
 function navigateLightbox(direction, userDeltaX = 0) {
     if (portfolioData.length === 0 || isNavigatingModal) return;
+    
+    // Disable image swipe switching while zoomed in!
     if (zoomScale > 1.05) return;
 
     isNavigatingModal = true;
@@ -351,16 +359,21 @@ function performMinimalAppleAnimation(direction, userDeltaX) {
     }
 }
 
+// =========================================================
+// 4. DOUBLE-CLICK & DOUBLE-TAP TO TOGGLE ZOOM (2.5x)
+// =========================================================
 function setupDoubleTapZoomEvents() {
     const imgWrapper = document.getElementById('lightboxImgWrapper');
     if (!imgWrapper || imgWrapper.dataset.doubleTapInit) return;
     imgWrapper.dataset.doubleTapInit = "true";
 
+    // Double-click for desktop mouse
     imgWrapper.addEventListener('dblclick', (e) => {
         e.preventDefault();
         toggleZoomAtPoint(e.clientX, e.clientY);
     });
 
+    // Double-tap for mobile touch
     imgWrapper.addEventListener('touchend', (e) => {
         if (e.touches.length > 0) return;
         const now = Date.now();
@@ -378,8 +391,10 @@ function toggleZoomAtPoint(clientX, clientY) {
     if (!modalImg) return;
 
     if (zoomScale > 1.05) {
+        // Reset Zoom back to 1.0
         resetLightboxZoom(true);
     } else {
+        // Zoom in to 2.5x
         zoomScale = 2.5;
         const rect = modalImg.getBoundingClientRect();
         const offsetX = clientX - (rect.left + rect.width / 2);
@@ -392,6 +407,9 @@ function toggleZoomAtPoint(clientX, clientY) {
     }
 }
 
+// =========================================================
+// 5. REAL-TIME TOUCH / MOUSE SWIPE & PAN ENGINE
+// =========================================================
 function setupLightboxDragEvents() {
     const imgWrapper = document.getElementById('lightboxImgWrapper');
     const modalImg = document.getElementById('lightbox-img');
@@ -399,10 +417,12 @@ function setupLightboxDragEvents() {
 
     imgWrapper.dataset.dragInit = "true";
 
+    // --- NATIVE TOUCH EVENTS (Swipe when 1x, Pan when Zoomed, Pinch to Zoom) ---
     imgWrapper.addEventListener('touchstart', (e) => {
         if (isNavigatingModal) return;
 
         if (e.touches.length === 2) {
+            // Pinch to Zoom start
             isTouchingModal = false;
             initialPinchDistance = Math.hypot(
                 e.touches[0].clientX - e.touches[1].clientX,
@@ -430,6 +450,7 @@ function setupLightboxDragEvents() {
     imgWrapper.addEventListener('touchmove', (e) => {
         if (isNavigatingModal) return;
 
+        // Two-Finger Pinch to Zoom Tracking
         if (e.touches.length === 2 && initialPinchDistance > 0) {
             e.preventDefault();
             const currentDist = Math.hypot(
@@ -441,6 +462,7 @@ function setupLightboxDragEvents() {
             return;
         }
 
+        // Single Finger Drag / Pan / Swipe
         if (isTouchingModal && e.touches.length === 1) {
             touchCurrentX = e.touches[0].clientX;
             touchCurrentY = e.touches[0].clientY;
@@ -448,11 +470,13 @@ function setupLightboxDragEvents() {
             const deltaY = touchCurrentY - touchStartY;
 
             if (zoomScale > 1.05) {
+                // Pan around zoomed floor plan image
                 e.preventDefault();
                 panX = panStartX + deltaX;
                 panY = panStartY + deltaY;
                 updateZoomTransform(false);
             } else {
+                // Horizontal 1:1 Swipe tracking
                 if (Math.abs(deltaX) > Math.abs(deltaY)) {
                     if (e.cancelable) e.preventDefault();
                     modalImg.style.transform = `translate3d(${deltaX}px, 0, 0) scale(1)`;
@@ -463,7 +487,7 @@ function setupLightboxDragEvents() {
         }
     }, { passive: false });
 
-    imgWrapper.addEventListener('touchend', () => {
+    imgWrapper.addEventListener('touchend', (e) => {
         initialPinchDistance = 0;
         if (!isTouchingModal || isNavigatingModal) return;
         isTouchingModal = false;
@@ -475,6 +499,7 @@ function setupLightboxDragEvents() {
         }
     });
 
+    // --- MOUSE DRAG EVENTS (Pan when Zoomed, Swipe when 1x) ---
     imgWrapper.addEventListener('mousedown', (e) => {
         if (isNavigatingModal) return;
         isTouchingModal = true;
@@ -538,6 +563,9 @@ function handleSwipeEnd() {
     }
 }
 
+// =========================================================
+// 6. TRACKPAD WHEEL (PINCH TO ZOOM & 2-FINGER SCROLL)
+// =========================================================
 function setupLightboxWheelEvents() {
     const modal = document.getElementById('lightboxModal');
     if (!modal || modal.dataset.wheelInit) return;
@@ -546,6 +574,7 @@ function setupLightboxWheelEvents() {
     modal.addEventListener('wheel', (e) => {
         if (!modal.classList.contains('active')) return;
 
+        // Trackpad Pinch-to-Zoom (Ctrl key pressed during wheel gesture)
         if (e.ctrlKey) {
             e.preventDefault();
             const zoomDelta = -e.deltaY * 0.015;
@@ -554,6 +583,7 @@ function setupLightboxWheelEvents() {
             return;
         }
 
+        // If currently zoomed in, trackpad wheel pans the image vertically/horizontally
         if (zoomScale > 1.05) {
             e.preventDefault();
             panX -= e.deltaX * 1.2;
@@ -562,6 +592,7 @@ function setupLightboxWheelEvents() {
             return;
         }
 
+        // If 1x scale, trackpad wheel performs 2-finger image swipe navigation
         const deltaX = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : (e.shiftKey ? e.deltaY : 0);
 
         if (Math.abs(deltaX) > 5) {
@@ -606,68 +637,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    initHero3DTilt();
-    initNativeAppleScrollReveal();
 });
 
 // =========================================================
-// 4. HERO SECTION 3D MOUSE PARALLAX TILT
-// =========================================================
-function initHero3DTilt() {
-    const heroRight = document.querySelector('.hero-right');
-    const heroImg = document.querySelector('.hero-svg-display');
-
-    if (!heroRight || !heroImg) return;
-
-    heroRight.addEventListener('mousemove', (e) => {
-        const rect = heroRight.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-
-        const rotateX = (-y / rect.height) * 10;
-        const rotateY = (x / rect.width) * 10;
-
-        heroImg.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-    });
-
-    heroRight.addEventListener('mouseleave', () => {
-        heroImg.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
-    });
-}
-
-// =========================================================
-// 5. NATIVE ZERO-BUG APPLE SCROLL REVEAL ENGINE
-// =========================================================
-function initNativeAppleScrollReveal() {
-    const revealGroups = document.querySelectorAll('.reveal-group');
-
-    const observerOptions = {
-        threshold: 0.12,
-        rootMargin: "0px 0px -40px 0px"
-    };
-
-    const groupObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const group = entry.target;
-                const revealElements = group.querySelectorAll('.reveal');
-
-                revealElements.forEach((el, index) => {
-                    el.style.transitionDelay = `${index * 0.09}s`;
-                    el.classList.add('active');
-                });
-
-                observer.unobserve(group);
-            }
-        });
-    }, observerOptions);
-
-    revealGroups.forEach(group => groupObserver.observe(group));
-}
-
-// =========================================================
-// 6. MOBILE MENU INTERACTION LOGIC
+// 7. MOBILE MENU INTERACTION LOGIC
 // =========================================================
 const mobileToggle = document.getElementById('mobileToggle');
 const navMenu = document.getElementById('navMenu');
@@ -688,7 +661,7 @@ if (mobileToggle && navMenu) {
 }
 
 // =========================================================
-// 7. BEFORE/AFTER SLIDER INTERACTION
+// 8. BEFORE/AFTER SLIDER INTERACTION
 // =========================================================
 const sliderRange = document.getElementById('sliderRange');
 const afterImg = document.getElementById('afterImg');
@@ -721,7 +694,51 @@ window.addEventListener('resize', () => {
 });
 
 // =========================================================
-// 8. DYNAMIC PRICING ENGINE WITH LOCALSTORAGE CACHING
+// 9. APPLE SIGNATURE STAGGERED SCROLL REVEAL ENGINE (ALL SECTIONS)
+// =========================================================
+function initAppleScrollReveals() {
+    // Target all section headers, grids, hero elements, form boxes, and standalone containers across the site
+    const revealTargets = document.querySelectorAll(
+        '.hero-left, .hero-right, .section-header, .slider-wrapper, .about-content, .standards-grid, .bento-specs-grid, .workflow-grid, .premium-pricing-card, .billing-banner, .form-container-box, .pricing-toggle-zone'
+    );
+
+    revealTargets.forEach(target => {
+        target.classList.add('reveal-node');
+    });
+
+    const observeOptions = { threshold: 0.08, rootMargin: "0px 0px -30px 0px" };
+
+    const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+
+                // Automatically stagger all child cards, titles, stats, buttons, and items inside
+                const children = entry.target.querySelectorAll('h1, h2, h3, h4, p, .btn-primary, .btn-secondary, .standard-card, .bento-hero-card, .bento-card, .step-card, .stat-card, .price-row-item, .form-group, .checkbox-label');
+                children.forEach((child, index) => {
+                    child.style.transition = 'opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), filter 0.85s cubic-bezier(0.16, 1, 0.3, 1)';
+                    child.style.transitionDelay = `${index * 0.10}s`;
+                    child.style.opacity = '1';
+                    child.style.transform = 'translateY(0) scale(1)';
+                    child.style.filter = 'blur(0px)';
+                });
+
+                obs.unobserve(entry.target);
+            }
+        });
+    }, observeOptions);
+
+    document.querySelectorAll('.reveal-node').forEach(node => observer.observe(node));
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAppleScrollReveals);
+} else {
+    initAppleScrollReveals();
+}
+
+// =========================================================
+// 10. DYNAMIC PRICING ENGINE WITH LOCALSTORAGE CACHING
 // =========================================================
 const baseUSD = { small: 8.00, mid: 12.00, premium: 18.00, large: 24.00, incremental: 4.00, express: 2.00, color: 2.00, furniture: 4.00 };
 let currentMarket = 'usd';
@@ -802,7 +819,7 @@ function updatePricingDisplay() {
 }
 
 // =========================================================
-// 9. SECURE UPLOAD PIPELINE FORM
+// 11. SECURE UPLOAD PIPELINE FORM
 // =========================================================
 const dropzoneArea = document.getElementById('dropzoneArea');
 const fileInput = document.getElementById('sketchFiles');
@@ -918,7 +935,6 @@ function showSuccessPopup() {
         popup.classList.add('active');
     }
 }
-
 function closeSuccessPopup() {
     const popup = document.getElementById('successPopup');
     if (popup) {
