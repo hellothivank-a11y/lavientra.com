@@ -1028,13 +1028,90 @@ function updateDropzoneText(files) {
     }
 }
 
+const APP_URL = 'https://script.google.com/macros/s/AKfycbymzH1zVuVz7R5hv4TWh4T8UEwcJHGp_SQ5z3odvd6OSLGHdg0LQX6U46oFSOL4ALR9Ag/exec';
+
+function toBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            const rawBase64 = reader.result.includes(',') ? reader.result.split(',')[1] : reader.result;
+            resolve({
+                fileName: file.name,
+                mimeType: file.type || 'application/octet-stream',
+                base64: rawBase64
+            });
+        };
+        reader.onerror = (error) => reject(error);
+    });
+}
+
 if (projectForm) {
-    projectForm.addEventListener('submit', (e) => {
+    projectForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const popup = document.getElementById('successPopup');
-        if (popup) popup.classList.add('active');
-        projectForm.reset();
-        if (dropzoneText) dropzoneText.innerHTML = `Drag & Drop your sketches here, or <strong>browse local storage</strong>`;
+
+        const submitBtn = document.getElementById('submitActionBtn');
+        const btnTextEl = submitBtn ? submitBtn.querySelector('.btn-text') : null;
+        const originalText = btnTextEl ? btnTextEl.textContent : 'Send to Lavientra Studio';
+
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            if (btnTextEl) btnTextEl.textContent = 'Submitting Order...';
+        }
+
+        try {
+            const fullName = document.getElementById('fullName')?.value || '';
+            const agencyEmail = document.getElementById('agencyEmail')?.value || '';
+            const propertyAddress = document.getElementById('propertyAddress')?.value || '';
+            const targetCountry = document.getElementById('targetCountry')?.value || '';
+            const serviceNeeded = document.getElementById('serviceNeeded')?.value || '';
+            const selectedStyles = Array.from(document.querySelectorAll('input[name="style"]:checked')).map(cb => cb.value).join(', ');
+            const instructions = document.getElementById('instructions')?.value || '';
+
+            const payload = {
+                fullName,
+                agencyEmail,
+                propertyAddress,
+                targetCountry,
+                serviceNeeded,
+                styles: selectedStyles,
+                instructions,
+                market: currentMarket || 'usd',
+                files: []
+            };
+
+            if (sketchFilesInput && sketchFilesInput.files.length > 0) {
+                const filePromises = Array.from(sketchFilesInput.files).map(file => toBase64(file));
+                payload.files = await Promise.all(filePromises);
+            }
+
+            const response = await fetch(APP_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+
+            if (data && (data.status === 'success' || data.result === 'success')) {
+                const popup = document.getElementById('successPopup');
+                if (popup) popup.classList.add('active');
+                projectForm.reset();
+                if (dropzoneText) dropzoneText.innerHTML = `Drag & Drop your sketches here, or <strong>browse local storage</strong>`;
+            } else {
+                alert(data.message || data.error || 'Order submission failed. Please try again.');
+            }
+        } catch (error) {
+            console.error('Submission Error:', error);
+            alert('An error occurred during submission. Please check your network connection and try again.');
+        } finally {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                if (btnTextEl) btnTextEl.textContent = originalText;
+            }
+        }
     });
 }
 
