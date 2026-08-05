@@ -990,129 +990,139 @@ const projectForm = document.getElementById('projectIntakeForm');
 const dropzoneArea = document.getElementById('dropzoneArea');
 const sketchFilesInput = document.getElementById('sketchFiles');
 const dropzoneText = document.getElementById('dropzoneText');
+let stagedFilesList = [];
 
 if (dropzoneArea && sketchFilesInput) {
     dropzoneArea.addEventListener('click', () => sketchFilesInput.click());
-
     dropzoneArea.addEventListener('dragover', (e) => {
         e.preventDefault();
         dropzoneArea.classList.add('dragover');
     });
 
-    dropzoneArea.addEventListener('dragleave', () => {
-        dropzoneArea.classList.remove('dragover');
+    ['dragleave', 'dragend'].forEach(type => {
+        dropzoneArea.addEventListener(type, () => dropzoneArea.classList.remove('dragover'));
     });
 
     dropzoneArea.addEventListener('drop', (e) => {
         e.preventDefault();
         dropzoneArea.classList.remove('dragover');
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            sketchFilesInput.files = e.dataTransfer.files;
-            updateDropzoneText(e.dataTransfer.files);
+            handleFilesIntegration(e.dataTransfer.files);
         }
     });
 
-    sketchFilesInput.addEventListener('change', () => {
-        if (sketchFilesInput.files && sketchFilesInput.files.length > 0) {
-            updateDropzoneText(sketchFilesInput.files);
+    sketchFilesInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files.length > 0) {
+            handleFilesIntegration(e.target.files);
         }
     });
 }
 
-function updateDropzoneText(files) {
+function handleFilesIntegration(filesList) {
+    stagedFilesList = Array.from(filesList);
     if (!dropzoneText) return;
-    if (files.length === 1) {
-        dropzoneText.innerHTML = `Selected File: <strong>${files[0].name}</strong>`;
+    if (stagedFilesList.length === 1) {
+        dropzoneText.innerHTML = `📄 Staged file: <strong>${stagedFilesList[0].name}</strong>`;
     } else {
-        dropzoneText.innerHTML = `Selected <strong>${files.length} files</strong> for drafting intake.`;
+        dropzoneText.innerHTML = `📚 Total <strong>${stagedFilesList.length} files staged</strong> for queue processing.`;
     }
 }
-
-const APP_URL = 'https://script.google.com/macros/s/AKfycbymzH1zVuVz7R5hv4TWh4T8UEwcJHGp_SQ5z3odvd6OSLGHdg0LQX6U46oFSOL4ALR9Ag/exec';
 
 function toBase64(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
-        reader.onload = () => {
-            const rawBase64 = reader.result.includes(',') ? reader.result.split(',')[1] : reader.result;
-            resolve({
-                fileName: file.name,
-                mimeType: file.type || 'application/octet-stream',
-                base64: rawBase64
-            });
-        };
-        reader.onerror = (error) => reject(error);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
     });
 }
 
 if (projectForm) {
-    projectForm.addEventListener('submit', async (e) => {
+    projectForm.addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const submitBtn = document.getElementById('submitActionBtn');
         const btnTextEl = submitBtn ? submitBtn.querySelector('.btn-text') : null;
-        const originalText = btnTextEl ? btnTextEl.textContent : 'Send to Lavientra Studio';
+
+        if (stagedFilesList.length === 0) {
+            alert('Please upload or drag a sketch file before submitting.');
+            return;
+        }
 
         if (submitBtn) {
             submitBtn.disabled = true;
-            if (btnTextEl) btnTextEl.textContent = 'Submitting Order...';
+            submitBtn.classList.add('loading');
+            if (btnTextEl) btnTextEl.textContent = 'Uploading Order...';
         }
 
         try {
+            let encodedFilesArray = [];
+            let totalSize = 0;
+
+            for (let i = 0; i < stagedFilesList.length; i++) {
+                totalSize += stagedFilesList[i].size;
+                if (totalSize > 45 * 1024 * 1024) {
+                    throw new Error("Total payload allocation exceeds limit (45MB). Please upload smaller files.");
+                }
+
+                let base64String = await toBase64(stagedFilesList[i]);
+                encodedFilesArray.push({
+                    data: base64String,
+                    name: stagedFilesList[i].name,
+                    mimeType: stagedFilesList[i].type
+                });
+            }
+
+            let selectedStyles = [];
+            document.querySelectorAll('input[name="style"]:checked').forEach(cb => {
+                selectedStyles.push(cb.value);
+            });
+
             const fullName = document.getElementById('fullName')?.value || '';
             const agencyEmail = document.getElementById('agencyEmail')?.value || '';
             const propertyAddress = document.getElementById('propertyAddress')?.value || '';
             const targetCountry = document.getElementById('targetCountry')?.value || '';
             const serviceNeeded = document.getElementById('serviceNeeded')?.value || '';
-            const selectedStyles = Array.from(document.querySelectorAll('input[name="style"]:checked')).map(cb => cb.value).join(', ');
             const instructions = document.getElementById('instructions')?.value || '';
 
-            const payload = {
-                fullName,
-                agencyEmail,
-                propertyAddress,
-                targetCountry,
-                serviceNeeded,
-                styles: selectedStyles,
-                instructions,
-                market: currentMarket || 'usd',
-                files: []
+            const payloadData = {
+                name: fullName,
+                email: agencyEmail,
+                propertyAddress: propertyAddress,
+                description: `[Country: ${targetCountry}] [Pipeline: ${serviceNeeded}] [Styles: ${selectedStyles.join(', ')}] Notes: ${instructions}`,
+                files: encodedFilesArray
             };
 
-            if (sketchFilesInput && sketchFilesInput.files.length > 0) {
-                const filePromises = Array.from(sketchFilesInput.files).map(file => toBase64(file));
-                payload.files = await Promise.all(filePromises);
-            }
+            const APP_URL = "https://script.google.com/macros/s/AKfycbymzH1zVuVz7R5hv4TWh4T8UEwcJHGp_SQ5z3odvd6OSLGHdg0LQX6U46oFSOL4ALR9Ag/exec";
 
-            const response = await fetch(APP_URL, {
+            await fetch(APP_URL, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'text/plain;charset=utf-8'
-                },
-                body: JSON.stringify(payload)
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(payloadData)
             });
 
-            const data = await response.json();
+            showSuccessPopup();
+            projectForm.reset();
+            if (dropzoneText) dropzoneText.innerHTML = `Drag & Drop your sketches here, or <strong>browse local storage</strong>`;
+            stagedFilesList = [];
 
-            if (data && (data.status === 'success' || data.result === 'success')) {
-                const popup = document.getElementById('successPopup');
-                if (popup) popup.classList.add('active');
-                projectForm.reset();
-                if (dropzoneText) dropzoneText.innerHTML = `Drag & Drop your sketches here, or <strong>browse local storage</strong>`;
-            } else {
-                alert(data.message || data.error || 'Order submission failed. Please try again.');
-            }
-        } catch (error) {
-            console.error('Submission Error:', error);
-            alert('An error occurred during submission. Please check your network connection and try again.');
+        } catch (err) {
+            console.error(err);
+            alert(err.message || 'Network communication error. Please try uploading smaller individual image files.');
         } finally {
             if (submitBtn) {
                 submitBtn.disabled = false;
-                if (btnTextEl) btnTextEl.textContent = originalText;
+                submitBtn.classList.remove('loading');
+                if (btnTextEl) btnTextEl.textContent = 'Send to Lavientra Studio';
             }
         }
     });
+}
+
+function showSuccessPopup() {
+    const popup = document.getElementById('successPopup');
+    if (popup) popup.classList.add('active');
 }
 
 function closeSuccessPopup() {
