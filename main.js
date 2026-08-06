@@ -81,7 +81,7 @@ const portfolioData = [
         desc: '12,000 sq ft office hub specification with open-plan workstation zones.' 
     },
     { 
-        img: 'assets/portfolio-curve.svg', 
+        img: 'assets/portfolio-curve.webp', 
         category: 'Curved Architecture', 
         title: 'Standard Editorial B&W Curve', 
         desc: 'Specialized curved wall lineage for bespoke architectural designs.' 
