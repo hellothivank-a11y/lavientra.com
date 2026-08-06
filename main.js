@@ -21,67 +21,67 @@ function unlockBodyScroll() {
 // =========================================================
 const portfolioData = [
     { 
-        img: 'assets/portfolio-bw.svg', 
+        img: 'assets/webp/portfolio-bw.webp', 
         category: 'Editorial Vector', 
         title: 'Standard Editorial B&W', 
         desc: 'High-contrast vector lineage drafted to RICS standards, ideal for traditional print brochures.' 
     },
     { 
-        img: 'assets/portfolio-color.svg', 
+        img: 'assets/webp/portfolio-color.webp', 
         category: 'Marketing Visual', 
         title: 'Color Zoned Marketing Layout', 
         desc: 'Soft color-coded zones to help buyers visualize property flow and room functions instantly.' 
     },
     { 
-        img: 'assets/portfolio-furniture.svg', 
+        img: 'assets/webp/portfolio-furniture.webp', 
         category: 'High-Fidelity CAD', 
         title: 'Premium Furnished Space', 
         desc: 'Includes accurate, modern CAD blocks for furniture to showcase property scale and potential.' 
     },
     { 
-        img: 'assets/portfolio-commercial.svg', 
+        img: 'assets/webp/portfolio-commercial.webp', 
         category: 'Commercial Corporate', 
         title: 'Commercial Property Specification', 
         desc: 'Drafted cleanly to showcase complex corporate layouts and massive square footage.' 
     },
     { 
-        img: 'assets/portfolio-complex.svg', 
+        img: 'assets/webp/portfolio-complex.webp', 
         category: 'Architectural Blueprint', 
         title: 'Complex Multi-Level Blueprint', 
         desc: 'Absolute geometrical precision for intricate layouts, split-levels, and period properties.' 
     },
     { 
-        img: 'assets/portfolio-siteplan.svg', 
+        img: 'assets/webp/portfolio-siteplan.webp', 
         category: 'Site Mapping', 
         title: 'Overall Site & Boundary Layout', 
         desc: 'Clear mapping of external perimeters, gardens, driveways, and outbuildings.' 
     },
     { 
-        img: 'assets/portfolio-siteplan-2.svg', 
+        img: 'assets/webp/portfolio-siteplan-2.webp', 
         category: 'Site Mapping II', 
         title: 'Overall Site & Boundary Layout II', 
         desc: 'Enhanced site boundary layout showing lap pool, pavilion, and landscaped grounds.' 
     },
     { 
-        img: 'assets/portfolio-complex-2.svg', 
+        img: 'assets/webp/portfolio-complex-2.webp', 
         category: 'Architectural Blueprint II', 
         title: 'Complex Multi-Level Blueprint II', 
         desc: 'Multi-level duplex layout with high-precision architectural detailing.' 
     },
     { 
-        img: 'assets/portfolio-color-2.svg', 
+        img: 'assets/webp/portfolio-color-2.webp', 
         category: 'Marketing Visual II', 
         title: 'Color Zoned Marketing Layout II', 
         desc: 'Vibrant color-coded zoning for luxury open-plan residential living.' 
     },
     { 
-        img: 'assets/portfolio-commercial-2.svg', 
+        img: 'assets/webp/portfolio-commercial-2.webp', 
         category: 'Commercial Corporate II', 
         title: 'Commercial Property Specification II', 
         desc: '12,000 sq ft office hub specification with open-plan workstation zones.' 
     },
     { 
-        img: 'assets/portfolio-curve.webp', 
+        img: 'assets/webp/portfolio-curve.webp', 
         category: 'Curved Architecture', 
         title: 'Standard Editorial B&W Curve', 
         desc: 'Specialized curved wall lineage for bespoke architectural designs.' 
