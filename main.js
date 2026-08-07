@@ -561,11 +561,7 @@ function initLightboxEventListeners() {
     //                            small continuous fractional or integer e.deltaY,
     //                            e.deltaX may be non-zero
     //
-    // Rules:
-    //  • Physical mouse wheel  → ZOOM only
-    //  • Trackpad pinch        → ZOOM only
-    //  • Trackpad 2-finger horizontal flick → slide navigation (one slide per gesture)
-    //  • Trackpad 2-finger vertical scroll  → IGNORED (no zoom, no navigation)
+  
     // ─────────────────────────────────────────────────────────────────────
     let isNavigatingModal = false;
 
