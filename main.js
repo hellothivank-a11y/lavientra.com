@@ -913,7 +913,7 @@ async function fetchLiveExchangeRates() {
             }
         }
     } catch (err) {
-        console.log('Using fallback exchange rates:', err);
+        // Fallback to default static rates
     }
     updatePricingDisplay();
 }
