@@ -1031,8 +1031,8 @@ nav.scrolled {
 }
 
 .portfolio-track-container.dragging {
-    cursor: grabbing;
     cursor: -webkit-grabbing;
+    cursor: grabbing;
 }
 
 .portfolio-track {
@@ -1085,14 +1085,15 @@ nav.scrolled {
 
 .portfolio-card-img-wrap {
     width: 100%;
-    height: 380px;
-    background: #FAFAFC;
+    aspect-ratio: 16 / 10;
+    height: auto;
+    background: #FFFFFF;
     border-radius: 20px;
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px;
+    padding: 0;
     overflow: hidden;
     position: relative;
     margin-bottom: 16px;
@@ -1101,22 +1102,18 @@ nav.scrolled {
 }
 
 .portfolio-card-img-wrap img,
-.portfolio-card-img-wrap svg {
+.portfolio-card-img-wrap svg,
+.portfolio-card img,
+.portfolio-grid img {
+    width: 100%;
+    height: 100%;
     max-width: 100%;
     max-height: 100%;
-    width: auto;
-    height: auto;
-    object-fit: contain !important;
+    object-fit: cover !important;
     display: block;
     margin: 0 auto;
-}
-
-.portfolio-card-img-wrap img,
-.portfolio-card-img-wrap svg,
-#lightbox-img {
-    shape-rendering: geometricPrecision;
-    text-rendering: geometricPrecision;
-    image-rendering: -webkit-optimize-contrast;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -1129,21 +1126,21 @@ nav.scrolled {
 
 .portfolio-card-badge {
     position: absolute;
-    top: 14px;
-    left: 14px;
+    top: 16px;
+    left: 16px;
     z-index: 2;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.6);
     padding: 6px 14px;
-    border-radius: 980px;
+    border-radius: 100px;
     font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.04em;
     color: #1D1D1F;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 .portfolio-card-meta {
@@ -1151,7 +1148,7 @@ nav.scrolled {
 }
 
 .portfolio-card-meta h4 {
-    font-size: 16.5px;
+    font-size: 18px;
     font-weight: 600;
     color: #1D1D1F;
     letter-spacing: -0.015em;
@@ -1171,7 +1168,8 @@ nav.scrolled {
     }
 
     .portfolio-card-img-wrap {
-        height: 240px;
+        height: auto;
+        aspect-ratio: 16 / 10;
         border-radius: 20px;
         margin-bottom: 12px;
     }
@@ -2213,24 +2211,43 @@ footer {
 }
 
 .lightbox-content-box {
-    width: 94vw;
-    max-width: 1400px;
-    height: 85vh;
+    width: 90vw;
+    max-width: 1200px;
+    margin: 0 auto;
     text-align: center;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
+    justify-content: center;
     user-select: none;
+    position: relative;
+    z-index: 1;
+}
+
+.lightbox-viewport {
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 16 / 10;
+    max-height: 75vh;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    position: relative;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
 }
 
 .lightbox-img-wrapper {
     width: 100%;
-    height: calc(100% - 50px);
+    height: 100%;
+    aspect-ratio: 16 / 10;
     background: #FFFFFF;
-    border-radius: 28px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2252,16 +2269,21 @@ footer {
     cursor: grabbing;
 }
 
-.lightbox-img-wrapper img {
+.lightbox-img-wrapper img,
+#lightbox-img {
     display: block !important;
-    max-width: 90%;
-    max-height: 90%;
-    object-fit: contain;
+    width: 100% !important;
+    height: 100% !important;
+    aspect-ratio: 16 / 10 !important;
+    object-fit: contain !important;
+    margin: 0 auto !important;
     transform-origin: center center;
     will-change: transform;
     pointer-events: none;
     opacity: 1 !important;
     visibility: visible !important;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
 }
 
 .lightbox-caption {
