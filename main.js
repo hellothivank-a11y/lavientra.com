@@ -21,67 +21,57 @@ function unlockBodyScroll() {
 // =========================================================
 const portfolioData = [
     { 
-        img: 'assets/webp/portfolio-bw.webp', 
+        thumb: 'assets/webp/thumb/portfolio-bw.webp',
+        full: 'assets/webp/portfolio-bw.webp',
         category: 'Editorial Vector', 
         title: 'Standard Editorial B&W', 
         desc: 'High-contrast vector lineage drafted to RICS standards, ideal for traditional print brochures.' 
     },
     { 
-        img: 'assets/webp/portfolio-color.webp', 
+        thumb: 'assets/webp/thumb/portfolio-color.webp',
+        full: 'assets/webp/portfolio-color.webp',
         category: 'Marketing Visual', 
         title: 'Color Zoned Marketing Layout', 
         desc: 'Soft color-coded zones to help buyers visualize property flow and room functions instantly.' 
     },
     { 
-        img: 'assets/webp/portfolio-furniture.webp', 
+        thumb: 'assets/webp/thumb/portfolio-furniture.webp',
+        full: 'assets/webp/portfolio-furniture.webp',
         category: 'High-Fidelity CAD', 
         title: 'Premium Furnished Space', 
         desc: 'Includes accurate, modern CAD blocks for furniture to showcase property scale and potential.' 
     },
     { 
-        img: 'assets/webp/portfolio-commercial.webp', 
+        thumb: 'assets/webp/thumb/portfolio-commercial.webp',
+        full: 'assets/webp/portfolio-commercial.webp',
         category: 'Commercial Corporate', 
         title: 'Commercial Property Specification', 
         desc: 'Drafted cleanly to showcase complex corporate layouts and massive square footage.' 
     },
     { 
-        img: 'assets/webp/portfolio-complex.webp', 
+        thumb: 'assets/webp/thumb/portfolio-complex.webp',
+        full: 'assets/webp/portfolio-complex.webp',
         category: 'Architectural Blueprint', 
         title: 'Complex Multi-Level Blueprint', 
         desc: 'Absolute geometrical precision for intricate layouts, split-levels, and period properties.' 
     },
     { 
-        img: 'assets/webp/portfolio-siteplan.webp', 
+        thumb: 'assets/webp/thumb/portfolio-siteplan.webp',
+        full: 'assets/webp/portfolio-siteplan.webp',
         category: 'Site Mapping', 
         title: 'Overall Site & Boundary Layout', 
         desc: 'Clear mapping of external perimeters, gardens, driveways, and outbuildings.' 
     },
     { 
-        img: 'assets/webp/portfolio-siteplan-2.webp', 
-        category: 'Site Mapping II', 
-        title: 'Overall Site & Boundary Layout II', 
-        desc: 'Enhanced site boundary layout showing lap pool, pavilion, and landscaped grounds.' 
-    },
-    { 
-        img: 'assets/webp/portfolio-complex-2.webp', 
-        category: 'Architectural Blueprint II', 
-        title: 'Complex Multi-Level Blueprint II', 
-        desc: 'Multi-level duplex layout with high-precision architectural detailing.' 
-    },
-    { 
-        img: 'assets/webp/portfolio-color-2.webp', 
-        category: 'Marketing Visual II', 
-        title: 'Color Zoned Marketing Layout II', 
-        desc: 'Vibrant color-coded zoning for luxury open-plan residential living.' 
-    },
-    { 
-        img: 'assets/webp/portfolio-commercial-2.webp', 
+        thumb: 'assets/webp/thumb/portfolio-commercial-2.webp',
+        full: 'assets/webp/portfolio-commercial-2.webp',
         category: 'Commercial Corporate II', 
         title: 'Commercial Property Specification II', 
         desc: '12,000 sq ft office hub specification with open-plan workstation zones.' 
     },
     { 
-        img: 'assets/webp/portfolio-curve.webp', 
+        thumb: 'assets/webp/thumb/portfolio-curve.webp',
+        full: 'assets/webp/portfolio-curve.webp',
         category: 'Curved Architecture', 
         title: 'Standard Editorial B&W Curve', 
         desc: 'Specialized curved wall lineage for bespoke architectural designs.' 
@@ -92,8 +82,8 @@ function renderPortfolio() {
     const track = document.getElementById('portfolioTrack');
     if (!track) return;
     
-    // Duplicate array to create 100% seamless infinite scroll loop
-    const duplicatedData = [...portfolioData, ...portfolioData];
+    // Triple array to create 100% seamless 3-set buffer infinite scroll loop
+    const duplicatedData = [...portfolioData, ...portfolioData, ...portfolioData];
     
     let htmlContent = '';
     duplicatedData.forEach((item, index) => {
@@ -102,7 +92,7 @@ function renderPortfolio() {
         <div class="portfolio-card" data-index="${originalIndex}">
             <div class="portfolio-card-img-wrap">
                 <span class="portfolio-card-badge">${item.category}</span>
-                <img src="${item.img}" alt="${escapeHtml(item.title)}" loading="lazy">
+                <img src="${item.thumb}" alt="${escapeHtml(item.title)}" loading="lazy">
             </div>
             <div class="portfolio-card-meta">
                 <h4>${item.title}</h4>
@@ -123,38 +113,42 @@ let portfolioHasDragged = false;
 
 function checkInfiniteScrollBounds() {
     const container = document.getElementById('portfolioTrackContainer');
-    if (!container) return;
+    const track = document.getElementById('portfolioTrack');
+    if (!container || !track) return;
 
-    const singleSetWidth = container.scrollWidth / 2;
+    const singleSetWidth = track.scrollWidth / 3;
     if (singleSetWidth <= 0) return;
 
-    if (container.scrollLeft <= 0) {
-        container.scrollLeft += singleSetWidth;
-    } else if (container.scrollLeft >= singleSetWidth) {
+    if (container.scrollLeft >= singleSetWidth * 2) {
         container.scrollLeft -= singleSetWidth;
+    } else if (container.scrollLeft <= singleSetWidth * 0.5) {
+        container.scrollLeft += singleSetWidth;
     }
 }
 
 function initPortfolioAutoScrollEngine() {
     const container = document.getElementById('portfolioTrackContainer');
-    if (!container) return;
+    const portfolioTrack = document.getElementById('portfolioTrack');
+    if (!container || !portfolioTrack) return;
 
-    if (container.scrollLeft === 0) {
-        container.scrollLeft = 1;
+    const singleSetWidth = portfolioTrack.scrollWidth / 3;
+    if (container.scrollLeft < 10 && singleSetWidth > 0) {
+        container.scrollLeft = singleSetWidth;
     }
 
     function updatePortfolioProgressBar() {
         const indicator = document.getElementById('portfolioProgressIndicator');
         if (!indicator) return;
-        const track = indicator.closest('.portfolio-progress-track');
-        if (!track) return;
-        const maxScroll = container.scrollWidth - container.clientWidth;
-        if (maxScroll <= 0) return;
-        // Use the first half only (duplicated track), so progress resets seamlessly
-        const halfScroll = container.scrollWidth / 2;
-        const rawScroll = container.scrollLeft % (halfScroll || 1);
-        const progress = rawScroll / halfScroll;
-        const trackWidth = track.clientWidth;
+        const progressTrack = indicator.closest('.portfolio-progress-track');
+        if (!progressTrack || !portfolioTrack) return;
+
+        const setWidth = portfolioTrack.scrollWidth / 3;
+        if (setWidth <= 0) return;
+
+        const currentOffset = container.scrollLeft % setWidth;
+        const progress = currentOffset / setWidth;
+
+        const trackWidth = progressTrack.clientWidth;
         const indicatorWidth = indicator.offsetWidth;
         const maxTranslate = trackWidth - indicatorWidth;
         indicator.style.transform = `translateX(${progress * maxTranslate}px)`;
@@ -282,7 +276,10 @@ function openLightbox(index) {
 
     resetLightboxZoom(false);
 
-    img.src = data.img;
+    img.src = data.full || data.img;
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.objectFit = 'contain';
     img.style.display = 'block';
     img.style.visibility = 'visible';
     img.style.opacity = '1';
@@ -381,7 +378,7 @@ function performMinimalAppleAnimation(newIndex, userDeltaX = 0) {
 
     setTimeout(() => {
         currentLightboxIndex = newIndex;
-        img.src = data.img;
+        img.src = data.full || data.img;
         title.textContent = data.title;
         desc.textContent = data.desc;
         resetLightboxZoom(false);
@@ -561,7 +558,11 @@ function initLightboxEventListeners() {
     //                            small continuous fractional or integer e.deltaY,
     //                            e.deltaX may be non-zero
     //
-  
+    // Rules:
+    //  • Physical mouse wheel  → ZOOM only
+    //  • Trackpad pinch        → ZOOM only
+    //  • Trackpad 2-finger horizontal flick → slide navigation (one slide per gesture)
+    //  • Trackpad 2-finger vertical scroll  → IGNORED (no zoom, no navigation)
     // ─────────────────────────────────────────────────────────────────────
     let isNavigatingModal = false;
 
@@ -827,15 +828,10 @@ function setupScrollReveals() {
         card.style.setProperty('--stagger-delay', `${index * 0.15}s`);
     });
 
-    // 5. STAGGER ABOUT METRICS & PORTFOLIO TRACK (0.1s sequential wave)
+    // 5. STAGGER ABOUT METRICS
     document.querySelectorAll('.about-bento-grid .bento-metric-item').forEach((item, index) => {
         item.classList.add('reveal-item');
         item.style.setProperty('--stagger-delay', `${index * 0.12}s`);
-    });
-
-    document.querySelectorAll('.portfolio-track .portfolio-card').forEach((card, index) => {
-        card.classList.add('reveal-item');
-        card.style.setProperty('--stagger-delay', `${(index % 6) * 0.1}s`);
     });
 
     // 6. TARGET ALL STANDALONE ELEMENTS & HEADERS EXPLICITLY
