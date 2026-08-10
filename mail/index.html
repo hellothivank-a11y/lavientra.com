@@ -185,6 +185,14 @@
             background-color: #1a56bc;
         }
 
+        .btn-warning {
+            background-color: rgba(253, 214, 99, 0.15);
+            color: #fdd663;
+        }
+        .btn-warning:hover {
+            background-color: rgba(253, 214, 99, 0.3);
+        }
+
         .btn-error {
             background-color: var(--md-sys-color-error-container);
             color: var(--md-sys-color-on-error-container);
@@ -224,7 +232,7 @@
         /* Metrics & Analytics Cards */
         .metrics-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 16px;
             margin-bottom: 24px;
         }
@@ -329,13 +337,6 @@
             margin-top: 16px;
         }
 
-        /* Tables */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 16px;
-        }
-
         th, td {
             padding: 16px;
             border-bottom: 1px solid var(--md-sys-color-surface-container-highest);
@@ -359,7 +360,7 @@
             border-radius: 28px;
             padding: 32px;
             width: 90%;
-            max-width: 600px;
+            max-width: 650px;
             background-color: var(--md-sys-color-surface-container);
             box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.4), 0 9px 46px 8px rgba(0, 0, 0, 0.3);
             color: var(--md-sys-color-on-surface);
@@ -386,7 +387,7 @@
         }
 
         .log-list li {
-            padding: 16px 0;
+            padding: 14px 0;
             border-bottom: 1px solid var(--md-sys-color-surface-container-highest);
             display: flex;
             align-items: center;
@@ -416,6 +417,9 @@
         <div class="segmented-btn-group">
             <button class="segmented-btn active" id="tabWorkspace" onclick="switchMainTab('workspace')">
                 <span class="material-symbols-outlined" style="font-size: 18px;">dashboard</span> Workspace
+            </button>
+            <button class="segmented-btn" id="tabHistory" onclick="switchMainTab('history')">
+                <span class="material-symbols-outlined" style="font-size: 18px;">history</span> History
             </button>
             <button class="segmented-btn" id="tabAnalytics" onclick="switchMainTab('analytics')">
                 <span class="material-symbols-outlined" style="font-size: 18px;">analytics</span> Progress & Analytics
@@ -468,10 +472,10 @@
 
         <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
-                <h2 style="margin: 0;"><span class="material-symbols-outlined">contacts</span> Contact List</h2>
+                <h2 style="margin: 0;"><span class="material-symbols-outlined">contacts</span> Pending Contact List</h2>
                 <div class="segmented-btn-group">
-                    <button class="segmented-btn active" id="btnUK" onclick="setRegionFilter('UK')">UK</button>
-                    <button class="segmented-btn" id="btnAus" onclick="setRegionFilter('Australia')">Australia</button>
+                    <button class="segmented-btn active" id="wsBtnUK" onclick="setWorkspaceRegion('UK')">UK</button>
+                    <button class="segmented-btn" id="wsBtnAus" onclick="setWorkspaceRegion('Australia')">Australia</button>
                 </div>
             </div>
             <table>
@@ -490,12 +494,28 @@
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <!-- HISTORY VIEW -->
+    <div id="historyView" style="display: none;">
+        <div class="card" style="background-color: transparent; box-shadow: none; padding: 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
+                <h2 style="margin: 0;"><span class="material-symbols-outlined">history</span> Outreach History</h2>
+                <div class="segmented-btn-group">
+                    <button class="segmented-btn active" id="histBtnUK" onclick="setHistoryRegion('UK')">UK</button>
+                    <button class="segmented-btn" id="histBtnAus" onclick="setHistoryRegion('Australia')">Australia</button>
+                </div>
+            </div>
+        </div>
 
         <div class="card">
-            <h2><span class="material-symbols-outlined">history</span> Sent Logs</h2>
-            <ul class="log-list" id="logList">
-                <!-- Logs will load here -->
-            </ul>
+            <h2 style="color: #81c995;"><span class="material-symbols-outlined">mark_email_read</span> Initial Sent (Waiting for Follow-up)</h2>
+            <div id="historyInitialContainer"></div>
+        </div>
+
+        <div class="card">
+            <h2 style="color: #fdd663;"><span class="material-symbols-outlined">forward_to_inbox</span> Follow-ups Sent</h2>
+            <div id="historyFollowupContainer"></div>
         </div>
     </div>
 
@@ -514,18 +534,26 @@
             <div class="metric-card">
                 <div class="title">
                     <span class="material-symbols-outlined" style="color: #81c995; font-size: 20px;">mark_email_read</span>
-                    Total Emails Sent
+                    Initial Emails Sent
                 </div>
                 <div class="value" id="metricTotalSent" style="color: #81c995;">0</div>
-                <div class="subtext">Completed outreaches</div>
+                <div class="subtext">Initial outreaches</div>
             </div>
             <div class="metric-card">
                 <div class="title">
-                    <span class="material-symbols-outlined" style="color: #fdd663; font-size: 20px;">today</span>
+                    <span class="material-symbols-outlined" style="color: #fdd663; font-size: 20px;">forward_to_inbox</span>
+                    Follow-ups Sent
+                </div>
+                <div class="value" id="metricTotalFollowupsSent" style="color: #fdd663;">0</div>
+                <div class="subtext">Follow-up outreaches</div>
+            </div>
+            <div class="metric-card">
+                <div class="title">
+                    <span class="material-symbols-outlined" style="color: #a8c7fa; font-size: 20px;">today</span>
                     Sent Today
                 </div>
-                <div class="value" id="metricSentToday" style="color: #fdd663;">0</div>
-                <div class="subtext">Daily progress tracker</div>
+                <div class="value" id="metricSentToday" style="color: #a8c7fa;">0</div>
+                <div class="subtext">Initial + Follow-up today</div>
             </div>
             <div class="metric-card">
                 <div class="title">
@@ -533,7 +561,7 @@
                     Completion Rate
                 </div>
                 <div class="value" id="metricCompletionRate">0%</div>
-                <div class="subtext">Total sent vs total leads</div>
+                <div class="subtext">Initial sent vs total leads</div>
             </div>
         </div>
 
@@ -556,16 +584,20 @@
                         <span class="stat-val" id="ukListCount">0</span>
                     </div>
                     <div class="stat-row">
-                        <span class="stat-label">Send Mail Count</span>
+                        <span class="stat-label">Initial Mail Sent</span>
                         <span class="stat-val" id="ukSentCount" style="color: #81c995;">0</span>
                     </div>
                     <div class="stat-row">
-                        <span class="stat-label">Pending Leads</span>
+                        <span class="stat-label">Follow-ups Sent</span>
+                        <span class="stat-val" id="ukFollowupCount" style="color: #fdd663;">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Pending Initial Leads</span>
                         <span class="stat-val" id="ukPendingCount" style="color: #f2b8b5;">0</span>
                     </div>
                     <div class="stat-row">
-                        <span class="stat-label">Daily Progress (Sent Today)</span>
-                        <span class="stat-val" id="ukTodayCount" style="color: #fdd663;">0</span>
+                        <span class="stat-label">Activity Today (Sent Today)</span>
+                        <span class="stat-val" id="ukTodayCount" style="color: #a8c7fa;">0</span>
                     </div>
                 </div>
             </div>
@@ -587,16 +619,20 @@
                         <span class="stat-val" id="ausListCount">0</span>
                     </div>
                     <div class="stat-row">
-                        <span class="stat-label">Send Mail Count</span>
+                        <span class="stat-label">Initial Mail Sent</span>
                         <span class="stat-val" id="ausSentCount" style="color: #81c995;">0</span>
                     </div>
                     <div class="stat-row">
-                        <span class="stat-label">Pending Leads</span>
+                        <span class="stat-label">Follow-ups Sent</span>
+                        <span class="stat-val" id="ausFollowupCount" style="color: #fdd663;">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Pending Initial Leads</span>
                         <span class="stat-val" id="ausPendingCount" style="color: #f2b8b5;">0</span>
                     </div>
                     <div class="stat-row">
-                        <span class="stat-label">Daily Progress (Sent Today)</span>
-                        <span class="stat-val" id="ausTodayCount" style="color: #fdd663;">0</span>
+                        <span class="stat-label">Activity Today (Sent Today)</span>
+                        <span class="stat-val" id="ausTodayCount" style="color: #a8c7fa;">0</span>
                     </div>
                 </div>
             </div>
@@ -606,7 +642,7 @@
     <!-- Native Dialog for Email Draft -->
     <dialog id="emailDialog">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin: 0;">Draft Email</h2>
+            <h2 style="margin: 0;" id="modalDialogTitle">Draft Email</h2>
             <button class="btn btn-tonal" onclick="copyText('all', this)" style="height: 36px; padding: 0 16px; font-size: 13px;">
                 <span class="material-symbols-outlined" style="font-size: 16px;">content_copy</span> Copy Full Email
             </button>
@@ -637,6 +673,7 @@
             </button>
         </div>
         <input type="hidden" id="currentEmailTarget">
+        <input type="hidden" id="currentEmailType" value="initial">
     </dialog>
 
     <!-- =============================== -->
@@ -645,7 +682,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -666,26 +703,36 @@
         // Firestore Collections
         const contactsCol = collection(db, "contacts");
         const logsCol = collection(db, "logs");
+        const followupLogsCol = collection(db, "followup_logs");
 
         // Global State Variables
         window.contacts = [];
         window.logs = [];
-        window.activeRegionFilter = 'UK';
+        window.followupLogs = [];
+        window.activeWorkspaceRegion = 'UK';
+        window.activeHistoryRegion = 'UK';
         window.activeMainTab = 'workspace';
         
         const dialog = document.getElementById('emailDialog');
 
-        // -- Live Sync: Listen for Contacts --
+        // -- Live Sync Listeners --
         onSnapshot(query(contactsCol, orderBy("createdAt", "desc")), (snapshot) => {
             window.contacts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             window.renderContacts();
+            window.renderHistory();
             window.renderAnalytics();
         });
 
-        // -- Live Sync: Listen for Logs --
         onSnapshot(query(logsCol, orderBy("createdAt", "desc")), (snapshot) => {
-            window.logs = snapshot.docs.map(doc => doc.data());
-            window.renderLogs();
+            window.logs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            window.renderContacts();
+            window.renderHistory();
+            window.renderAnalytics();
+        });
+
+        onSnapshot(query(followupLogsCol, orderBy("createdAt", "desc")), (snapshot) => {
+            window.followupLogs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            window.renderHistory();
             window.renderAnalytics();
         });
 
@@ -693,22 +740,32 @@
         window.switchMainTab = function(tab) {
             window.activeMainTab = tab;
             document.getElementById('tabWorkspace').classList.toggle('active', tab === 'workspace');
+            document.getElementById('tabHistory').classList.toggle('active', tab === 'history');
             document.getElementById('tabAnalytics').classList.toggle('active', tab === 'analytics');
 
             document.getElementById('workspaceView').style.display = tab === 'workspace' ? 'block' : 'none';
+            document.getElementById('historyView').style.display = tab === 'history' ? 'block' : 'none';
             document.getElementById('analyticsView').style.display = tab === 'analytics' ? 'block' : 'none';
             
             if (tab === 'analytics') window.renderAnalytics();
+            if (tab === 'history') window.renderHistory();
         };
         
-        window.setRegionFilter = function(region) {
-            window.activeRegionFilter = region;
-            document.getElementById('btnUK').classList.toggle('active', region === 'UK');
-            document.getElementById('btnAus').classList.toggle('active', region === 'Australia');
+        window.setWorkspaceRegion = function(region) {
+            window.activeWorkspaceRegion = region;
+            document.getElementById('wsBtnUK').classList.toggle('active', region === 'UK');
+            document.getElementById('wsBtnAus').classList.toggle('active', region === 'Australia');
             window.renderContacts();
         };
 
-        // Helper: Title Case Converter (First letter Upper, rest Lower)
+        window.setHistoryRegion = function(region) {
+            window.activeHistoryRegion = region;
+            document.getElementById('histBtnUK').classList.toggle('active', region === 'UK');
+            document.getElementById('histBtnAus').classList.toggle('active', region === 'Australia');
+            window.renderHistory();
+        };
+
+        // Helper: Title Case Converter
         window.toTitleCase = function(str) {
             if (!str) return '';
             return str.trim().split(/\s+/).map(word => {
@@ -741,7 +798,6 @@
             });
         };
 
-        // Helper: Copy Specific Value with Icon Feedback
         window.copyValue = function(text, btnElement) {
             if (!text) return;
             navigator.clipboard.writeText(text).then(() => {
@@ -755,6 +811,16 @@
                     iconSpan.style.color = '';
                 }, 1500);
             });
+        };
+
+        // -- Unsent Action: Delete Log from Firestore --
+        window.markUnsent = async function(logId, colName) {
+            if (!confirm("Are you sure you want to mark this mail as Unsent? This will remove it from history.")) return;
+            try {
+                await deleteDoc(doc(db, colName, logId));
+            } catch (e) {
+                alert("Error deleting log: " + e.message);
+            }
         };
 
         // -- Save Contact to Firebase --
@@ -779,13 +845,12 @@
                     createdAt: serverTimestamp()
                 });
 
-                // Clear Form
                 document.getElementById('companyUrl').value = '';
                 document.getElementById('clientName').value = '';
                 document.getElementById('companyName').value = '';
                 document.getElementById('clientEmail').value = '';
                 
-                window.setRegionFilter(country);
+                window.setWorkspaceRegion(country);
             } catch (e) {
                 alert("Error saving contact: " + e.message);
             }
@@ -793,16 +858,21 @@
 
         window.renderContacts = function() {
             const tbody = document.getElementById('contactTableBody');
+            if (!tbody) return;
             tbody.innerHTML = '';
             
-            const filteredContacts = window.contacts.filter(c => c.country === window.activeRegionFilter);
+            // Filter: Only contacts in active workspace region that DO NOT have an initial log
+            const pendingContacts = window.contacts.filter(c => 
+                c.country === window.activeWorkspaceRegion && 
+                !window.logs.some(l => l.email === c.email)
+            );
             
-            if (filteredContacts.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--md-sys-color-on-surface-variant); padding: 32px;">No contacts in this region.</td></tr>`;
+            if (pendingContacts.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--md-sys-color-on-surface-variant); padding: 32px;">No pending contacts here. Try adding a new contact above!</td></tr>`;
                 return;
             }
             
-            filteredContacts.forEach(contact => {
+            pendingContacts.forEach(contact => {
                 const tr = document.createElement('tr');
                 const urlLink = contact.url ? (contact.url.startsWith('http') ? contact.url : 'https://' + contact.url) : '';
                 const companyDisplay = window.toTitleCase(contact.company);
@@ -833,8 +903,8 @@
                 </td>
                 <td>${contact.country}</td>
                 <td>
-                    <button class="btn btn-tonal" onclick="generateEmail('${contact.id}')">
-                        <span class="material-symbols-outlined" style="font-size: 18px;">edit_document</span> Draft
+                    <button class="btn btn-tonal" onclick="generateEmail('${contact.id}', 'initial')">
+                        <span class="material-symbols-outlined" style="font-size: 18px;">edit_document</span> Draft Initial
                     </button>
                 </td>
             `;
@@ -842,7 +912,96 @@
             });
         };
 
-        window.generateEmail = function(id) {
+        window.renderHistory = function() {
+            const initialContainer = document.getElementById('historyInitialContainer');
+            const followupContainer = document.getElementById('historyFollowupContainer');
+            if (!initialContainer || !followupContainer) return;
+            
+            initialContainer.innerHTML = '';
+            followupContainer.innerHTML = '';
+
+            // Grouping logic for INITIAL LOGS that have NO FOLLOW-UP LOG YET
+            const initialLogsInRegion = window.logs.filter(l => l.country === window.activeHistoryRegion);
+            const pendingFollowupLogs = initialLogsInRegion.filter(l => !window.followupLogs.some(fl => fl.email === l.email));
+
+            const initialByDate = {};
+            pendingFollowupLogs.forEach(l => {
+                if (!initialByDate[l.dateString]) initialByDate[l.dateString] = [];
+                initialByDate[l.dateString].push(l);
+            });
+
+            if (Object.keys(initialByDate).length === 0) {
+                initialContainer.innerHTML = `<p style="color: var(--md-sys-color-on-surface-variant); padding: 16px; margin: 0;">No contacts waiting for follow-up.</p>`;
+            } else {
+                Object.keys(initialByDate).sort((a,b) => new Date(b) - new Date(a)).forEach(date => {
+                    let html = `<h3 style="margin-top: 16px; margin-bottom: 12px; color: var(--md-sys-color-on-surface-variant); display: flex; align-items: center; gap: 8px;"><span class="material-symbols-outlined" style="font-size: 18px;">calendar_today</span> ${date}</h3><table><thead><tr><th>Company</th><th>Name</th><th>Email</th><th>Action</th></tr></thead><tbody>`;
+                    initialByDate[date].forEach(log => {
+                        const contact = window.contacts.find(c => c.email === log.email);
+                        const companyName = contact ? window.toTitleCase(contact.company) : log.email;
+                        const clientName = contact ? ((!contact.name || contact.name === 'Team') ? '-' : window.toTitleCase(contact.name)) : '-';
+                        const contactId = contact ? contact.id : null;
+
+                        html += `<tr>
+                            <td><strong>${companyName}</strong></td>
+                            <td>${clientName}</td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span>${log.email}</span>
+                                    <button class="icon-btn" onclick="copyValue('${log.email}', this)" title="Copy Email"><span class="material-symbols-outlined" style="font-size: 16px;">content_copy</span></button>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="display: flex; gap: 8px;">
+                                    ${contactId ? `<button class="btn btn-warning" style="height: 32px; padding: 0 12px; font-size: 12px;" onclick="generateEmail('${contactId}', 'followup')"><span class="material-symbols-outlined" style="font-size: 16px;">forward_to_inbox</span> Draft Follow-up</button>` : ''}
+                                    <button class="btn btn-error" style="height: 32px; padding: 0 12px; font-size: 12px;" onclick="markUnsent('${log.id}', 'logs')"><span class="material-symbols-outlined" style="font-size: 16px;">undo</span> Unsent Initial</button>
+                                </div>
+                            </td>
+                        </tr>`;
+                    });
+                    html += `</tbody></table>`;
+                    initialContainer.innerHTML += html;
+                });
+            }
+
+            // Grouping logic for FOLLOW-UP LOGS
+            const followupLogsInRegion = window.followupLogs.filter(l => l.country === window.activeHistoryRegion);
+            const followupByDate = {};
+            followupLogsInRegion.forEach(l => {
+                if (!followupByDate[l.dateString]) followupByDate[l.dateString] = [];
+                followupByDate[l.dateString].push(l);
+            });
+
+            if (Object.keys(followupByDate).length === 0) {
+                followupContainer.innerHTML = `<p style="color: var(--md-sys-color-on-surface-variant); padding: 16px; margin: 0;">No follow-ups sent yet.</p>`;
+            } else {
+                Object.keys(followupByDate).sort((a,b) => new Date(b) - new Date(a)).forEach(date => {
+                    let html = `<h3 style="margin-top: 16px; margin-bottom: 12px; color: var(--md-sys-color-on-surface-variant); display: flex; align-items: center; gap: 8px;"><span class="material-symbols-outlined" style="font-size: 18px;">calendar_today</span> ${date}</h3><table><thead><tr><th>Company</th><th>Name</th><th>Email</th><th>Action</th></tr></thead><tbody>`;
+                    followupByDate[date].forEach(log => {
+                        const contact = window.contacts.find(c => c.email === log.email);
+                        const companyName = contact ? window.toTitleCase(contact.company) : log.email;
+                        const clientName = contact ? ((!contact.name || contact.name === 'Team') ? '-' : window.toTitleCase(contact.name)) : '-';
+
+                        html += `<tr>
+                            <td><strong>${companyName}</strong></td>
+                            <td>${clientName}</td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span>${log.email}</span>
+                                    <button class="icon-btn" onclick="copyValue('${log.email}', this)" title="Copy Email"><span class="material-symbols-outlined" style="font-size: 16px;">content_copy</span></button>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn btn-error" style="height: 32px; padding: 0 12px; font-size: 12px;" onclick="markUnsent('${log.id}', 'followup_logs')"><span class="material-symbols-outlined" style="font-size: 16px;">undo</span> Unsent Follow-up</button>
+                            </td>
+                        </tr>`;
+                    });
+                    html += `</tbody></table>`;
+                    followupContainer.innerHTML += html;
+                });
+            }
+        };
+
+        window.generateEmail = function(id, type = 'initial') {
             const contact = window.contacts.find(c => c.id === id);
             if (!contact) return;
 
@@ -852,12 +1011,23 @@
             let greeting = (!contact.name || contact.name === "Team") ? `Hi ${companyFormatted} Team,` : `Hi ${nameFormatted},`;
             const regionText = contact.country === 'Australia' ? 'Australia' : 'UK';
 
-            const subject = `Floor plan drafting support for ${companyFormatted}`;
-            const template = `${greeting}\n\nI’m from Lavientra Studio, and we help busy ${regionText} property photographers offload their floor plan drafting with a guaranteed 24-hour turnaround. We specialize in clean, RICS-compliant 2D layouts customized to your brand standards.\n\nIf you’d like to review our work or check our standard drafting workflow, feel free to visit us at lavientra.com. You can also submit field sketches directly through our client portal there.\n\nWe’d love to handle your first layout as a complimentary test run whenever you have a shoot lined up this week. No commitments.\n\nBest regards,\n\nThe Lavientra Studio Team`;
+            let subject = '';
+            let template = '';
+
+            if (type === 'followup') {
+                document.getElementById('modalDialogTitle').innerText = 'Draft Follow-up Email 📩';
+                subject = `Following up: Floor plan drafting support for ${companyFormatted}`;
+                template = `${greeting}\n\nI wanted to quickly follow up on my previous message regarding floor plan drafting support for ${companyFormatted}.\n\nI know you’re likely busy, so I'll keep this short—we’d still love to handle your first layout as a complimentary test run with a 24-hour turnaround, whenever you have a shoot lined up this week.\n\nFeel free to review our work or check our standard drafting workflow at lavientra.com. You can also submit field sketches directly through our client portal there.\n\nNo commitments.\n\nBest regards,\n\nThe Lavientra Studio Team`;
+            } else {
+                document.getElementById('modalDialogTitle').innerText = 'Draft Initial Email';
+                subject = `Floor plan drafting support for ${companyFormatted}`;
+                template = `${greeting}\n\nI’m from Lavientra Studio, and we help busy ${regionText} property photographers offload their floor plan drafting with a guaranteed 24-hour turnaround. We specialize in clean, RICS-compliant 2D layouts customized to your brand standards.\n\nIf you’d like to review our work or check our standard drafting workflow, feel free to visit us at lavientra.com. You can also submit field sketches directly through our client portal there.\n\nWe’d love to handle your first layout as a complimentary test run whenever you have a shoot lined up this week. No commitments.\n\nBest regards,\n\nThe Lavientra Studio Team`;
+            }
 
             document.getElementById('emailSubject').value = subject;
             document.getElementById('generatedEmail').value = template;
             document.getElementById('currentEmailTarget').value = contact.email;
+            document.getElementById('currentEmailType').value = type;
 
             dialog.showModal();
         };
@@ -865,6 +1035,7 @@
         // -- Save Log to Firebase --
         window.markAsSent = async function() {
             const email = document.getElementById('currentEmailTarget').value;
+            const type = document.getElementById('currentEmailType').value || 'initial';
             const date = new Date();
             const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
             const dateString = date.toLocaleDateString('en-US', options);
@@ -872,9 +1043,10 @@
 
             const targetContact = window.contacts.find(c => c.email === email);
             const country = targetContact ? targetContact.country : 'UK';
+            const targetCol = type === 'followup' ? followupLogsCol : logsCol;
 
             try {
-                await addDoc(logsCol, {
+                await addDoc(targetCol, {
                     email: email,
                     dateString: dateString,
                     isoDate: isoDate,
@@ -888,41 +1060,40 @@
             }
         };
 
-        window.renderLogs = function() {
-            const logList = document.getElementById('logList');
-            logList.innerHTML = '';
-            window.logs.forEach(log => {
-                const li = document.createElement('li');
-                li.innerHTML = `<span class="material-symbols-outlined">mark_email_read</span> Sent to <strong>${log.email}</strong> (${log.country}) on ${log.dateString}`;
-                logList.appendChild(li);
-            });
-        };
-
         window.renderAnalytics = function() {
             const todayIso = new Date().toISOString().split('T')[0];
             const logsData = window.logs;
+            const followupData = window.followupLogs;
             const contactsData = window.contacts;
 
             // Overall Stats
             const totalContacts = contactsData.length;
-            const totalSent = logsData.length;
-            const sentToday = logsData.filter(l => l.isoDate === todayIso).length;
-            const completionRate = totalContacts > 0 ? Math.round((totalSent / totalContacts) * 100) : 0;
+            const totalInitialSent = logsData.length;
+            const totalFollowupsSent = followupData.length;
+            
+            const initialSentToday = logsData.filter(l => l.isoDate === todayIso).length;
+            const followupsSentToday = followupData.filter(l => l.isoDate === todayIso).length;
+            const sentToday = initialSentToday + followupsSentToday;
+
+            const completionRate = totalContacts > 0 ? Math.round((totalInitialSent / totalContacts) * 100) : 0;
 
             document.getElementById('metricTotalContacts').innerText = totalContacts;
-            document.getElementById('metricTotalSent').innerText = totalSent;
+            document.getElementById('metricTotalSent').innerText = totalInitialSent;
+            document.getElementById('metricTotalFollowupsSent').innerText = totalFollowupsSent;
             document.getElementById('metricSentToday').innerText = sentToday;
             document.getElementById('metricCompletionRate').innerText = `${completionRate}%`;
 
             // UK Stats
             const ukContacts = contactsData.filter(c => c.country === 'UK').length;
             const ukSent = logsData.filter(l => l.country === 'UK').length;
+            const ukFollowups = followupData.filter(l => l.country === 'UK').length;
             const ukPending = Math.max(0, ukContacts - ukSent);
-            const ukToday = logsData.filter(l => l.country === 'UK' && l.isoDate === todayIso).length;
+            const ukToday = logsData.filter(l => l.country === 'UK' && l.isoDate === todayIso).length + followupData.filter(l => l.country === 'UK' && l.isoDate === todayIso).length;
             const ukRate = ukContacts > 0 ? Math.round((ukSent / ukContacts) * 100) : 0;
 
             document.getElementById('ukListCount').innerText = ukContacts;
             document.getElementById('ukSentCount').innerText = ukSent;
+            document.getElementById('ukFollowupCount').innerText = ukFollowups;
             document.getElementById('ukPendingCount').innerText = ukPending;
             document.getElementById('ukTodayCount').innerText = ukToday;
             document.getElementById('ukCompletionBadge').innerText = `${ukRate}% Done`;
@@ -931,12 +1102,14 @@
             // Australia Stats
             const ausContacts = contactsData.filter(c => c.country === 'Australia').length;
             const ausSent = logsData.filter(l => l.country === 'Australia').length;
+            const ausFollowups = followupData.filter(l => l.country === 'Australia').length;
             const ausPending = Math.max(0, ausContacts - ausSent);
-            const ausToday = logsData.filter(l => l.country === 'Australia' && l.isoDate === todayIso).length;
+            const ausToday = logsData.filter(l => l.country === 'Australia' && l.isoDate === todayIso).length + followupData.filter(l => l.country === 'Australia' && l.isoDate === todayIso).length;
             const ausRate = ausContacts > 0 ? Math.round((ausSent / ausContacts) * 100) : 0;
 
             document.getElementById('ausListCount').innerText = ausContacts;
             document.getElementById('ausSentCount').innerText = ausSent;
+            document.getElementById('ausFollowupCount').innerText = ausFollowups;
             document.getElementById('ausPendingCount').innerText = ausPending;
             document.getElementById('ausTodayCount').innerText = ausToday;
             document.getElementById('ausCompletionBadge').innerText = `${ausRate}% Done`;
