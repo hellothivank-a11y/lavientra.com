@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lavientra Studio CRM</title>
     <!-- Google Fonts for Material Look -->
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap"
+        rel="stylesheet">
     <!-- Google Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
 
@@ -42,14 +44,28 @@
             color-scheme: light;
         }
 
-        h1, h2, h3, h4 {
+        h1,
+        h2,
+        h3,
+        h4 {
             font-family: 'Google Sans', sans-serif;
             margin: 0;
             color: var(--md-sys-color-on-surface);
         }
 
-        h1 { font-size: 24px; font-weight: 400; }
-        h2 { font-size: 20px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        h1 {
+            font-size: 24px;
+            font-weight: 400;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
         .app-bar {
             display: flex;
@@ -123,7 +139,8 @@
         .input-group textarea:focus {
             outline: none;
             border: 2px solid var(--md-sys-color-primary);
-            padding: 15px; /* offset border change */
+            padding: 15px;
+            /* offset border change */
         }
 
         .input-group label {
@@ -139,9 +156,9 @@
             pointer-events: none;
         }
 
-        .input-group input:focus ~ label,
-        .input-group select:focus ~ label,
-        .input-group textarea:focus ~ label {
+        .input-group input:focus~label,
+        .input-group select:focus~label,
+        .input-group textarea:focus~label {
             color: var(--md-sys-color-primary);
         }
 
@@ -153,7 +170,8 @@
             gap: 8px;
             padding: 0 24px;
             height: 40px;
-            border-radius: 100px; /* Pill shape */
+            border-radius: 100px;
+            /* Pill shape */
             font-family: 'Google Sans', sans-serif;
             font-weight: 500;
             font-size: 14px;
@@ -161,11 +179,11 @@
             cursor: pointer;
             transition: background-color 0.2s, box-shadow 0.2s, transform 0.1s;
         }
-        
+
         .btn-tall {
             height: 52px;
         }
-        
+
         .btn:active {
             transform: scale(0.98);
         }
@@ -177,7 +195,7 @@
 
         .btn-primary:hover {
             background-color: #0842a0;
-            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2);
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
         }
 
         .btn-tonal {
@@ -193,6 +211,7 @@
             background-color: #fef7e0;
             color: #b06000;
         }
+
         .btn-warning:hover {
             background-color: #feefc3;
         }
@@ -213,6 +232,7 @@
             border-radius: 100px;
             padding: 4px;
         }
+
         .segmented-btn {
             background: transparent;
             border: none;
@@ -228,6 +248,7 @@
             align-items: center;
             gap: 6px;
         }
+
         .segmented-btn.active {
             background-color: var(--md-sys-color-surface-container);
             color: var(--md-sys-color-primary);
@@ -331,6 +352,7 @@
             justify-content: center;
             transition: background-color 0.2s, color 0.2s;
         }
+
         .icon-btn:hover {
             background-color: var(--md-sys-color-surface-container-highest);
             color: var(--md-sys-color-primary);
@@ -343,7 +365,8 @@
             margin-top: 16px;
         }
 
-        th, td {
+        th,
+        td {
             padding: 16px;
             border-bottom: 1px solid var(--md-sys-color-surface-container-highest);
             text-align: left;
@@ -355,7 +378,7 @@
             font-weight: 500;
             color: var(--md-sys-color-on-surface-variant);
         }
-        
+
         tbody tr:hover {
             background-color: rgba(11, 87, 208, 0.04);
         }
@@ -372,19 +395,26 @@
             border: 1px solid #e1e3e1;
             color: var(--md-sys-color-on-surface);
         }
-        
+
         dialog::backdrop {
             background: rgba(0, 0, 0, 0.32);
             backdrop-filter: blur(2px);
         }
-        
+
         dialog[open] {
             animation: show 0.2s ease-out normal;
         }
-        
+
         @keyframes show {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .log-list {
@@ -402,7 +432,7 @@
             font-size: 14px;
             color: var(--md-sys-color-on-surface);
         }
-        
+
         .log-list li:last-child {
             border-bottom: none;
         }
@@ -418,7 +448,8 @@
 
     <div class="app-bar">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary); font-size: 32px;">cloud_sync</span>
+            <span class="material-symbols-outlined"
+                style="color: var(--md-sys-color-primary); font-size: 32px;">cloud_sync</span>
             <h1>Lavientra Studio Outreach</h1>
         </div>
         <div class="segmented-btn-group">
@@ -437,15 +468,18 @@
     <!-- WORKSPACE VIEW -->
     <div id="workspaceView">
         <div class="card">
-            <h2 style="margin-bottom: 24px;"><span class="material-symbols-outlined">person_add</span> Add New Contact</h2>
+            <h2 style="margin-bottom: 24px;"><span class="material-symbols-outlined">person_add</span> Add New Contact
+            </h2>
 
             <div class="flex-row">
                 <div class="input-group">
-                    <input type="text" id="companyName" placeholder="Company Name" required onblur="this.value = window.toTitleCase(this.value)">
+                    <input type="text" id="companyName" placeholder="Company Name" required
+                        onblur="this.value = window.toTitleCase(this.value)">
                     <label>Company Name</label>
                 </div>
                 <div class="input-group">
-                    <input type="text" id="clientName" placeholder="e.g. John Doe" onblur="this.value = window.toTitleCase(this.value)">
+                    <input type="text" id="clientName" placeholder="e.g. John Doe"
+                        onblur="this.value = window.toTitleCase(this.value)">
                     <label>Client Name (Optional)</label>
                 </div>
             </div>
@@ -470,7 +504,8 @@
                     <label>Region / Country</label>
                 </div>
                 <div style="display: flex; justify-content: flex-end; flex: 1;">
-                    <button class="btn btn-primary btn-tall" onclick="addContact()" style="padding: 0 32px; font-size: 15px;">
+                    <button class="btn btn-primary btn-tall" onclick="addContact()"
+                        style="padding: 0 32px; font-size: 15px;">
                         <span class="material-symbols-outlined">cloud_upload</span> Save to Cloud
                     </button>
                 </div>
@@ -478,11 +513,13 @@
         </div>
 
         <div class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
                 <h2 style="margin: 0;"><span class="material-symbols-outlined">contacts</span> Pending Contact List</h2>
                 <div class="segmented-btn-group">
                     <button class="segmented-btn active" id="wsBtnUK" onclick="setWorkspaceRegion('UK')">UK</button>
-                    <button class="segmented-btn" id="wsBtnAus" onclick="setWorkspaceRegion('Australia')">Australia</button>
+                    <button class="segmented-btn" id="wsBtnAus"
+                        onclick="setWorkspaceRegion('Australia')">Australia</button>
                 </div>
             </div>
             <table>
@@ -497,7 +534,11 @@
                 </thead>
                 <tbody id="contactTableBody">
                     <!-- Contacts will load here -->
-                    <tr><td colspan="5" style="text-align: center; color: var(--md-sys-color-on-surface-variant); padding: 32px;">Loading from Cloud...</td></tr>
+                    <tr>
+                        <td colspan="5"
+                            style="text-align: center; color: var(--md-sys-color-on-surface-variant); padding: 32px;">
+                            Loading from Cloud...</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -505,23 +546,25 @@
 
     <!-- HISTORY VIEW -->
     <div id="historyView" style="display: none;">
-        <div class="card" style="background-color: transparent; box-shadow: none; padding: 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
-                <h2 style="margin: 0;"><span class="material-symbols-outlined">history</span> Outreach History</h2>
-                <div class="segmented-btn-group">
-                    <button class="segmented-btn active" id="histBtnUK" onclick="setHistoryRegion('UK')">UK</button>
-                    <button class="segmented-btn" id="histBtnAus" onclick="setHistoryRegion('Australia')">Australia</button>
-                </div>
+        <div class="card"
+            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; padding: 20px 32px;">
+            <h2 style="margin: 0;"><span class="material-symbols-outlined">history</span> Outreach History</h2>
+            <div class="segmented-btn-group">
+                <button class="segmented-btn active" id="histBtnUK" onclick="setHistoryRegion('UK')">UK</button>
+                <button class="segmented-btn" id="histBtnAus"
+                    onclick="setHistoryRegion('Australia')">Australia</button>
             </div>
         </div>
 
         <div class="card">
-            <h2 style="color: #137333;"><span class="material-symbols-outlined">mark_email_read</span> Initial Sent (Waiting for Follow-up)</h2>
+            <h2 style="color: #137333;"><span class="material-symbols-outlined">mark_email_read</span> Initial Sent
+                (Waiting for Follow-up)</h2>
             <div id="historyInitialContainer"></div>
         </div>
 
         <div class="card">
-            <h2 style="color: #b06000;"><span class="material-symbols-outlined">forward_to_inbox</span> Follow-ups Sent</h2>
+            <h2 style="color: #b06000;"><span class="material-symbols-outlined">forward_to_inbox</span> Follow-ups Sent
+            </h2>
             <div id="historyFollowupContainer"></div>
         </div>
     </div>
@@ -532,7 +575,8 @@
         <div class="metrics-grid">
             <div class="metric-card">
                 <div class="title">
-                    <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary); font-size: 20px;">groups</span>
+                    <span class="material-symbols-outlined"
+                        style="color: var(--md-sys-color-primary); font-size: 20px;">groups</span>
                     Total Contacts
                 </div>
                 <div class="value" id="metricTotalContacts">0</div>
@@ -540,7 +584,8 @@
             </div>
             <div class="metric-card">
                 <div class="title">
-                    <span class="material-symbols-outlined" style="color: #137333; font-size: 20px;">mark_email_read</span>
+                    <span class="material-symbols-outlined"
+                        style="color: #137333; font-size: 20px;">mark_email_read</span>
                     Initial Emails Sent
                 </div>
                 <div class="value" id="metricTotalSent" style="color: #137333;">0</div>
@@ -548,7 +593,8 @@
             </div>
             <div class="metric-card">
                 <div class="title">
-                    <span class="material-symbols-outlined" style="color: #b06000; font-size: 20px;">forward_to_inbox</span>
+                    <span class="material-symbols-outlined"
+                        style="color: #b06000; font-size: 20px;">forward_to_inbox</span>
                     Follow-ups Sent
                 </div>
                 <div class="value" id="metricTotalFollowupsSent" style="color: #b06000;">0</div>
@@ -564,7 +610,8 @@
             </div>
             <div class="metric-card">
                 <div class="title">
-                    <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary); font-size: 20px;">pie_chart</span>
+                    <span class="material-symbols-outlined"
+                        style="color: var(--md-sys-color-primary); font-size: 20px;">pie_chart</span>
                     Completion Rate
                 </div>
                 <div class="value" id="metricCompletionRate">0%</div>
@@ -578,9 +625,11 @@
             <div class="card" style="margin-bottom: 0;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                     <h3 style="display: flex; align-items: center; gap: 8px;">🇬🇧 United Kingdom</h3>
-                    <span class="segmented-btn" style="background-color: rgba(11, 87, 208, 0.08); color: var(--md-sys-color-primary); cursor: default;" id="ukCompletionBadge">0% Done</span>
+                    <span class="segmented-btn"
+                        style="background-color: rgba(11, 87, 208, 0.08); color: var(--md-sys-color-primary); cursor: default;"
+                        id="ukCompletionBadge">0% Done</span>
                 </div>
-                
+
                 <div class="progress-bar-bg">
                     <div class="progress-bar-fill" id="ukProgressBar" style="width: 0%;"></div>
                 </div>
@@ -613,7 +662,9 @@
             <div class="card" style="margin-bottom: 0;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                     <h3 style="display: flex; align-items: center; gap: 8px;">🇦🇺 Australia</h3>
-                    <span class="segmented-btn" style="background-color: rgba(11, 87, 208, 0.08); color: var(--md-sys-color-primary); cursor: default;" id="ausCompletionBadge">0% Done</span>
+                    <span class="segmented-btn"
+                        style="background-color: rgba(11, 87, 208, 0.08); color: var(--md-sys-color-primary); cursor: default;"
+                        id="ausCompletionBadge">0% Done</span>
                 </div>
 
                 <div class="progress-bar-bg">
@@ -650,7 +701,8 @@
     <dialog id="emailDialog">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <h2 style="margin: 0;" id="modalDialogTitle">Draft Email</h2>
-            <button class="btn btn-tonal" onclick="copyText('all', this)" style="height: 36px; padding: 0 16px; font-size: 13px;">
+            <button class="btn btn-tonal" onclick="copyText('all', this)"
+                style="height: 36px; padding: 0 16px; font-size: 13px;">
                 <span class="material-symbols-outlined" style="font-size: 16px;">content_copy</span> Copy Full Email
             </button>
         </div>
@@ -659,7 +711,8 @@
                 <input type="text" id="emailSubject" value="Quick question regarding [Company]">
                 <label>Subject</label>
             </div>
-            <button class="btn btn-tonal" onclick="copyText('emailSubject', this)" title="Copy Subject" style="height: 52px;">
+            <button class="btn btn-tonal" onclick="copyText('emailSubject', this)" title="Copy Subject"
+                style="height: 52px;">
                 <span class="material-symbols-outlined" style="font-size: 18px;">content_copy</span> Subject
             </button>
         </div>
@@ -668,7 +721,8 @@
                 <textarea id="generatedEmail"></textarea>
                 <label>Message Body</label>
             </div>
-            <button class="btn btn-tonal" onclick="copyText('generatedEmail', this)" title="Copy Body" style="height: 52px; margin-top: 0;">
+            <button class="btn btn-tonal" onclick="copyText('generatedEmail', this)" title="Copy Body"
+                style="height: 52px; margin-top: 0;">
                 <span class="material-symbols-outlined" style="font-size: 18px;">content_copy</span> Body
             </button>
         </div>
@@ -719,7 +773,7 @@
         window.activeWorkspaceRegion = 'UK';
         window.activeHistoryRegion = 'UK';
         window.activeMainTab = 'workspace';
-        
+
         const dialog = document.getElementById('emailDialog');
 
         // -- Live Sync Listeners --
@@ -744,7 +798,7 @@
         });
 
         // -- UI Functions --
-        window.switchMainTab = function(tab) {
+        window.switchMainTab = function (tab) {
             window.activeMainTab = tab;
             document.getElementById('tabWorkspace').classList.toggle('active', tab === 'workspace');
             document.getElementById('tabHistory').classList.toggle('active', tab === 'history');
@@ -753,19 +807,19 @@
             document.getElementById('workspaceView').style.display = tab === 'workspace' ? 'block' : 'none';
             document.getElementById('historyView').style.display = tab === 'history' ? 'block' : 'none';
             document.getElementById('analyticsView').style.display = tab === 'analytics' ? 'block' : 'none';
-            
+
             if (tab === 'analytics') window.renderAnalytics();
             if (tab === 'history') window.renderHistory();
         };
-        
-        window.setWorkspaceRegion = function(region) {
+
+        window.setWorkspaceRegion = function (region) {
             window.activeWorkspaceRegion = region;
             document.getElementById('wsBtnUK').classList.toggle('active', region === 'UK');
             document.getElementById('wsBtnAus').classList.toggle('active', region === 'Australia');
             window.renderContacts();
         };
 
-        window.setHistoryRegion = function(region) {
+        window.setHistoryRegion = function (region) {
             window.activeHistoryRegion = region;
             document.getElementById('histBtnUK').classList.toggle('active', region === 'UK');
             document.getElementById('histBtnAus').classList.toggle('active', region === 'Australia');
@@ -773,7 +827,7 @@
         };
 
         // Helper: Title Case Converter
-        window.toTitleCase = function(str) {
+        window.toTitleCase = function (str) {
             if (!str) return '';
             return str.trim().split(/\s+/).map(word => {
                 if (!word) return '';
@@ -782,7 +836,7 @@
         };
 
         // Helper: Copy Text to Clipboard
-        window.copyText = function(target, btnElement) {
+        window.copyText = function (target, btnElement) {
             let text = '';
             if (target === 'emailSubject') {
                 text = document.getElementById('emailSubject').value;
@@ -805,7 +859,7 @@
             });
         };
 
-        window.copyValue = function(text, btnElement) {
+        window.copyValue = function (text, btnElement) {
             if (!text) return;
             navigator.clipboard.writeText(text).then(() => {
                 const iconSpan = btnElement.querySelector('.material-symbols-outlined');
@@ -821,7 +875,7 @@
         };
 
         // -- Unsent Action: Delete Log from Firestore --
-        window.markUnsent = async function(logId, colName) {
+        window.markUnsent = async function (logId, colName) {
             if (!confirm("Are you sure you want to mark this mail as Unsent? This will remove it from history.")) return;
             try {
                 await deleteDoc(doc(db, colName, logId));
@@ -831,7 +885,7 @@
         };
 
         // -- Save Contact to Firebase --
-        window.addContact = async function() {
+        window.addContact = async function () {
             const url = document.getElementById('companyUrl').value;
             const nameRaw = document.getElementById('clientName').value;
             const companyRaw = document.getElementById('companyName').value;
@@ -856,29 +910,29 @@
                 document.getElementById('clientName').value = '';
                 document.getElementById('companyName').value = '';
                 document.getElementById('clientEmail').value = '';
-                
+
                 window.setWorkspaceRegion(country);
             } catch (e) {
                 alert("Error saving contact: " + e.message);
             }
         };
 
-        window.renderContacts = function() {
+        window.renderContacts = function () {
             const tbody = document.getElementById('contactTableBody');
             if (!tbody) return;
             tbody.innerHTML = '';
-            
+
             // Filter: Only contacts in active workspace region that DO NOT have an initial log
-            const pendingContacts = window.contacts.filter(c => 
-                c.country === window.activeWorkspaceRegion && 
+            const pendingContacts = window.contacts.filter(c =>
+                c.country === window.activeWorkspaceRegion &&
                 !window.logs.some(l => l.email === c.email)
             );
-            
+
             if (pendingContacts.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--md-sys-color-on-surface-variant); padding: 32px;">No pending contacts here. Try adding a new contact above!</td></tr>`;
                 return;
             }
-            
+
             pendingContacts.forEach(contact => {
                 const tr = document.createElement('tr');
                 const urlLink = contact.url ? (contact.url.startsWith('http') ? contact.url : 'https://' + contact.url) : '';
@@ -919,11 +973,11 @@
             });
         };
 
-        window.renderHistory = function() {
+        window.renderHistory = function () {
             const initialContainer = document.getElementById('historyInitialContainer');
             const followupContainer = document.getElementById('historyFollowupContainer');
             if (!initialContainer || !followupContainer) return;
-            
+
             initialContainer.innerHTML = '';
             followupContainer.innerHTML = '';
 
@@ -940,7 +994,7 @@
             if (Object.keys(initialByDate).length === 0) {
                 initialContainer.innerHTML = `<p style="color: var(--md-sys-color-on-surface-variant); padding: 16px; margin: 0;">No contacts waiting for follow-up.</p>`;
             } else {
-                Object.keys(initialByDate).sort((a,b) => new Date(b) - new Date(a)).forEach(date => {
+                Object.keys(initialByDate).sort((a, b) => new Date(b) - new Date(a)).forEach(date => {
                     let html = `<h3 style="margin-top: 16px; margin-bottom: 12px; color: var(--md-sys-color-on-surface-variant); display: flex; align-items: center; gap: 8px;"><span class="material-symbols-outlined" style="font-size: 18px;">calendar_today</span> ${date}</h3><table><thead><tr><th>Company</th><th>Name</th><th>Email</th><th>Action</th></tr></thead><tbody>`;
                     initialByDate[date].forEach(log => {
                         const contact = window.contacts.find(c => c.email === log.email);
@@ -981,7 +1035,7 @@
             if (Object.keys(followupByDate).length === 0) {
                 followupContainer.innerHTML = `<p style="color: var(--md-sys-color-on-surface-variant); padding: 16px; margin: 0;">No follow-ups sent yet.</p>`;
             } else {
-                Object.keys(followupByDate).sort((a,b) => new Date(b) - new Date(a)).forEach(date => {
+                Object.keys(followupByDate).sort((a, b) => new Date(b) - new Date(a)).forEach(date => {
                     let html = `<h3 style="margin-top: 16px; margin-bottom: 12px; color: var(--md-sys-color-on-surface-variant); display: flex; align-items: center; gap: 8px;"><span class="material-symbols-outlined" style="font-size: 18px;">calendar_today</span> ${date}</h3><table><thead><tr><th>Company</th><th>Name</th><th>Email</th><th>Action</th></tr></thead><tbody>`;
                     followupByDate[date].forEach(log => {
                         const contact = window.contacts.find(c => c.email === log.email);
@@ -1008,7 +1062,7 @@
             }
         };
 
-        window.generateEmail = function(id, type = 'initial') {
+        window.generateEmail = function (id, type = 'initial') {
             const contact = window.contacts.find(c => c.id === id);
             if (!contact) return;
 
@@ -1040,7 +1094,7 @@
         };
 
         // -- Save Log to Firebase --
-        window.markAsSent = async function() {
+        window.markAsSent = async function () {
             const email = document.getElementById('currentEmailTarget').value;
             const type = document.getElementById('currentEmailType').value || 'initial';
             const date = new Date();
@@ -1060,14 +1114,14 @@
                     country: country,
                     createdAt: serverTimestamp()
                 });
-                
+
                 window.closeTemplate();
             } catch (e) {
                 alert("Error saving log: " + e.message);
             }
         };
 
-        window.renderAnalytics = function() {
+        window.renderAnalytics = function () {
             const todayIso = new Date().toISOString().split('T')[0];
             const logsData = window.logs;
             const followupData = window.followupLogs;
@@ -1077,7 +1131,7 @@
             const totalContacts = contactsData.length;
             const totalInitialSent = logsData.length;
             const totalFollowupsSent = followupData.length;
-            
+
             const initialSentToday = logsData.filter(l => l.isoDate === todayIso).length;
             const followupsSentToday = followupData.filter(l => l.isoDate === todayIso).length;
             const sentToday = initialSentToday + followupsSentToday;
@@ -1123,10 +1177,10 @@
             document.getElementById('ausProgressBar').style.width = `${Math.min(100, ausRate)}%`;
         };
 
-        window.closeTemplate = function() {
+        window.closeTemplate = function () {
             dialog.close();
         };
-        
+
         // Light dismiss for dialog
         dialog.addEventListener('click', (e) => {
             const dialogDimensions = dialog.getBoundingClientRect();
