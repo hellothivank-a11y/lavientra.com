@@ -11,22 +11,25 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
 
     <style>
-        /* Material Design 3 Colors & Variables - Dark Mode */
+        /* Material Design 3 Colors & Variables - Light Mode */
         :root {
-            /* Dark Theme Tokens */
-            --md-sys-color-primary: #a8c7fa;
-            --md-sys-color-on-primary: #062e6f;
-            --md-sys-color-primary-container: #0842a0;
-            --md-sys-color-on-primary-container: #d3e3fd;
-            --md-sys-color-surface: #131314;
-            --md-sys-color-surface-container: #1e1f20;
-            --md-sys-color-surface-container-highest: #333537;
-            --md-sys-color-on-surface: #e3e3e3;
-            --md-sys-color-on-surface-variant: #c4c7c5;
-            --md-sys-color-outline: #8e918f;
-            --md-sys-color-error: #f2b8b5;
-            --md-sys-color-error-container: #8c1d18;
-            --md-sys-color-on-error-container: #f9dedc;
+            /* Light Theme Tokens */
+            --md-sys-color-primary: #0b57d0;
+            --md-sys-color-on-primary: #ffffff;
+            --md-sys-color-primary-container: #d3e3fd;
+            --md-sys-color-on-primary-container: #041e49;
+            --md-sys-color-surface: #f8fafd;
+            --md-sys-color-surface-container: #ffffff;
+            --md-sys-color-surface-container-highest: #e9eef6;
+            --md-sys-color-on-surface: #1f1f1f;
+            --md-sys-color-on-surface-variant: #444746;
+            --md-sys-color-outline: #747775;
+            --md-sys-color-outline-variant: #c4c7c5;
+            --md-sys-color-error: #ba1a1a;
+            --md-sys-color-error-container: #ffdad6;
+            --md-sys-color-on-error-container: #410002;
+            --md-sys-color-success: #137333;
+            --md-sys-color-warning: #b06000;
         }
 
         body {
@@ -36,7 +39,7 @@
             padding: 24px;
             color: var(--md-sys-color-on-surface);
             line-height: 1.5;
-            color-scheme: dark;
+            color-scheme: light;
         }
 
         h1, h2, h3, h4 {
@@ -64,7 +67,8 @@
             border-radius: 24px;
             padding: 32px;
             margin-bottom: 24px;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3), 0 2px 6px 2px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.12), 0 4px 8px 3px rgba(60, 64, 67, 0.04);
+            border: 1px solid #e1e3e1;
             transition: box-shadow 0.2s ease;
         }
 
@@ -94,19 +98,19 @@
         .input-group textarea {
             width: 100%;
             padding: 16px;
-            border: 1px solid var(--md-sys-color-outline);
+            border: 1px solid var(--md-sys-color-outline-variant);
             border-radius: 4px;
             font-size: 16px;
             box-sizing: border-box;
-            background: transparent;
+            background: #ffffff;
             font-family: 'Roboto', sans-serif;
             color: var(--md-sys-color-on-surface);
             transition: border-color 0.2s ease, padding 0.2s ease;
-            color-scheme: dark;
+            color-scheme: light;
         }
 
         .input-group select {
-            background-color: var(--md-sys-color-surface-container);
+            background-color: #ffffff;
         }
 
         .input-group textarea {
@@ -126,7 +130,7 @@
             position: absolute;
             top: -10px;
             left: 12px;
-            background: var(--md-sys-color-surface-container);
+            background: #ffffff;
             padding: 0 4px;
             font-size: 12px;
             color: var(--md-sys-color-on-surface-variant);
@@ -172,8 +176,8 @@
         }
 
         .btn-primary:hover {
-            background-color: #d3e3fd; /* lighter version for hover in dark mode */
-            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.3);
+            background-color: #0842a0;
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2);
         }
 
         .btn-tonal {
@@ -182,24 +186,24 @@
         }
 
         .btn-tonal:hover {
-            background-color: #1a56bc;
+            background-color: #c2d7fc;
         }
 
         .btn-warning {
-            background-color: rgba(253, 214, 99, 0.15);
-            color: #fdd663;
+            background-color: #fef7e0;
+            color: #b06000;
         }
         .btn-warning:hover {
-            background-color: rgba(253, 214, 99, 0.3);
+            background-color: #feefc3;
         }
 
         .btn-error {
             background-color: var(--md-sys-color-error-container);
-            color: var(--md-sys-color-on-error-container);
+            color: var(--md-sys-color-error);
         }
 
         .btn-error:hover {
-            background-color: #601410;
+            background-color: #f8b4ad;
         }
 
         /* Segmented Buttons */
@@ -225,8 +229,9 @@
             gap: 6px;
         }
         .segmented-btn.active {
-            background-color: var(--md-sys-color-primary-container);
-            color: var(--md-sys-color-on-primary-container);
+            background-color: var(--md-sys-color-surface-container);
+            color: var(--md-sys-color-primary);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
         /* Metrics & Analytics Cards */
@@ -241,7 +246,8 @@
             background-color: var(--md-sys-color-surface-container);
             border-radius: 20px;
             padding: 24px;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            box-shadow: 0 1px 3px rgba(60, 64, 67, 0.12), 0 1px 2px rgba(60, 64, 67, 0.08);
+            border: 1px solid #e9eef6;
             display: flex;
             flex-direction: column;
             gap: 8px;
@@ -295,7 +301,7 @@
             display: flex;
             justify-content: space-between;
             padding: 8px 0;
-            border-bottom: 1px dashed var(--md-sys-color-surface-container-highest);
+            border-bottom: 1px dashed #e1e3e1;
             font-size: 14px;
         }
 
@@ -351,7 +357,7 @@
         }
         
         tbody tr:hover {
-            background-color: rgba(255,255,255,0.03);
+            background-color: rgba(11, 87, 208, 0.04);
         }
 
         /* Native Dialog styling */
@@ -362,13 +368,14 @@
             width: 90%;
             max-width: 650px;
             background-color: var(--md-sys-color-surface-container);
-            box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.4), 0 9px 46px 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e1e3e1;
             color: var(--md-sys-color-on-surface);
         }
         
         dialog::backdrop {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(2px); /* Glassmorphism touch */
+            background: rgba(0, 0, 0, 0.32);
+            backdrop-filter: blur(2px);
         }
         
         dialog[open] {
@@ -401,7 +408,7 @@
         }
 
         .log-list li span.material-symbols-outlined {
-            color: #81c995; /* Lighter green for dark mode */
+            color: #137333;
             font-size: 20px;
         }
     </style>
@@ -509,12 +516,12 @@
         </div>
 
         <div class="card">
-            <h2 style="color: #81c995;"><span class="material-symbols-outlined">mark_email_read</span> Initial Sent (Waiting for Follow-up)</h2>
+            <h2 style="color: #137333;"><span class="material-symbols-outlined">mark_email_read</span> Initial Sent (Waiting for Follow-up)</h2>
             <div id="historyInitialContainer"></div>
         </div>
 
         <div class="card">
-            <h2 style="color: #fdd663;"><span class="material-symbols-outlined">forward_to_inbox</span> Follow-ups Sent</h2>
+            <h2 style="color: #b06000;"><span class="material-symbols-outlined">forward_to_inbox</span> Follow-ups Sent</h2>
             <div id="historyFollowupContainer"></div>
         </div>
     </div>
@@ -533,26 +540,26 @@
             </div>
             <div class="metric-card">
                 <div class="title">
-                    <span class="material-symbols-outlined" style="color: #81c995; font-size: 20px;">mark_email_read</span>
+                    <span class="material-symbols-outlined" style="color: #137333; font-size: 20px;">mark_email_read</span>
                     Initial Emails Sent
                 </div>
-                <div class="value" id="metricTotalSent" style="color: #81c995;">0</div>
+                <div class="value" id="metricTotalSent" style="color: #137333;">0</div>
                 <div class="subtext">Initial outreaches</div>
             </div>
             <div class="metric-card">
                 <div class="title">
-                    <span class="material-symbols-outlined" style="color: #fdd663; font-size: 20px;">forward_to_inbox</span>
+                    <span class="material-symbols-outlined" style="color: #b06000; font-size: 20px;">forward_to_inbox</span>
                     Follow-ups Sent
                 </div>
-                <div class="value" id="metricTotalFollowupsSent" style="color: #fdd663;">0</div>
+                <div class="value" id="metricTotalFollowupsSent" style="color: #b06000;">0</div>
                 <div class="subtext">Follow-up outreaches</div>
             </div>
             <div class="metric-card">
                 <div class="title">
-                    <span class="material-symbols-outlined" style="color: #a8c7fa; font-size: 20px;">today</span>
+                    <span class="material-symbols-outlined" style="color: #0b57d0; font-size: 20px;">today</span>
                     Sent Today
                 </div>
-                <div class="value" id="metricSentToday" style="color: #a8c7fa;">0</div>
+                <div class="value" id="metricSentToday" style="color: #0b57d0;">0</div>
                 <div class="subtext">Initial + Follow-up today</div>
             </div>
             <div class="metric-card">
@@ -571,7 +578,7 @@
             <div class="card" style="margin-bottom: 0;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                     <h3 style="display: flex; align-items: center; gap: 8px;">🇬🇧 United Kingdom</h3>
-                    <span class="segmented-btn" style="background-color: rgba(168, 199, 250, 0.1); color: var(--md-sys-color-primary); cursor: default;" id="ukCompletionBadge">0% Done</span>
+                    <span class="segmented-btn" style="background-color: rgba(11, 87, 208, 0.08); color: var(--md-sys-color-primary); cursor: default;" id="ukCompletionBadge">0% Done</span>
                 </div>
                 
                 <div class="progress-bar-bg">
@@ -585,19 +592,19 @@
                     </div>
                     <div class="stat-row">
                         <span class="stat-label">Initial Mail Sent</span>
-                        <span class="stat-val" id="ukSentCount" style="color: #81c995;">0</span>
+                        <span class="stat-val" id="ukSentCount" style="color: #137333;">0</span>
                     </div>
                     <div class="stat-row">
                         <span class="stat-label">Follow-ups Sent</span>
-                        <span class="stat-val" id="ukFollowupCount" style="color: #fdd663;">0</span>
+                        <span class="stat-val" id="ukFollowupCount" style="color: #b06000;">0</span>
                     </div>
                     <div class="stat-row">
                         <span class="stat-label">Pending Initial Leads</span>
-                        <span class="stat-val" id="ukPendingCount" style="color: #f2b8b5;">0</span>
+                        <span class="stat-val" id="ukPendingCount" style="color: #ba1a1a;">0</span>
                     </div>
                     <div class="stat-row">
                         <span class="stat-label">Activity Today (Sent Today)</span>
-                        <span class="stat-val" id="ukTodayCount" style="color: #a8c7fa;">0</span>
+                        <span class="stat-val" id="ukTodayCount" style="color: #0b57d0;">0</span>
                     </div>
                 </div>
             </div>
@@ -606,7 +613,7 @@
             <div class="card" style="margin-bottom: 0;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                     <h3 style="display: flex; align-items: center; gap: 8px;">🇦🇺 Australia</h3>
-                    <span class="segmented-btn" style="background-color: rgba(168, 199, 250, 0.1); color: var(--md-sys-color-primary); cursor: default;" id="ausCompletionBadge">0% Done</span>
+                    <span class="segmented-btn" style="background-color: rgba(11, 87, 208, 0.08); color: var(--md-sys-color-primary); cursor: default;" id="ausCompletionBadge">0% Done</span>
                 </div>
 
                 <div class="progress-bar-bg">
@@ -620,19 +627,19 @@
                     </div>
                     <div class="stat-row">
                         <span class="stat-label">Initial Mail Sent</span>
-                        <span class="stat-val" id="ausSentCount" style="color: #81c995;">0</span>
+                        <span class="stat-val" id="ausSentCount" style="color: #137333;">0</span>
                     </div>
                     <div class="stat-row">
                         <span class="stat-label">Follow-ups Sent</span>
-                        <span class="stat-val" id="ausFollowupCount" style="color: #fdd663;">0</span>
+                        <span class="stat-val" id="ausFollowupCount" style="color: #b06000;">0</span>
                     </div>
                     <div class="stat-row">
                         <span class="stat-label">Pending Initial Leads</span>
-                        <span class="stat-val" id="ausPendingCount" style="color: #f2b8b5;">0</span>
+                        <span class="stat-val" id="ausPendingCount" style="color: #ba1a1a;">0</span>
                     </div>
                     <div class="stat-row">
                         <span class="stat-label">Activity Today (Sent Today)</span>
-                        <span class="stat-val" id="ausTodayCount" style="color: #a8c7fa;">0</span>
+                        <span class="stat-val" id="ausTodayCount" style="color: #0b57d0;">0</span>
                     </div>
                 </div>
             </div>
@@ -791,7 +798,7 @@
 
             navigator.clipboard.writeText(text).then(() => {
                 const originalHTML = btnElement.innerHTML;
-                btnElement.innerHTML = `<span class="material-symbols-outlined" style="font-size: 18px; color: #81c995;">check</span> Copied!`;
+                btnElement.innerHTML = `<span class="material-symbols-outlined" style="font-size: 18px; color: #137333;">check</span> Copied!`;
                 setTimeout(() => {
                     btnElement.innerHTML = originalHTML;
                 }, 1500);
@@ -805,7 +812,7 @@
                 if (!iconSpan) return;
                 const originalIcon = iconSpan.innerText;
                 iconSpan.innerText = 'check';
-                iconSpan.style.color = '#81c995';
+                iconSpan.style.color = '#137333';
                 setTimeout(() => {
                     iconSpan.innerText = originalIcon;
                     iconSpan.style.color = '';
