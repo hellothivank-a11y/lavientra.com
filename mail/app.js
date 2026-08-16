@@ -703,8 +703,13 @@ window.renderAnalytics = function () {
 };
 
 // ===============================
-// FIREBASE FIRESTORE INTEGRATION
+// FIREBASE AUTH & FIRESTORE INTEGRATION
 // ===============================
+const ALLOWED_EMAILS = [
+    "thivanka.ltk@gmail.com",
+    "lavientra@gmail.com"
+];
+
 const firebaseConfig = {
     apiKey: "AIzaSyCVcML4xiZXMqKzcBiJrtfJI4kC-3ZvDbU",
     authDomain: "mail-list-f302b.firebaseapp.com",
@@ -716,9 +721,53 @@ const firebaseConfig = {
 };
 
 let db, contactsCol, logsCol, followupLogsCol;
+let unsubscribeContacts = null;
+let unsubscribeLogs = null;
+let unsubscribeFollowupLogs = null;
+
+function startDatabaseSync() {
+    stopDatabaseSync(); // Ensure no duplicate subscriptions
+
+    if (!contactsCol || !logsCol || !followupLogsCol) return;
+
+    unsubscribeContacts = contactsCol.orderBy("createdAt", "desc").onSnapshot((snapshot) => {
+        window.contacts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        window.renderContacts();
+        window.renderHistory();
+        window.renderAnalytics();
+    }, (err) => console.error("Contacts sync error:", err));
+
+    unsubscribeLogs = logsCol.orderBy("createdAt", "desc").onSnapshot((snapshot) => {
+        window.logs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        window.renderContacts();
+        window.renderHistory();
+        window.renderAnalytics();
+    }, (err) => console.error("Logs sync error:", err));
+
+    unsubscribeFollowupLogs = followupLogsCol.orderBy("createdAt", "desc").onSnapshot((snapshot) => {
+        window.followupLogs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        window.renderHistory();
+        window.renderAnalytics();
+    }, (err) => console.error("Followup logs sync error:", err));
+}
+
+function stopDatabaseSync() {
+    if (typeof unsubscribeContacts === 'function') {
+        unsubscribeContacts();
+        unsubscribeContacts = null;
+    }
+    if (typeof unsubscribeLogs === 'function') {
+        unsubscribeLogs();
+        unsubscribeLogs = null;
+    }
+    if (typeof unsubscribeFollowupLogs === 'function') {
+        unsubscribeFollowupLogs();
+        unsubscribeFollowupLogs = null;
+    }
+}
 
 function initFirebase() {
-    if (typeof firebase === 'undefined') {
+    if (typeof firebase === 'undefined' || typeof firebase.auth !== 'function') {
         setTimeout(initFirebase, 200);
         return;
     }
@@ -732,30 +781,56 @@ function initFirebase() {
     logsCol = db.collection("logs");
     followupLogsCol = db.collection("followup_logs");
 
-    // Live Sync Listeners
-    contactsCol.orderBy("createdAt", "desc").onSnapshot((snapshot) => {
-        window.contacts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        window.renderContacts();
-        window.renderHistory();
-        window.renderAnalytics();
-    }, (err) => console.error("Contacts sync error:", err));
+    // Firebase Auth State Listener
+    firebase.auth().onAuthStateChanged((user) => {
+        const loginContainer = document.getElementById('loginContainer');
+        const appContainer = document.getElementById('appContainer');
 
-    logsCol.orderBy("createdAt", "desc").onSnapshot((snapshot) => {
-        window.logs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        window.renderContacts();
-        window.renderHistory();
-        window.renderAnalytics();
-    }, (err) => console.error("Logs sync error:", err));
-
-    followupLogsCol.orderBy("createdAt", "desc").onSnapshot((snapshot) => {
-        window.followupLogs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        window.renderHistory();
-        window.renderAnalytics();
-    }, (err) => console.error("Followup logs sync error:", err));
+        if (user) {
+            const userEmail = (user.email || '').toLowerCase().trim();
+            if (ALLOWED_EMAILS.includes(userEmail)) {
+                if (loginContainer) loginContainer.style.display = 'none';
+                if (appContainer) appContainer.style.display = 'block';
+                startDatabaseSync();
+            } else {
+                alert("Access Denied: Your email (" + user.email + ") is not authorized to access this outreach application.");
+                firebase.auth().signOut();
+            }
+        } else {
+            if (loginContainer) loginContainer.style.display = 'flex';
+            if (appContainer) appContainer.style.display = 'none';
+            stopDatabaseSync();
+            window.contacts = [];
+            window.logs = [];
+            window.followupLogs = [];
+        }
+    });
 }
 
-// Start Firebase sync
+// Start Firebase sync & Auth listener
 initFirebase();
+
+// -- Google Sign-In Action --
+window.loginWithGoogle = async function () {
+    try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
+        await firebase.auth().signInWithPopup(provider);
+    } catch (error) {
+        if (error.code !== 'auth/popup-closed-by-user') {
+            alert("Sign in failed: " + error.message);
+        }
+    }
+};
+
+// -- Logout Action --
+window.logout = async function () {
+    try {
+        await firebase.auth().signOut();
+    } catch (error) {
+        alert("Logout failed: " + error.message);
+    }
+};
 
 // -- Delete Contact Action --
 window.deleteContact = async function (contactId, companyName) {
