@@ -776,6 +776,32 @@ window.markUnsent = async function (logId, colName) {
     }
 };
 
+// -- Clear Contact Form --
+window.clearContactForm = function () {
+    const compEl = document.getElementById('companyName');
+    const clientEl = document.getElementById('clientName');
+    const emailEl = document.getElementById('clientEmail');
+    const socialEl = document.getElementById('socialUrl');
+    const urlEl = document.getElementById('companyUrl');
+
+    if (compEl) compEl.value = '';
+    if (clientEl) clientEl.value = '';
+    if (emailEl) emailEl.value = '';
+    if (socialEl) socialEl.value = '';
+    if (urlEl) urlEl.value = '';
+
+    const warningEl = document.getElementById('emailDuplicateWarning');
+    if (warningEl) {
+        warningEl.style.display = 'none';
+        warningEl.innerHTML = '';
+    }
+    if (emailEl) emailEl.classList.remove('input-duplicate-error');
+
+    // Reset outreach channel to email default
+    window.setOutreachChannel('email');
+    if (compEl) compEl.focus();
+};
+
 // -- Save Contact to Firebase --
 window.addContact = async function () {
     const channel = document.getElementById('outreachChannel')?.value || window.activeOutreachChannel || 'email';
@@ -849,20 +875,7 @@ window.addContact = async function () {
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        document.getElementById('companyUrl').value = '';
-        if (document.getElementById('socialUrl')) document.getElementById('socialUrl').value = '';
-        document.getElementById('clientName').value = '';
-        document.getElementById('companyName').value = '';
-        document.getElementById('clientEmail').value = '';
-
-        const warningEl = document.getElementById('emailDuplicateWarning');
-        if (warningEl) {
-            warningEl.style.display = 'none';
-            warningEl.innerHTML = '';
-        }
-        const emailInput = document.getElementById('clientEmail');
-        if (emailInput) emailInput.classList.remove('input-duplicate-error');
-
+        window.clearContactForm();
         window.setWorkspaceRegion(country);
     } catch (e) {
         alert("Error saving contact: " + e.message);

@@ -116,8 +116,12 @@
                             </div>
                             <input type="hidden" id="country" value="UK">
                         </div>
-                        <div style="display: flex; justify-content: flex-end; flex: 1;">
-                            <button class="btn btn-primary btn-tall" onclick="addContact()"
+                        <div style="display: flex; justify-content: flex-end; align-items: center; gap: 12px; flex: 1;">
+                            <button type="button" class="btn btn-tonal btn-tall" onclick="clearContactForm()"
+                                style="padding: 0 22px; font-size: 14px;">
+                                <span class="material-symbols-outlined" style="font-size: 18px;">restart_alt</span> Clear
+                            </button>
+                            <button type="button" class="btn btn-primary btn-tall" onclick="addContact()"
                                 style="padding: 0 32px; font-size: 15px;">
                                 <span class="material-symbols-outlined">cloud_upload</span> Save to Cloud
                             </button>
