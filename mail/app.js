@@ -236,7 +236,11 @@ window.setOutreachChannel = function (channel) {
 };
 
 // Helper: Check duplicate email in real-time
+window.isSavingContact = false;
+
 window.checkEmailDuplicate = function () {
+    if (window.isSavingContact) return;
+
     const emailInput = document.getElementById('clientEmail');
     const warningEl = document.getElementById('emailDuplicateWarning');
     if (!emailInput || !warningEl) return;
@@ -734,7 +738,6 @@ function initFirebase() {
         window.renderContacts();
         window.renderHistory();
         window.renderAnalytics();
-        if (typeof window.checkEmailDuplicate === 'function') window.checkEmailDuplicate();
     }, (err) => console.error("Contacts sync error:", err));
 
     logsCol.orderBy("createdAt", "desc").onSnapshot((snapshot) => {
@@ -742,14 +745,12 @@ function initFirebase() {
         window.renderContacts();
         window.renderHistory();
         window.renderAnalytics();
-        if (typeof window.checkEmailDuplicate === 'function') window.checkEmailDuplicate();
     }, (err) => console.error("Logs sync error:", err));
 
     followupLogsCol.orderBy("createdAt", "desc").onSnapshot((snapshot) => {
         window.followupLogs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         window.renderHistory();
         window.renderAnalytics();
-        if (typeof window.checkEmailDuplicate === 'function') window.checkEmailDuplicate();
     }, (err) => console.error("Followup logs sync error:", err));
 }
 
@@ -863,6 +864,13 @@ window.addContact = async function () {
     const company = window.toTitleCase(companyRaw);
     const name = nameRaw ? window.toTitleCase(nameRaw) : "Team";
 
+    window.isSavingContact = true;
+    const warningEl = document.getElementById('emailDuplicateWarning');
+    if (warningEl) {
+        warningEl.style.display = 'none';
+        warningEl.innerHTML = '';
+    }
+
     try {
         await contactsCol.add({
             channel,
@@ -879,6 +887,8 @@ window.addContact = async function () {
         window.setWorkspaceRegion(country);
     } catch (e) {
         alert("Error saving contact: " + e.message);
+    } finally {
+        window.isSavingContact = false;
     }
 };
 
