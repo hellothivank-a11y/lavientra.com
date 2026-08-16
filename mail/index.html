@@ -41,54 +41,88 @@
             <h2 style="margin-bottom: 24px;"><span class="material-symbols-outlined">person_add</span> Add New Contact
             </h2>
 
-            <div class="flex-row">
-                <div class="input-group">
-                    <input type="text" id="companyName" placeholder="Company Name" required
-                        onblur="this.value = window.toTitleCase(this.value)">
-                    <label>Company Name</label>
-                </div>
-                <div class="input-group">
-                    <input type="text" id="clientName" placeholder="e.g. John Doe"
-                        onblur="this.value = window.toTitleCase(this.value)">
-                    <label>Client Name (Optional)</label>
-                </div>
-            </div>
-
-            <div class="flex-row">
-                <div class="input-group">
-                    <input type="email" id="clientEmail" placeholder="contact@company.com" required>
-                    <label>Email Address</label>
-                </div>
-                <div class="input-group">
-                    <input type="text" id="companyUrl" placeholder="https://example.com">
-                    <label>Website URL (Optional)</label>
-                </div>
-            </div>
-
-            <div class="flex-row" style="align-items: center; justify-content: space-between; margin-bottom: 0;">
-                <div class="input-group custom-select-group" id="countryDropdownGroup" style="margin-bottom: 0;">
-                    <div class="custom-select-trigger" id="countryTrigger" tabindex="0" onclick="toggleCountryDropdown(event)">
-                        <span id="countrySelectedText">🇬🇧 United Kingdom (UK)</span>
-                        <span class="material-symbols-outlined dropdown-arrow">expand_more</span>
+            <div class="add-contact-layout">
+                <!-- Left Side: Outreach Channel Selector -->
+                <div class="channel-sidebar">
+                    <span class="channel-sidebar-label">Channel</span>
+                    <div class="channel-vertical-group" id="channelSelectorGroup">
+                        <button type="button" class="channel-nav-btn active" id="channelBtnEmail" onclick="setOutreachChannel('email')">
+                            <svg class="channel-svg-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                            <span>Email</span>
+                        </button>
+                        <button type="button" class="channel-nav-btn" id="channelBtnInstagram" onclick="setOutreachChannel('instagram')">
+                            <svg class="channel-svg-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                            <span>Instagram</span>
+                        </button>
+                        <button type="button" class="channel-nav-btn" id="channelBtnLinkedin" onclick="setOutreachChannel('linkedin')">
+                            <svg class="channel-svg-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.46c-.95 0-1.72.77-1.72 1.72s.77 1.72 1.72 1.72 1.72-.77 1.72-1.72-.77-1.72-1.72-1.72z"/></svg>
+                            <span>LinkedIn</span>
+                        </button>
+                        <button type="button" class="channel-nav-btn" id="channelBtnFacebook" onclick="setOutreachChannel('facebook')">
+                            <svg class="channel-svg-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
+                            <span>Facebook</span>
+                        </button>
                     </div>
-                    <label>Region / Country</label>
-                    <div class="custom-dropdown-menu" id="countryMenu">
-                        <div class="custom-option selected" data-value="UK" onclick="selectCountry('UK', '🇬🇧 United Kingdom (UK)')">
-                            <span>🇬🇧 United Kingdom (UK)</span>
-                            <span class="material-symbols-outlined check-icon">check</span>
+                    <input type="hidden" id="outreachChannel" value="email">
+                </div>
+
+                <!-- Right Side: Form Inputs -->
+                <div class="channel-form-fields" style="flex: 1;">
+                    <div class="flex-row">
+                        <div class="input-group">
+                            <input type="text" id="companyName" placeholder="Company Name" required
+                                onblur="this.value = window.toTitleCase(this.value)">
+                            <label>Company Name *</label>
                         </div>
-                        <div class="custom-option" data-value="Australia" onclick="selectCountry('Australia', '🇦🇺 Australia (AUS)')">
-                            <span>🇦🇺 Australia (AUS)</span>
-                            <span class="material-symbols-outlined check-icon">check</span>
+                        <div class="input-group">
+                            <input type="text" id="clientName" placeholder="e.g. John Doe"
+                                onblur="this.value = window.toTitleCase(this.value)">
+                            <label>Client Name (Optional)</label>
                         </div>
                     </div>
-                    <input type="hidden" id="country" value="UK">
-                </div>
-                <div style="display: flex; justify-content: flex-end; flex: 1;">
-                    <button class="btn btn-primary btn-tall" onclick="addContact()"
-                        style="padding: 0 32px; font-size: 15px;">
-                        <span class="material-symbols-outlined">cloud_upload</span> Save to Cloud
-                    </button>
+
+                    <div class="flex-row" id="channelInputsRow">
+                        <div class="input-group" id="emailInputGroup">
+                            <input type="email" id="clientEmail" placeholder="contact@company.com" required oninput="checkEmailDuplicate()">
+                            <label id="clientEmailLabel">Email Address *</label>
+                            <div id="emailDuplicateWarning" class="email-warning-box" style="display: none;"></div>
+                        </div>
+                        <div class="input-group" id="socialUrlGroup" style="display: none;">
+                            <input type="text" id="socialUrl" placeholder="https://instagram.com/username">
+                            <label id="socialUrlLabel">Instagram Profile URL / Handle *</label>
+                        </div>
+                        <div class="input-group" id="websiteUrlGroup">
+                            <input type="text" id="companyUrl" placeholder="https://example.com">
+                            <label>Website URL (Optional)</label>
+                        </div>
+                    </div>
+
+                    <div class="flex-row" style="align-items: center; justify-content: space-between; margin-bottom: 0;">
+                        <div class="input-group custom-select-group" id="countryDropdownGroup" style="margin-bottom: 0;">
+                            <div class="custom-select-trigger" id="countryTrigger" tabindex="0" onclick="toggleCountryDropdown(event)">
+                                <span id="countrySelectedText">🇬🇧 United Kingdom (UK)</span>
+                                <span class="material-symbols-outlined dropdown-arrow">expand_more</span>
+                            </div>
+                            <label>Region / Country</label>
+                            <div class="custom-dropdown-menu" id="countryMenu">
+                                <div class="custom-option selected" data-value="UK" onclick="selectCountry('UK', '🇬🇧 United Kingdom (UK)')">
+                                    <span>🇬🇧 United Kingdom (UK)</span>
+                                    <span class="material-symbols-outlined check-icon">check</span>
+                                </div>
+                                <div class="custom-option" data-value="Australia" onclick="selectCountry('Australia', '🇦🇺 Australia (AUS)')">
+                                    <span>🇦🇺 Australia (AUS)</span>
+                                    <span class="material-symbols-outlined check-icon">check</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="country" value="UK">
+                        </div>
+                        <div style="display: flex; justify-content: flex-end; flex: 1;">
+                            <button class="btn btn-primary btn-tall" onclick="addContact()"
+                                style="padding: 0 32px; font-size: 15px;">
+                                <span class="material-symbols-outlined">cloud_upload</span> Save to Cloud
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -108,15 +142,16 @@
                     <tr>
                         <th>Company</th>
                         <th>Name</th>
-                        <th>Email</th>
+                        <th>Channel & Target</th>
                         <th>Region</th>
+                        <th>Status / Follow-up</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody id="contactTableBody">
                     <!-- Contacts will load here -->
                     <tr>
-                        <td colspan="5"
+                        <td colspan="6"
                             style="text-align: center; color: var(--md-sys-color-on-surface-variant); padding: 32px;">
                             Loading from Cloud...</td>
                     </tr>
@@ -161,6 +196,15 @@
                 </div>
                 <div class="value" id="metricTotalContacts">0</div>
                 <div class="subtext">All campaign leads</div>
+            </div>
+            <div class="metric-card">
+                <div class="title">
+                    <span class="material-symbols-outlined"
+                        style="color: #fab005; font-size: 20px;">notification_important</span>
+                    Follow-ups Pending
+                </div>
+                <div class="value" id="metricPendingFollowups" style="color: #fab005;">0</div>
+                <div class="subtext">3+ days since last email</div>
             </div>
             <div class="metric-card">
                 <div class="title">
@@ -220,6 +264,10 @@
                         <span class="stat-val" id="ukListCount">0</span>
                     </div>
                     <div class="stat-row">
+                        <span class="stat-label">Follow-ups Pending (3+ Days)</span>
+                        <span class="stat-val" id="ukPendingFollowups" style="color: #fab005; font-weight: 700;">0</span>
+                    </div>
+                    <div class="stat-row">
                         <span class="stat-label">Initial Mail Sent</span>
                         <span class="stat-val" id="ukSentCount" style="color: #137333;">0</span>
                     </div>
@@ -257,6 +305,10 @@
                         <span class="stat-val" id="ausListCount">0</span>
                     </div>
                     <div class="stat-row">
+                        <span class="stat-label">Follow-ups Pending (3+ Days)</span>
+                        <span class="stat-val" id="ausPendingFollowups" style="color: #fab005; font-weight: 700;">0</span>
+                    </div>
+                    <div class="stat-row">
                         <span class="stat-label">Initial Mail Sent</span>
                         <span class="stat-val" id="ausSentCount" style="color: #137333;">0</span>
                     </div>
@@ -277,16 +329,16 @@
         </div>
     </div>
 
-    <!-- Native Dialog for Email Draft -->
+    <!-- Native Dialog for Email / DM Draft -->
     <dialog id="emailDialog">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <h2 style="margin: 0;" id="modalDialogTitle">Draft Email</h2>
             <button class="btn btn-tonal" onclick="copyText('all', this)"
                 style="height: 36px; padding: 0 16px; font-size: 13px;">
-                <span class="material-symbols-outlined" style="font-size: 16px;">content_copy</span> Copy Full Email
+                <span class="material-symbols-outlined" style="font-size: 16px;">content_copy</span> Copy Full Message
             </button>
         </div>
-        <div class="flex-row" style="margin-top: 16px; align-items: center;">
+        <div class="flex-row" id="dialogSubjectRow" style="margin-top: 16px; align-items: center;">
             <div class="input-group" style="flex: 1;">
                 <input type="text" id="emailSubject" value="Quick question regarding [Company]">
                 <label>Subject</label>
@@ -299,7 +351,7 @@
         <div class="flex-row" style="align-items: flex-start;">
             <div class="input-group" style="flex: 1;">
                 <textarea id="generatedEmail"></textarea>
-                <label>Message Body</label>
+                <label id="dialogBodyLabel">Message Body</label>
             </div>
             <button class="btn btn-tonal" onclick="copyText('generatedEmail', this)" title="Copy Body"
                 style="height: 52px; margin-top: 0;">
@@ -309,12 +361,14 @@
 
         <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px;">
             <button class="btn btn-error" onclick="closeTemplate()">Cancel</button>
-            <button class="btn btn-primary" onclick="markAsSent()">
+            <button class="btn btn-primary" id="modalSubmitBtn" onclick="markAsSent()">
                 <span class="material-symbols-outlined">send</span> Mark as Sent
             </button>
         </div>
+        <input type="hidden" id="currentContactId">
         <input type="hidden" id="currentEmailTarget">
         <input type="hidden" id="currentEmailType" value="initial">
+        <input type="hidden" id="currentChannelType" value="email">
     </dialog>
 
     <!-- Firebase SDK (Compat version for local file:// & web support) -->

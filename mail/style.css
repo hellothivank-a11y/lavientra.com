@@ -263,6 +263,51 @@ h2 {
     color: var(--md-sys-color-primary);
 }
 
+.input-duplicate-error {
+    border-color: var(--md-sys-color-error) !important;
+    background-color: #fff8f7 !important;
+}
+
+.input-group input.input-duplicate-error:focus {
+    border-color: var(--md-sys-color-error) !important;
+}
+
+.input-group input.input-duplicate-error~label {
+    color: var(--md-sys-color-error) !important;
+}
+
+.email-warning-box {
+    margin-top: 6px;
+    padding: 8px 12px;
+    background-color: var(--md-sys-color-error-container);
+    color: var(--md-sys-color-on-error-container);
+    border-radius: 8px;
+    font-size: 12.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(186, 26, 26, 0.2);
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.badge-duplicate {
+    background-color: var(--md-sys-color-error-container);
+    color: var(--md-sys-color-error);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 100px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 6px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 /* Material 3 Buttons */
 .btn {
     display: inline-flex;
@@ -324,6 +369,186 @@ h2 {
 
 .btn-error:hover {
     background-color: #f8b4ad;
+}
+
+.btn-followup {
+    background-color: #fab005;
+    color: #000000;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(250, 176, 5, 0.3);
+}
+
+.btn-followup:hover {
+    background-color: #e09e04;
+    box-shadow: 0 2px 6px rgba(250, 176, 5, 0.4);
+}
+
+/* Status & Reminder Badges */
+.badge-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    font-family: 'Google Sans', sans-serif;
+    transition: all 0.2s ease;
+}
+
+.badge-not-sent {
+    background: rgba(140, 140, 140, 0.12);
+    color: #666666;
+    font-weight: 500;
+}
+
+.badge-sent {
+    background: rgba(19, 115, 51, 0.12);
+    color: #137333;
+    font-weight: 600;
+}
+
+.badge-followup-due {
+    background: rgba(250, 176, 5, 0.15);
+    color: #fab005;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(250, 176, 5, 0.35);
+    animation: pulse-border 2s infinite ease-in-out;
+}
+
+/* Outreach Channel Sidebar (Subtle & Un-highlighted) */
+.add-contact-layout {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+}
+
+.channel-sidebar {
+    width: 175px;
+    flex-shrink: 0;
+    border-right: 1px solid #e9eef6;
+    padding-right: 24px;
+}
+
+.channel-sidebar-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--md-sys-color-outline);
+    margin-bottom: 12px;
+}
+
+.channel-vertical-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.channel-nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--md-sys-color-on-surface-variant);
+    font-family: 'Google Sans', 'Roboto', sans-serif;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s ease;
+}
+
+.channel-nav-btn:hover {
+    background-color: var(--md-sys-color-surface-container-highest);
+    color: var(--md-sys-color-on-surface);
+}
+
+.channel-nav-btn.active {
+    background-color: var(--md-sys-color-surface-container-highest);
+    color: var(--md-sys-color-on-surface);
+    border-color: #d0d7de;
+    font-weight: 600;
+}
+
+.channel-nav-btn .channel-svg-icon {
+    opacity: 0.75;
+    transition: opacity 0.15s ease;
+}
+
+.channel-nav-btn.active .channel-svg-icon,
+.channel-nav-btn:hover .channel-svg-icon {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .add-contact-layout {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .channel-sidebar {
+        width: 100% !important;
+        border-right: none !important;
+        border-bottom: 1px solid #e1e3e1;
+        padding-right: 0 !important;
+        padding-bottom: 16px;
+    }
+    .channel-vertical-group {
+        flex-direction: row !important;
+        flex-wrap: wrap;
+    }
+}
+
+/* Outreach Channel Badges */
+.channel-svg-icon {
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+.badge-channel {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+}
+
+.badge-channel-email {
+    background: rgba(11, 87, 208, 0.1);
+    color: var(--md-sys-color-primary);
+}
+
+.badge-channel-instagram {
+    background: rgba(225, 48, 108, 0.12);
+    color: #e1306c;
+}
+
+.badge-channel-linkedin {
+    background: rgba(10, 102, 194, 0.12);
+    color: #0a66c2;
+}
+
+.badge-channel-facebook {
+    background: rgba(24, 119, 242, 0.12);
+    color: #1877f2;
+}
+
+@keyframes pulse-border {
+    0%, 100% { border-color: rgba(250, 176, 5, 0.35); }
+    50% { border-color: rgba(250, 176, 5, 0.85); }
 }
 
 /* Segmented Buttons */
