@@ -560,7 +560,8 @@ window.generateEmail = function (id, type = 'initial') {
 
     const subjectRow = document.getElementById('dialogSubjectRow');
     const modalTitle = document.getElementById('modalDialogTitle');
-    const modalSubmitBtn = document.getElementById('modalSubmitBtn');
+    const modalOpenBtn = document.getElementById('modalOpenPlatformBtn');
+    const modalMarkBtn = document.getElementById('modalMarkAsSentBtn') || document.getElementById('modalSubmitBtn');
     const dialogBodyLabel = document.getElementById('dialogBodyLabel');
 
     let subject = '';
@@ -580,8 +581,9 @@ window.generateEmail = function (id, type = 'initial') {
             template = `${greeting}\n\nI’m from Lavientra Studio, and we help busy ${regionText} property photographers offload their floor plan drafting with a guaranteed 24-hour turnaround. We specialize in clean, RICS-compliant 2D layouts customized to your brand standards.\n\nIf you’d like to review our work or check our standard drafting workflow, feel free to visit us at lavientra.com. You can also submit field sketches directly through our client portal there.\n\nWe’d love to handle your first layout as a complimentary test run whenever you have a shoot lined up this week. No commitments.\n\nBest regards,\n\nThe Lavientra Studio Team`;
         }
 
-        if (modalSubmitBtn) {
-            modalSubmitBtn.innerHTML = `<span class="material-symbols-outlined">mail</span> Open in Gmail & Log`;
+        if (modalOpenBtn) {
+            modalOpenBtn.style.display = 'inline-flex';
+            modalOpenBtn.innerHTML = `<span class="material-symbols-outlined">mail</span> Open in Gmail & Log`;
         }
     } else {
         // Social DM
@@ -598,9 +600,18 @@ window.generateEmail = function (id, type = 'initial') {
             template = `${greeting}\n\nI came across your work in ${regionText} and love your property photography style! I'm with Lavientra Studio—we provide dedicated 24-hr turnaround floor plan drafting tailored to your brand.\n\nWe'd love to draft your first floor plan completely free as a test run on your next shoot this week! Feel free to check out lavientra.com or message back here if you'd like to try us out.\n\nBest,\nThe Lavientra Studio Team`;
         }
 
-        if (modalSubmitBtn) {
-            modalSubmitBtn.innerHTML = `<span class="material-symbols-outlined">open_in_new</span> Open ${channelName} Profile & Log`;
+        if (modalOpenBtn) {
+            if (contact.socialUrl) {
+                modalOpenBtn.style.display = 'inline-flex';
+                modalOpenBtn.innerHTML = `<span class="material-symbols-outlined">open_in_new</span> Open ${channelName} Profile & Log`;
+            } else {
+                modalOpenBtn.style.display = 'none';
+            }
         }
+    }
+
+    if (modalMarkBtn) {
+        modalMarkBtn.innerHTML = `<span class="material-symbols-outlined">send</span> Mark as Sent`;
     }
 
     document.getElementById('emailSubject').value = subject;
@@ -968,7 +979,7 @@ window.addContact = async function () {
 };
 
 // -- Save Log to Firebase & Open Platform --
-window.markAsSent = async function () {
+window.markAsSent = async function (openPlatform = false) {
     const contactId = document.getElementById('currentContactId')?.value;
     const email = document.getElementById('currentEmailTarget')?.value || '';
     const type = document.getElementById('currentEmailType')?.value || 'initial';
@@ -985,13 +996,15 @@ window.markAsSent = async function () {
     const dateString = date.toLocaleDateString('en-US', options);
     const isoDate = date.toISOString().split('T')[0];
 
-    // Open appropriate platform
-    if (channel === 'email' && email) {
-        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        window.open(gmailUrl, '_blank');
-    } else if (targetContact && targetContact.socialUrl) {
-        const socUrl = window.formatSocialUrl(targetContact.socialUrl, channel);
-        if (socUrl) window.open(socUrl, '_blank');
+    // Open appropriate platform only if openPlatform is true
+    if (openPlatform) {
+        if (channel === 'email' && email) {
+            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.open(gmailUrl, '_blank');
+        } else if (targetContact && targetContact.socialUrl) {
+            const socUrl = window.formatSocialUrl(targetContact.socialUrl, channel);
+            if (socUrl) window.open(socUrl, '_blank');
+        }
     }
 
     if (!targetCol) {

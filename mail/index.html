@@ -390,9 +390,12 @@
             </button>
         </div>
 
-        <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px;">
+        <div style="display: flex; gap: 12px; justify-content: flex-end; align-items: center; margin-top: 24px; flex-wrap: wrap;">
             <button class="btn btn-error" onclick="closeTemplate()">Cancel</button>
-            <button class="btn btn-primary" id="modalSubmitBtn" onclick="markAsSent()">
+            <button class="btn btn-tonal" id="modalOpenPlatformBtn" onclick="markAsSent(true)">
+                <span class="material-symbols-outlined">mail</span> Open in Gmail & Log
+            </button>
+            <button class="btn btn-primary" id="modalMarkAsSentBtn" onclick="markAsSent(false)">
                 <span class="material-symbols-outlined">send</span> Mark as Sent
             </button>
         </div>
