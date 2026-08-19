@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lavientra Studio Outreach CRM</title>
+    <!-- Modern SaaS Fonts: Plus Jakarta Sans & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Material Symbols Outlined -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ==========================================
+         LOGIN SCREEN (Visible when unauthenticated)
+         ========================================== -->
+    <div id="loginContainer" class="login-wrapper">
+        <div class="login-card">
+            <div class="login-header">
+                <span class="material-symbols-outlined login-logo-icon">hub</span>
+                <h2>Lavientra Studio CRM</h2>
+                <p class="login-subtitle">Cloud Outreach & Follow-up Automation Platform. Sign in with your authorized Google workspace account to continue.</p>
+            </div>
+            <button type="button" class="btn-google-login" onclick="loginWithGoogle()">
+                <svg class="google-icon" viewBox="0 0 24 24" width="18" height="18">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                </svg>
+                <span>Sign in with Google</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MAIN SAAS APP CONTAINER (Authenticated)
+         ========================================== -->
+    <div id="appContainer" class="app-layout" style="display: none;">
+
+        <!-- LEFT-HAND SIDEBAR NAVIGATION -->
+        <aside class="sidebar" id="appSidebar">
+            <!-- Sidebar Header / Brand -->
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span class="material-symbols-outlined" style="font-size: 22px;">bolt</span>
+                </div>
+                <div>
+                    <div class="sidebar-brand-title">Lavientra CRM</div>
+                    <div class="sidebar-brand-subtitle">Outreach Studio</div>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="sidebar-nav">
+                <div class="nav-section-label">Core Modules</div>
+                <button type="button" class="nav-item active" id="tabNavWorkspace" onclick="switchMainTab('workspace')">
+                    <div class="nav-item-left">
+                        <span class="material-symbols-outlined">dashboard</span>
+                        <span>Workspace</span>
+                    </div>
+                    <span class="nav-badge" id="sidebarBadgePending">0</span>
+                </button>
+
+                <button type="button" class="nav-item" id="tabNavQueue" onclick="switchMainTab('queue')">
+                    <div class="nav-item-left">
+                        <span class="material-symbols-outlined">schedule_send</span>
+                        <span>Queue & Automation</span>
+                    </div>
+                    <span class="nav-badge badge-highlight" id="sidebarBadgeDue">0 Due</span>
+                </button>
+
+                <button type="button" class="nav-item" id="tabNavHistory" onclick="switchMainTab('history')">
+                    <div class="nav-item-left">
+                        <span class="material-symbols-outlined">history</span>
+                        <span>Outreach History</span>
+                    </div>
+                    <span class="nav-badge" id="sidebarBadgeHistory">0</span>
+                </button>
+
+                <div class="nav-section-label" style="margin-top: 8px;">Content & Strategy</div>
+                <button type="button" class="nav-item" id="tabNavTemplates" onclick="switchMainTab('templates')">
+                    <div class="nav-item-left">
+                        <span class="material-symbols-outlined">edit_note</span>
+                        <span>Template Manager</span>
+                    </div>
+                </button>
+
+                <button type="button" class="nav-item" id="tabNavAnalytics" onclick="switchMainTab('analytics')">
+                    <div class="nav-item-left">
+                        <span class="material-symbols-outlined">query_stats</span>
+                        <span>Progress & Analytics</span>
+                    </div>
+                </button>
+
+                <button type="button" class="nav-item" id="tabNavSettings" onclick="switchMainTab('settings')">
+                    <div class="nav-item-left">
+                        <span class="material-symbols-outlined">tune</span>
+                        <span>Settings</span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Sidebar Footer: Theme Toggle & User Info -->
+            <div class="sidebar-footer">
+                <button type="button" class="theme-toggle-btn" onclick="toggleTheme()">
+                    <span style="display: flex; align-items: center; gap: 8px;">
+                        <span class="material-symbols-outlined" id="themeIcon" style="font-size: 18px;">light_mode</span>
+                        <span id="themeLabel">Light Mode</span>
+                    </span>
+                    <div class="theme-toggle-pill">
+                        <span id="themePillLight" class="active"><span class="material-symbols-outlined" style="font-size: 14px;">light_mode</span></span>
+                        <span id="themePillDark"><span class="material-symbols-outlined" style="font-size: 14px;">dark_mode</span></span>
+                    </div>
+                </button>
+
+                <div class="user-profile-card">
+                    <div class="user-profile-info">
+                        <div class="user-avatar" id="userAvatarLetter">L</div>
+                        <div class="user-details">
+                            <div class="user-name" id="userNameDisplay">Lavientra User</div>
+                            <div class="user-email" id="userEmailDisplay">auth@lavientra.com</div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-sidebar-logout" onclick="logout()" title="Sign Out">
+                        <span class="material-symbols-outlined" style="font-size: 18px;">logout</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT WRAPPER -->
+        <main class="main-content">
+            <!-- TOP APP HEADER -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button type="button" class="mobile-menu-btn" onclick="toggleMobileSidebar()" title="Toggle Menu">
+                        <span class="material-symbols-outlined">menu</span>
+                    </button>
+                    <div class="page-title-group">
+                        <div class="page-breadcrumb" id="headerBreadcrumb">CRM / Workspace</div>
+                        <h1 id="headerTitle">Workspace & Leads</h1>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <!-- Global Region Switcher -->
+                    <div class="segmented-btn-group" id="headerRegionGroup">
+                        <button type="button" class="segmented-btn active" id="globalBtnUK" onclick="setGlobalRegion('UK')">🇬🇧 UK</button>
+                        <button type="button" class="segmented-btn" id="globalBtnAus" onclick="setGlobalRegion('Australia')">🇦🇺 AUS</button>
+                    </div>
+
+                    <!-- CSV Bulk Importer Trigger Button -->
+                    <button type="button" class="btn btn-tonal" onclick="openCsvModal()" style="height: 38px;">
+                        <span class="material-symbols-outlined">upload_file</span>
+                        <span>Import CSV</span>
+                    </button>
+
+                    <!-- Cloud Scheduler Live Pill -->
+                    <div class="automation-status-pill status-active" id="headerAutomationPill" onclick="switchMainTab('queue')" style="cursor: pointer;" title="Click to view Queue Hub">
+                        <div class="pulse-dot"></div>
+                        <span id="headerAutomationText">Scheduler Active</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- SCROLLABLE VIEW CONTAINER -->
+            <div class="view-container">
+
+                <!-- 1. WORKSPACE VIEW -->
+                <div id="workspaceView" class="view-section active">
+                    <!-- Add Contact Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h2 class="card-title"><span class="material-symbols-outlined">person_add</span> Add New Lead</h2>
+                                <p class="card-subtitle">Quickly capture prospective photographers or studios for multi-channel outreach</p>
+                            </div>
+                        </div>
+
+                        <div class="add-contact-layout">
+                            <!-- Outreach Channel Selector -->
+                            <div class="channel-sidebar">
+                                <span class="channel-sidebar-label">Outreach Channel</span>
+                                <div class="channel-vertical-group" id="channelSelectorGroup">
+                                    <button type="button" class="channel-nav-btn active" id="channelBtnEmail" onclick="setOutreachChannel('email')">
+                                        <svg class="channel-svg-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                                        <span>Email</span>
+                                    </button>
+                                    <button type="button" class="channel-nav-btn" id="channelBtnInstagram" onclick="setOutreachChannel('instagram')">
+                                        <svg class="channel-svg-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                                        <span>Instagram</span>
+                                    </button>
+                                    <button type="button" class="channel-nav-btn" id="channelBtnLinkedin" onclick="setOutreachChannel('linkedin')">
+                                        <svg class="channel-svg-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.46c-.95 0-1.72.77-1.72 1.72s.77 1.72 1.72 1.72 1.72-.77 1.72-1.72-.77-1.72-1.72-1.72z"/></svg>
+                                        <span>LinkedIn</span>
+                                    </button>
+                                    <button type="button" class="channel-nav-btn" id="channelBtnFacebook" onclick="setOutreachChannel('facebook')">
+                                        <svg class="channel-svg-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
+                                        <span>Facebook</span>
+                                    </button>
+                                </div>
+                                <input type="hidden" id="outreachChannel" value="email">
+                            </div>
+
+                            <!-- Contact Form Fields -->
+                            <div class="channel-form-fields">
+                                <div class="flex-row">
+                                    <div class="input-group">
+                                        <label for="companyName">Company / Studio Name *</label>
+                                        <input type="text" id="companyName" placeholder="e.g. Apex Property Media" required onblur="this.value = window.toTitleCase(this.value)">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="clientName">Contact Person Name (Optional)</label>
+                                        <input type="text" id="clientName" placeholder="e.g. John Miller" onblur="this.value = window.toTitleCase(this.value)">
+                                    </div>
+                                </div>
+
+                                <div class="flex-row" id="channelInputsRow">
+                                    <div class="input-group" id="emailInputGroup">
+                                        <label id="clientEmailLabel" for="clientEmail">Email Address *</label>
+                                        <input type="email" id="clientEmail" placeholder="contact@company.com" required oninput="checkEmailDuplicate()">
+                                        <div id="emailDuplicateWarning" class="email-warning-box" style="display: none;"></div>
+                                    </div>
+                                    <div class="input-group" id="socialUrlGroup" style="display: none;">
+                                        <label id="socialUrlLabel" for="socialUrl">Profile URL / Handle *</label>
+                                        <input type="text" id="socialUrl" placeholder="https://instagram.com/username">
+                                    </div>
+                                    <div class="input-group" id="websiteUrlGroup">
+                                        <label for="companyUrl">Website URL (Optional)</label>
+                                        <input type="text" id="companyUrl" placeholder="https://company.co.uk">
+                                    </div>
+                                </div>
+
+                                <div class="flex-row" style="align-items: flex-end; justify-content: space-between;">
+                                    <div class="input-group custom-select-group" id="countryDropdownGroup" style="max-width: 280px;">
+                                        <label>Target Region / Country</label>
+                                        <div class="custom-select-trigger" id="countryTrigger" tabindex="0" onclick="toggleCountryDropdown(event)">
+                                            <span id="countrySelectedText">🇬🇧 United Kingdom (UK)</span>
+                                            <span class="material-symbols-outlined" style="font-size: 20px;">expand_more</span>
+                                        </div>
+                                        <div class="custom-dropdown-menu" id="countryMenu">
+                                            <div class="custom-option selected" data-value="UK" onclick="selectCountry('UK', '🇬🇧 United Kingdom (UK)')">
+                                                <span>🇬🇧 United Kingdom (UK)</span>
+                                                <span class="material-symbols-outlined check-icon">check</span>
+                                            </div>
+                                            <div class="custom-option" data-value="Australia" onclick="selectCountry('Australia', '🇦🇺 Australia (AUS)')">
+                                                <span>🇦🇺 Australia (AUS)</span>
+                                                <span class="material-symbols-outlined check-icon">check</span>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="country" value="UK">
+                                    </div>
+
+                                    <div style="display: flex; gap: 10px; align-items: center;">
+                                        <button type="button" class="btn btn-tonal btn-tall" onclick="clearContactForm()">
+                                            <span class="material-symbols-outlined">restart_alt</span> Clear
+                                        </button>
+                                        <button type="button" class="btn btn-primary btn-tall" onclick="addContact()">
+                                            <span class="material-symbols-outlined">cloud_upload</span> Save to Cloud
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pending Contacts Table Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h2 class="card-title"><span class="material-symbols-outlined">contacts</span> Pending Outreach Workspace</h2>
+                                <p class="card-subtitle">Prioritized leads needing initial outreach or 3+ day follow-up</p>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                                <div class="input-group" style="min-width: 220px; margin-bottom: 0;">
+                                    <input type="text" id="workspaceSearchInput" placeholder="Search company, name or email..." oninput="renderContacts()">
+                                </div>
+                                <div class="segmented-btn-group">
+                                    <button type="button" class="segmented-btn active" id="wsBtnUK" onclick="setWorkspaceRegion('UK')">🇬🇧 UK</button>
+                                    <button type="button" class="segmented-btn" id="wsBtnAus" onclick="setWorkspaceRegion('Australia')">🇦🇺 Australia</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Company / Studio</th>
+                                        <th>Contact Person</th>
+                                        <th>Channel & Target</th>
+                                        <th>Region</th>
+                                        <th>Status / Follow-up</th>
+                                        <th style="text-align: right;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="contactTableBody">
+                                    <tr>
+                                        <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 36px;">
+                                            Loading contacts from Cloud Firestore...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. AUTOMATION & QUEUE HUB VIEW -->
+                <div id="queueView" class="view-section">
+                    <!-- Automation Status & Control Card -->
+                    <div class="automation-header-card">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                                <h2 style="font-size: 18px; margin: 0;">Cloud Scheduler Automation</h2>
+                                <div class="automation-status-pill status-active" id="hubAutomationStatusPill">
+                                    <div class="pulse-dot"></div>
+                                    <span id="hubAutomationStatusText">Active</span>
+                                </div>
+                            </div>
+                            <p style="font-size: 13px; color: var(--text-secondary); margin: 0;">
+                                Automated batch dispatcher running on a scheduled 3-minute gap per lead to ensure maximum deliverability and spam avoidance.
+                            </p>
+                        </div>
+                        <div class="switch-container">
+                            <span style="font-size: 13.5px; font-weight: 600;" id="switchLabelText">Automation On</span>
+                            <label class="switch">
+                                <input type="checkbox" id="automationToggleSwitch" checked onchange="toggleAutomationState(this.checked)">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Queue Breakdown Metric Cards -->
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="title"><span class="material-symbols-outlined" style="color: var(--primary);">hourglass_top</span> Today's Queue Size</div>
+                            <div class="value" id="queueTotalQueued">0</div>
+                            <div class="subtext">Leads ready for dispatch</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="title"><span class="material-symbols-outlined" style="color: var(--warning);">timer</span> Dispatch Interval</div>
+                            <div class="value" id="queueIntervalText">3 Min</div>
+                            <div class="subtext">Spacing between emails</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="title"><span class="material-symbols-outlined" style="color: var(--success);">rocket_launch</span> Next Dispatch Batch</div>
+                            <div class="value" id="queueNextDispatch" style="font-size: 20px;">09:00 AM</div>
+                            <div class="subtext" id="queueNextRegion">Target: UK Batch</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="title"><span class="material-symbols-outlined" style="color: var(--purple);">reply</span> Replied / Follow-up Stopped</div>
+                            <div class="value" id="queueTotalReplied">0</div>
+                            <div class="subtext">Contacts safely excluded</div>
+                        </div>
+                    </div>
+
+                    <!-- Queue Timelines Grid -->
+                    <div class="queue-grid">
+                        <!-- UK Batch Queue Card -->
+                        <div class="queue-card">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <h3 style="font-size: 15px; display: flex; align-items: center; gap: 8px;">🇬🇧 UK Dispatch Batch</h3>
+                                <span class="nav-badge" id="ukQueueBadge">0 Queued</span>
+                            </div>
+                            <p style="font-size: 12.5px; color: var(--text-secondary);">Simulated scheduled send timeline for pending UK prospects.</p>
+                            <div class="timeline-list" id="ukTimelineList">
+                                <div style="text-align: center; color: var(--text-muted); padding: 20px;">No pending leads in UK queue.</div>
+                            </div>
+                        </div>
+
+                        <!-- Australia Batch Queue Card -->
+                        <div class="queue-card">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <h3 style="font-size: 15px; display: flex; align-items: center; gap: 8px;">🇦🇺 Australia Dispatch Batch</h3>
+                                <span class="nav-badge" id="ausQueueBadge">0 Queued</span>
+                            </div>
+                            <p style="font-size: 12.5px; color: var(--text-secondary);">Simulated scheduled send timeline for pending Australia prospects.</p>
+                            <div class="timeline-list" id="ausTimelineList">
+                                <div style="text-align: center; color: var(--text-muted); padding: 20px;">No pending leads in Australia queue.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. OUTREACH HISTORY VIEW -->
+                <div id="historyView" class="view-section">
+                    <div class="card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                        <div>
+                            <h2 class="card-title"><span class="material-symbols-outlined">history</span> Outreaches Logged to Cloud</h2>
+                            <p class="card-subtitle">Track sent initial messages and follow-ups with one-click undo or reply tracking</p>
+                        </div>
+                        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                            <div class="input-group" style="min-width: 220px; margin-bottom: 0;">
+                                <input type="text" id="historySearchInput" placeholder="Search outreach history..." oninput="renderHistory()">
+                            </div>
+                            <div class="segmented-btn-group">
+                                <button type="button" class="segmented-btn active" id="histBtnUK" onclick="setHistoryRegion('UK')">🇬🇧 UK</button>
+                                <button type="button" class="segmented-btn" id="histBtnAus" onclick="setHistoryRegion('Australia')">🇦🇺 Australia</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Initial Outreaches Waiting for Follow-up -->
+                    <div class="card">
+                        <h2 class="card-title" style="color: var(--success); margin-bottom: 16px;">
+                            <span class="material-symbols-outlined">mark_email_read</span> Initial Sent (Waiting for Follow-up / Reply)
+                        </h2>
+                        <div id="historyInitialContainer"></div>
+                    </div>
+
+                    <!-- Follow-ups Sent -->
+                    <div class="card">
+                        <h2 class="card-title" style="color: var(--warning); margin-bottom: 16px;">
+                            <span class="material-symbols-outlined">forward_to_inbox</span> Follow-ups Completed
+                        </h2>
+                        <div id="historyFollowupContainer"></div>
+                    </div>
+                </div>
+
+                <!-- 4. DYNAMIC TEMPLATE MANAGER VIEW -->
+                <div id="templatesView" class="view-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h2 class="card-title"><span class="material-symbols-outlined">edit_note</span> Outreach Template Manager</h2>
+                                <p class="card-subtitle">Customize message copy, dynamic variables, and channel formats with direct Cloud Firestore sync</p>
+                            </div>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <button type="button" class="btn btn-tonal" onclick="resetTemplatesToDefault()">
+                                    <span class="material-symbols-outlined">restart_alt</span> Reset to Defaults
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="saveTemplatesToFirestore()">
+                                    <span class="material-symbols-outlined">save</span> Save Templates to Cloud
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Template Channel & Type Controls -->
+                        <div style="display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+                            <div class="segmented-btn-group" id="templateChannelGroup">
+                                <button type="button" class="segmented-btn active" id="tplChanEmail" onclick="switchTemplateChannel('email')">✉️ Email</button>
+                                <button type="button" class="segmented-btn" id="tplChanInstagram" onclick="switchTemplateChannel('instagram')">📷 Instagram</button>
+                                <button type="button" class="segmented-btn" id="tplChanLinkedin" onclick="switchTemplateChannel('linkedin')">💼 LinkedIn</button>
+                                <button type="button" class="segmented-btn" id="tplChanFacebook" onclick="switchTemplateChannel('facebook')">👥 Facebook</button>
+                            </div>
+
+                            <div class="segmented-btn-group" id="templateTypeGroup">
+                                <button type="button" class="segmented-btn active" id="tplTypeInitial" onclick="switchTemplateType('initial')">1️⃣ Initial Outreach</button>
+                                <button type="button" class="segmented-btn" id="tplTypeFollowup" onclick="switchTemplateType('followup')">2️⃣ Follow-up Message</button>
+                            </div>
+                        </div>
+
+                        <!-- Editor & Live Preview Grid -->
+                        <div class="template-manager-grid">
+                            <!-- Left: Live Form Editor -->
+                            <div>
+                                <div class="placeholder-chips-bar">
+                                    <span style="font-size: 11.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Click to Insert:</span>
+                                    <button type="button" class="chip-btn" onclick="insertPlaceholder('{Name}')">{Name}</button>
+                                    <button type="button" class="chip-btn" onclick="insertPlaceholder('{Company}')">{Company}</button>
+                                    <button type="button" class="chip-btn" onclick="insertPlaceholder('{Region}')">{Region}</button>
+                                </div>
+
+                                <div class="input-group" id="templateSubjectGroup" style="margin-bottom: 16px;">
+                                    <label for="templateSubjectInput">Email Subject Line</label>
+                                    <input type="text" id="templateSubjectInput" placeholder="Subject with placeholders..." oninput="updateTemplatePreview()">
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="templateBodyInput" id="templateBodyLabel">Email Body Copy</label>
+                                    <textarea id="templateBodyInput" rows="12" placeholder="Write message body here..." oninput="updateTemplatePreview()"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Right: Live Realtime Preview -->
+                            <div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <span style="font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Live Render Preview</span>
+                                    <span class="nav-badge">Sample Lead: Apex Property Media (UK)</span>
+                                </div>
+                                <div id="templatePreviewSubject" style="font-weight: 700; font-size: 14px; margin-bottom: 10px; padding: 10px; background: var(--bg-card-subtle); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                                    Subject: ...
+                                </div>
+                                <div class="preview-box" id="templatePreviewBody"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. PROGRESS & ANALYTICS VIEW -->
+                <div id="analyticsView" class="view-section">
+                    <!-- Top Metrics Grid -->
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="title"><span class="material-symbols-outlined" style="color: var(--primary);">groups</span> Total Campaign Leads</div>
+                            <div class="value" id="metricTotalContacts">0</div>
+                            <div class="subtext">Active prospective studios</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="title"><span class="material-symbols-outlined" style="color: var(--warning);">notification_important</span> Follow-ups Pending</div>
+                            <div class="value" id="metricPendingFollowups" style="color: var(--warning);">0</div>
+                            <div class="subtext">3+ days since initial email</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="title"><span class="material-symbols-outlined" style="color: var(--success);">mark_email_read</span> Initial Outreaches</div>
+                            <div class="value" id="metricTotalSent" style="color: var(--success);">0</div>
+                            <div class="subtext">First contacts made</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="title"><span class="material-symbols-outlined" style="color: #ea580c;">forward_to_inbox</span> Follow-ups Sent</div>
+                            <div class="value" id="metricTotalFollowupsSent" style="color: #ea580c;">0</div>
+                            <div class="subtext">Second touchpoints delivered</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="title"><span class="material-symbols-outlined" style="color: var(--purple);">forum</span> Replied / Conversions</div>
+                            <div class="value" id="metricTotalReplied" style="color: var(--purple);">0</div>
+                            <div class="subtext">Positive responses</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="title"><span class="material-symbols-outlined" style="color: var(--primary);">pie_chart</span> Initial Completion</div>
+                            <div class="value" id="metricCompletionRate">0%</div>
+                            <div class="subtext">Initial sent vs total list</div>
+                        </div>
+                    </div>
+
+                    <!-- Country Breakdown Cards -->
+                    <div class="country-card-grid">
+                        <!-- UK Card -->
+                        <div class="card" style="margin-bottom: 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                                <h3 style="display: flex; align-items: center; gap: 8px; font-size: 16px;">🇬🇧 United Kingdom Market</h3>
+                                <span class="nav-badge" id="ukCompletionBadge">0% Done</span>
+                            </div>
+
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" id="ukProgressBar" style="width: 0%;"></div>
+                            </div>
+
+                            <div style="margin-top: 16px;">
+                                <div class="stat-row">
+                                    <span class="stat-label">Total Leads on File</span>
+                                    <span class="stat-val" id="ukListCount">0</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Follow-ups Due (3+ Days)</span>
+                                    <span class="stat-val" id="ukPendingFollowups" style="color: var(--warning);">0</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Initial Outreaches Sent</span>
+                                    <span class="stat-val" id="ukSentCount" style="color: var(--success);">0</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Follow-ups Sent</span>
+                                    <span class="stat-val" id="ukFollowupCount" style="color: #ea580c;">0</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Replied / Stopped Follow-up</span>
+                                    <span class="stat-val" id="ukRepliedCount" style="color: var(--purple);">0</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Pending Initial Leads</span>
+                                    <span class="stat-val" id="ukPendingCount" style="color: var(--error);">0</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Activity Today (Sent Today)</span>
+                                    <span class="stat-val" id="ukTodayCount" style="color: var(--primary);">0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Australia Card -->
+                        <div class="card" style="margin-bottom: 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                                <h3 style="display: flex; align-items: center; gap: 8px; font-size: 16px;">🇦🇺 Australia Market</h3>
+                                <span class="nav-badge" id="ausCompletionBadge">0% Done</span>
+                            </div>
+
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" id="ausProgressBar" style="width: 0%;"></div>
+                            </div>
+
+                            <div style="margin-top: 16px;">
+                                <div class="stat-row">
+                                    <span class="stat-label">Total Leads on File</span>
+                                    <span class="stat-val" id="ausListCount">0</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Follow-ups Due (3+ Days)</span>
+                                    <span class="stat-val" id="ausPendingFollowups" style="color: var(--warning);">0</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Initial Outreaches Sent</span>
+                                    <span class="stat-val" id="ausSentCount" style="color: var(--success);">0</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Follow-ups Sent</span>
+                                    <span class="stat-val" id="ausFollowupCount" style="color: #ea580c;">0</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Replied / Stopped Follow-up</span>
+                                    <span class="stat-val" id="ausRepliedCount" style="color: var(--purple);">0</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Pending Initial Leads</span>
+                                    <span class="stat-val" id="ausPendingCount" style="color: var(--error);">0</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Activity Today (Sent Today)</span>
+                                    <span class="stat-val" id="ausTodayCount" style="color: var(--primary);">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. SETTINGS VIEW -->
+                <div id="settingsView" class="view-section">
+                    <div class="card">
+                        <h2 class="card-title" style="margin-bottom: 20px;"><span class="material-symbols-outlined">tune</span> System Preferences & Export Tools</h2>
+                        
+                        <div class="flex-row" style="gap: 24px;">
+                            <!-- Data Export -->
+                            <div style="flex: 1; min-width: 280px; padding: 20px; background: var(--bg-card-subtle); border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
+                                <h3 style="font-size: 15px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                                    <span class="material-symbols-outlined" style="color: var(--primary);">download</span> Export CRM Database
+                                </h3>
+                                <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Download full contacts and outreach history records as CSV spreadsheets.</p>
+                                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                    <button type="button" class="btn btn-tonal" onclick="exportContactsCsv()">
+                                        <span class="material-symbols-outlined">table_view</span> Export Contacts (.csv)
+                                    </button>
+                                    <button type="button" class="btn btn-outline" onclick="downloadSampleCsv()">
+                                        <span class="material-symbols-outlined">description</span> Sample Import CSV
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- User & Access Security -->
+                            <div style="flex: 1; min-width: 280px; padding: 20px; background: var(--bg-card-subtle); border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
+                                <h3 style="font-size: 15px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                                    <span class="material-symbols-outlined" style="color: var(--success);">security</span> Authorized Workspace
+                                </h3>
+                                <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">Authenticated Google Session:</p>
+                                <div style="font-family: monospace; font-size: 13px; color: var(--primary); background: var(--bg-card); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); margin-bottom: 16px;" id="settingsAuthEmailDisplay">
+                                    auth@lavientra.com
+                                </div>
+                                <button type="button" class="btn btn-error" onclick="logout()">
+                                    <span class="material-symbols-outlined">logout</span> End Session (Sign Out)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /view-container -->
+        </main>
+    </div>
+    <!-- /appContainer -->
+
+    <!-- ==========================================
+         MODALS & DIALOGS
+         ========================================== -->
+
+    <!-- 1. DRAFT EMAIL / DM DIALOG -->
+    <dialog id="emailDialog">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+            <h2 style="margin: 0; font-size: 18px;" id="modalDialogTitle">Draft Outreach</h2>
+            <button type="button" class="btn btn-tonal btn-sm" onclick="copyText('all', this)">
+                <span class="material-symbols-outlined" style="font-size: 16px;">content_copy</span> Copy Full Message
+            </button>
+        </div>
+
+        <div class="flex-row" id="dialogSubjectRow" style="align-items: center; margin-bottom: 12px;">
+            <div class="input-group" style="flex: 1; min-width: auto;">
+                <label for="emailSubject">Subject</label>
+                <input type="text" id="emailSubject" value="Quick question regarding [Company]">
+            </div>
+            <button type="button" class="btn btn-tonal" onclick="copyText('emailSubject', this)" title="Copy Subject" style="height: 42px; margin-top: 22px;">
+                <span class="material-symbols-outlined" style="font-size: 16px;">content_copy</span> Subject
+            </button>
+        </div>
+
+        <div class="flex-row" style="align-items: flex-start;">
+            <div class="input-group" style="flex: 1; min-width: auto;">
+                <label id="dialogBodyLabel" for="generatedEmail">Message Body</label>
+                <textarea id="generatedEmail" rows="11"></textarea>
+            </div>
+            <button type="button" class="btn btn-tonal" onclick="copyText('generatedEmail', this)" title="Copy Body" style="height: 42px; margin-top: 22px;">
+                <span class="material-symbols-outlined" style="font-size: 16px;">content_copy</span> Body
+            </button>
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin-top: 20px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-outline" onclick="closeTemplate()">Cancel</button>
+            <button type="button" class="btn btn-tonal" id="modalOpenPlatformBtn" onclick="markAsSent(true)">
+                <span class="material-symbols-outlined">mail</span> Open in Gmail & Log
+            </button>
+            <button type="button" class="btn btn-primary" id="modalMarkAsSentBtn" onclick="markAsSent(false)">
+                <span class="material-symbols-outlined">send</span> Mark as Sent
+            </button>
+        </div>
+        <input type="hidden" id="currentContactId">
+        <input type="hidden" id="currentEmailTarget">
+        <input type="hidden" id="currentEmailType" value="initial">
+        <input type="hidden" id="currentChannelType" value="email">
+    </dialog>
+
+    <!-- 2. CSV BULK IMPORTER DIALOG -->
+    <dialog id="csvImportDialog" style="max-width: 780px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h2 style="margin: 0; font-size: 18px;"><span class="material-symbols-outlined" style="vertical-align: middle; color: var(--primary);">upload_file</span> Bulk CSV Lead Importer</h2>
+            <button type="button" class="icon-btn" onclick="closeCsvModal()"><span class="material-symbols-outlined">close</span></button>
+        </div>
+
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">
+            Upload your lead CSV. Supported headers: <code>Company Name</code>, <code>Client Name</code>, <code>Email</code>, <code>Channel</code>, <code>Social URL</code>, <code>Region (UK/Australia)</code>, <code>Website</code>.
+        </p>
+
+        <!-- Drag & Drop Zone -->
+        <div class="csv-dropzone" id="csvDropzone" onclick="document.getElementById('csvFileInput').click()">
+            <span class="material-symbols-outlined dropzone-icon">cloud_upload</span>
+            <div style="font-size: 14.5px; font-weight: 600; margin-bottom: 4px;">Drag & Drop your CSV file here, or browse</div>
+            <div style="font-size: 12px; color: var(--text-muted);">Supports standard .csv format with headers</div>
+            <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="handleCsvFileSelect(event)">
+        </div>
+
+        <!-- Parsed Leads Preview Area -->
+        <div id="csvPreviewContainer" style="display: none; margin-top: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-size: 13px; font-weight: 700;" id="csvParsedCount">0 Valid Leads Detected</span>
+                <span style="font-size: 12px; color: var(--warning);" id="csvDuplicateCount"></span>
+            </div>
+            <div class="table-responsive" style="max-height: 240px; overflow-y: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Contact</th>
+                            <th>Target / Channel</th>
+                            <th>Region</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="csvPreviewTableBody"></tbody>
+                </table>
+            </div>
+
+            <!-- Upload Progress Bar -->
+            <div id="csvProgressBarContainer" style="display: none; margin-top: 14px;">
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="csvProgressBarFill" style="width: 0%;"></div>
+                </div>
+                <div style="text-align: center; font-size: 12px; color: var(--text-secondary); margin-top: 4px;" id="csvProgressText">Importing leads to Cloud...</div>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="downloadSampleCsv()">
+                <span class="material-symbols-outlined">download</span> Download Sample Template
+            </button>
+            <div style="display: flex; gap: 10px;">
+                <button type="button" class="btn btn-tonal" onclick="closeCsvModal()">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btnExecuteCsvImport" onclick="executeCsvImport()" disabled>
+                    <span class="material-symbols-outlined">publish</span> Import Leads to Cloud
+                </button>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Toast Notification Anchor -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ==========================================
+         FIREBASE SDKs & APPLICATION SCRIPTS
+         ========================================== -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
