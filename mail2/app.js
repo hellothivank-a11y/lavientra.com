@@ -1,16 +1,15 @@
 // ==========================================================================
 // LAVIENTRA STUDIO COMMAND CENTER — CRM & MANTINE UI ENGINE (v7+)
+// Manual Outreach Workflow: Copy Address, Subject, Body + Mark as Sent
 // ==========================================================================
 
 window.contacts = [];
 window.logs = [];
 window.followupLogs = [];
 window.activeWorkspaceRegion = 'UK';
-window.activeHistoryRegion = 'UK';
 window.activeMainTab = 'workspace';
 window.activePipelineStage = 'all';
 window.activeTemplateMarket = 'UK';
-window.isSchedulerActive = true;
 
 // Default Market Pitch Templates
 window.templates = {
@@ -27,7 +26,7 @@ window.templates = {
 // ==========================================================================
 // 1. MANTINE NOTIFICATIONS SYSTEM (@mantine/notifications)
 // ==========================================================================
-window.showNotification = function ({ title, message, color = 'indigo', icon = 'info', autoClose = 4000 }) {
+window.showNotification = function ({ title, message, color = 'indigo', icon = 'info', autoClose = 3500 }) {
     const container = document.getElementById('mantineNotifications');
     if (!container) return;
 
@@ -96,7 +95,7 @@ window.toggleTheme = function () {
     if (icon) icon.innerText = isDark ? 'light_mode' : 'dark_mode';
     window.showNotification({
         title: isDark ? 'Dark Mode Enabled' : 'Light Mode Enabled',
-        message: `Interface theme switched to ${isDark ? 'Dark Slate' : 'Clean High-Contrast Light'}.`,
+        message: `Interface theme switched to ${isDark ? 'Dark Slate' : 'Clean Light'}.`,
         color: 'indigo'
     });
 };
@@ -110,7 +109,7 @@ window.switchMainTab = function (tab) {
     window.activeMainTab = tab;
 
     // Update NavLinks
-    ['workspace', 'pipeline', 'scheduler', 'templates', 'analytics'].forEach(t => {
+    ['workspace', 'pipeline', 'templates', 'analytics'].forEach(t => {
         const navEl = document.getElementById(`nav${t.charAt(0).toUpperCase() + t.slice(1)}`);
         const modEl = document.getElementById(`${t}Module`);
         if (navEl) navEl.classList.toggle('active', t === tab);
@@ -123,14 +122,12 @@ window.switchMainTab = function (tab) {
         const titles = {
             workspace: 'Workspace Dashboard',
             pipeline: 'Pipeline & Stage Manager',
-            scheduler: 'Queue & Cloud Scheduler',
             templates: 'Template Studio',
             analytics: 'Progress & Analytics'
         };
         currentModEl.innerText = titles[tab] || tab;
     }
 
-    // Close mobile navbar if open
     const navbar = document.getElementById('appNavbar');
     if (navbar && window.innerWidth <= 1024) navbar.classList.remove('opened');
 
@@ -165,7 +162,77 @@ window.setPipelineStageFilter = function (stage) {
 };
 
 // ==========================================================================
-// 3. CONTACTS & PIPELINE RENDERING
+// 3. COPY HELPER FUNCTIONS (EMAIL, SUBJECT, BODY, ALL)
+// ==========================================================================
+window.copyFieldValue = function (fieldId, btnElement) {
+    const el = document.getElementById(fieldId);
+    if (!el || !el.value) return;
+
+    navigator.clipboard.writeText(el.value).then(() => {
+        if (btnElement) {
+            const originalHTML = btnElement.innerHTML;
+            btnElement.innerHTML = `<span class="material-symbols-outlined" style="font-size: 15px; color: var(--mantine-color-teal-6);">check</span> Copied!`;
+            setTimeout(() => { btnElement.innerHTML = originalHTML; }, 1500);
+        }
+        window.showNotification({ title: 'Copied', message: 'Field copied to clipboard.', color: 'teal' });
+    });
+};
+
+window.copyValueDirect = function (text, btnElement) {
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+        if (btnElement) {
+            const originalHTML = btnElement.innerHTML;
+            btnElement.innerHTML = `<span class="material-symbols-outlined" style="font-size: 16px; color: var(--mantine-color-teal-6);">check</span>`;
+            setTimeout(() => { btnElement.innerHTML = originalHTML; }, 1500);
+        }
+        window.showNotification({ title: 'Copied', message: `"${text}" copied to clipboard.`, color: 'teal' });
+    });
+};
+
+window.copyAllOutreach = function (btnElement) {
+    const email = document.getElementById('modalTargetAddress')?.value || '';
+    const subject = document.getElementById('emailSubject')?.value || '';
+    const body = document.getElementById('generatedEmail')?.value || '';
+
+    const textToCopy = `To: ${email}\nSubject: ${subject}\n\n${body}`;
+
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        if (btnElement) {
+            const originalHTML = btnElement.innerHTML;
+            btnElement.innerHTML = `<span class="material-symbols-outlined" style="font-size: 15px; color: var(--mantine-color-teal-6);">check</span> Copied All!`;
+            setTimeout(() => { btnElement.innerHTML = originalHTML; }, 1500);
+        }
+        window.showNotification({ title: 'Copied All', message: 'Address, Subject, and Body copied to clipboard.', color: 'teal' });
+    });
+};
+
+window.copyTemplateSubject = function (btnElement) {
+    const el = document.getElementById('templateSubjectInput');
+    if (el) window.copyFieldValue('templateSubjectInput', btnElement);
+};
+
+window.copyTemplateBody = function (btnElement) {
+    const el = document.getElementById('templateBodyInput');
+    if (el) window.copyFieldValue('templateBodyInput', btnElement);
+};
+
+window.copyFullPreview = function (btnElement) {
+    const sub = document.getElementById('previewSubjectText')?.innerText || '';
+    const body = document.getElementById('previewBodyText')?.innerText || '';
+    const text = `Subject: ${sub}\n\n${body}`;
+    navigator.clipboard.writeText(text).then(() => {
+        if (btnElement) {
+            const originalHTML = btnElement.innerHTML;
+            btnElement.innerHTML = `<span class="material-symbols-outlined" style="font-size: 14px; color: var(--mantine-color-teal-6);">check</span> Copied!`;
+            setTimeout(() => { btnElement.innerHTML = originalHTML; }, 1500);
+        }
+        window.showNotification({ title: 'Copied Full Preview', message: 'Subject and body copied.', color: 'teal' });
+    });
+};
+
+// ==========================================================================
+// 4. CONTACTS & PIPELINE RENDERING
 // ==========================================================================
 window.toTitleCase = function (str) {
     if (!str) return '';
@@ -246,7 +313,6 @@ window.renderContacts = function () {
     const tbody = document.getElementById('contactTableBody');
     if (!tbody) return;
 
-    // Apply Region, Search & Channel Filters
     const searchQuery = (document.getElementById('pipelineSearchInput')?.value || '').toLowerCase().trim();
     const channelFilter = document.getElementById('pipelineChannelFilter')?.value || 'all';
 
@@ -264,7 +330,6 @@ window.renderContacts = function () {
         list = list.filter(c => (c.channel || 'email') === channelFilter);
     }
 
-    // Counts for Stage Pills
     const countAll = list.length;
     const countDue = list.filter(c => window.getContactStatusInfo(c).status === 'followup_due').length;
     const countNever = list.filter(c => window.getContactStatusInfo(c).status === 'never_sent').length;
@@ -280,7 +345,6 @@ window.renderContacts = function () {
     if (bNever) bNever.innerText = countNever;
     if (bSent) bSent.innerText = countSent;
 
-    // Filter by Active Stage Tab
     if (window.activePipelineStage !== 'all') {
         list = list.filter(c => window.getContactStatusInfo(c).status === window.activePipelineStage);
     }
@@ -315,11 +379,23 @@ window.renderContacts = function () {
         }
 
         let targetContent = '';
+        const targetVal = channel === 'email' ? contact.email : contact.socialUrl;
+
         if (channel === 'email') {
-            targetContent = `<span>${contact.email || '-'}</span>`;
+            targetContent = `
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span>${contact.email || '-'}</span>
+                    ${contact.email ? `<button type="button" class="mantine-ActionIcon-root" style="width: 26px; height: 26px;" onclick="copyValueDirect('${contact.email}', this)" title="Copy Email"><span class="material-symbols-outlined" style="font-size: 15px;">content_copy</span></button>` : ''}
+                </div>
+            `;
         } else {
             const socUrl = window.formatSocialUrl(contact.socialUrl, channel);
-            targetContent = `<a href="${socUrl}" target="_blank" style="font-weight: 500;">${contact.socialUrl || 'View Handle'}</a>`;
+            targetContent = `
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <a href="${socUrl}" target="_blank" style="font-weight: 500;">${contact.socialUrl || 'View Handle'}</a>
+                    ${contact.socialUrl ? `<button type="button" class="mantine-ActionIcon-root" style="width: 26px; height: 26px;" onclick="copyValueDirect('${contact.socialUrl}', this)" title="Copy Handle"><span class="material-symbols-outlined" style="font-size: 15px;">content_copy</span></button>` : ''}
+                </div>
+            `;
         }
 
         tr.innerHTML = `
@@ -350,13 +426,12 @@ window.renderContacts = function () {
         tbody.appendChild(tr);
     });
 
-    // Update Navbar Badges
     const navPipelineBadge = document.getElementById('navPipelineBadge');
     if (navPipelineBadge) navPipelineBadge.innerText = window.contacts.length;
 };
 
 // ==========================================================================
-// 4. ADD CONTACT & VALIDATION
+// 5. ADD CONTACT & VALIDATION
 // ==========================================================================
 window.activeOutreachChannel = 'email';
 
@@ -497,7 +572,7 @@ window.deleteContact = async function (contactId, companyName) {
 };
 
 // ==========================================================================
-// 5. TEMPLATE STUDIO & LIVE PREVIEW
+// 6. TEMPLATE STUDIO & LIVE PREVIEW
 // ==========================================================================
 window.switchTemplateMarket = function (market) {
     window.activeTemplateMarket = market;
@@ -564,7 +639,7 @@ window.saveCurrentTemplate = function () {
 };
 
 // ==========================================================================
-// 6. OUTREACH MODAL & DRAFTING
+// 7. OUTREACH MODAL & MARK AS SENT ACTION
 // ==========================================================================
 window.generateEmail = function (id, type = 'initial') {
     const contact = window.contacts.find(c => c.id === id);
@@ -590,12 +665,20 @@ window.generateEmail = function (id, type = 'initial') {
     }
 
     const subRow = document.getElementById('dialogSubjectRow');
-    if (subRow) subRow.style.display = channel === 'email' ? 'flex' : 'none';
+    if (subRow) subRow.style.display = channel === 'email' ? 'block' : 'none';
+
+    // Target field
+    const targetAddressEl = document.getElementById('modalTargetAddress');
+    const targetLabelEl = document.getElementById('modalTargetLabel');
+    const targetVal = channel === 'email' ? (contact.email || '') : (contact.socialUrl || '');
+
+    if (targetAddressEl) targetAddressEl.value = targetVal;
+    if (targetLabelEl) targetLabelEl.innerText = channel === 'email' ? 'Recipient Email Address' : `${channel.charAt(0).toUpperCase() + channel.slice(1)} Profile / Handle`;
 
     document.getElementById('emailSubject').value = subject;
     document.getElementById('generatedEmail').value = body;
     document.getElementById('currentContactId').value = contact.id;
-    document.getElementById('currentEmailTarget').value = contact.email || '';
+    document.getElementById('currentEmailTarget').value = targetVal;
     document.getElementById('currentEmailType').value = type;
     document.getElementById('currentChannelType').value = channel;
 
@@ -607,37 +690,22 @@ window.closeTemplate = function () {
     if (modal) modal.classList.remove('opened');
 };
 
-window.copyText = function (target, btn) {
-    const el = document.getElementById(target);
-    if (!el) return;
-    navigator.clipboard.writeText(el.value).then(() => {
-        window.showNotification({ title: 'Copied to Clipboard', message: 'Content copied successfully.', color: 'teal' });
-    });
-};
-
-window.markAsSent = async function (openPlatform = false) {
+// Core "Mark as Sent" Action
+window.markAsSent = async function () {
     const contactId = document.getElementById('currentContactId')?.value;
     const email = document.getElementById('currentEmailTarget')?.value || '';
     const type = document.getElementById('currentEmailType')?.value || 'initial';
     const channel = document.getElementById('currentChannelType')?.value || 'email';
     const subject = document.getElementById('emailSubject')?.value || '';
-    const body = document.getElementById('generatedEmail')?.value || '';
 
     const targetContact = window.contacts.find(c => c.id === contactId);
     const country = targetContact ? targetContact.country : 'UK';
     const targetCol = type === 'followup' ? followupLogsCol : logsCol;
 
-    if (openPlatform) {
-        if (channel === 'email' && email) {
-            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            window.open(gmailUrl, '_blank');
-        } else if (targetContact && targetContact.socialUrl) {
-            const socUrl = window.formatSocialUrl(targetContact.socialUrl, channel);
-            if (socUrl) window.open(socUrl, '_blank');
-        }
+    if (!targetCol) {
+        window.showNotification({ title: 'Database Error', message: 'Database connection not ready.', color: 'red' });
+        return;
     }
-
-    if (!targetCol) return;
 
     try {
         const now = new Date();
@@ -664,41 +732,18 @@ window.markAsSent = async function (openPlatform = false) {
 
         window.closeTemplate();
         window.showNotification({
-            title: 'Outreach Logged',
-            message: `Logged ${type === 'followup' ? 'follow-up' : 'initial'} message for ${targetContact?.company || 'contact'}.`,
+            title: 'Marked as Sent',
+            message: `Logged ${type === 'followup' ? 'follow-up' : 'initial outreach'} for ${targetContact?.company || 'contact'}.`,
             color: 'teal'
         });
     } catch (e) {
-        window.showNotification({ title: 'Logging Failed', message: e.message, color: 'red' });
+        window.showNotification({ title: 'Error Logging Sent', message: e.message, color: 'red' });
     }
 };
 
 // ==========================================================================
-// 7. SCHEDULER & ANALYTICS
+// 8. PROGRESS & ANALYTICS
 // ==========================================================================
-window.toggleSchedulerEngine = function () {
-    window.isSchedulerActive = !window.isSchedulerActive;
-    const sw = document.getElementById('schedulerSwitch');
-    const badge = document.getElementById('schedulerStatusBadge');
-    const headerBadge = document.getElementById('headerAutomationBadge');
-
-    if (sw) sw.classList.toggle('checked', window.isSchedulerActive);
-    if (badge) {
-        badge.className = `mantine-Badge-root ${window.isSchedulerActive ? 'mantine-Badge-teal' : 'mantine-Badge-gray'}`;
-        badge.innerHTML = window.isSchedulerActive ? '<span class="pulse-dot"></span> Active (Listening)' : 'Engine Paused';
-    }
-    if (headerBadge) {
-        headerBadge.className = `mantine-Badge-root ${window.isSchedulerActive ? 'mantine-Badge-teal' : 'mantine-Badge-gray'}`;
-        headerBadge.innerHTML = `<span class="pulse-dot"></span> <span>Scheduler: ${window.isSchedulerActive ? 'Active' : 'Paused'}</span>`;
-    }
-
-    window.showNotification({
-        title: window.isSchedulerActive ? 'Cloud Scheduler Active' : 'Cloud Scheduler Paused',
-        message: window.isSchedulerActive ? 'Adhering to regional market active hours.' : 'Automated dispatching has been suspended.',
-        color: window.isSchedulerActive ? 'teal' : 'amber'
-    });
-};
-
 window.renderAnalytics = function () {
     const todayIso = new Date().toISOString().split('T')[0];
     const contactsData = window.contacts;
@@ -764,7 +809,7 @@ window.renderAnalytics = function () {
 };
 
 // ==========================================================================
-// 8. FIREBASE AUTH & FIRESTORE INTEGRATION
+// 9. FIREBASE AUTH & FIRESTORE INTEGRATION
 // ==========================================================================
 const ALLOWED_EMAILS = [
     "thivanka.ltk@gmail.com",
@@ -880,7 +925,7 @@ window.logout = async function () {
 };
 
 // ==========================================================================
-// 9. INITIALIZATION
+// 10. INITIALIZATION
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
     window.initTheme();
