@@ -165,18 +165,99 @@ a:hover {
     display: flex;
     flex: 1;
     min-height: calc(100vh - var(--appshell-header-height));
-}
-
-.mantine-AppShell-navbar {
+    position: relative;
+}.mantine-AppShell-navbar {
     width: var(--appshell-navbar-width);
     background-color: var(--mantine-color-navbar-bg);
     border-right: 1px solid var(--mantine-color-border);
-    padding: 20px 16px;
+    padding: 20px 14px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     flex-shrink: 0;
-    transition: transform 0.2s ease, width 0.2s ease;
+    transition: width 0.3s cubic-bezier(0.2, 0, 0, 1), padding 0.3s cubic-bezier(0.2, 0, 0, 1), transform 0.3s cubic-bezier(0.2, 0, 0, 1);
+    overflow: hidden;
+    white-space: nowrap;
+    will-change: width, padding;
+}
+
+.nav-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--mantine-color-dimmed);
+    padding: 0 12px 8px 12px;
+    display: block;
+    opacity: 1;
+    max-height: 30px;
+    transition: opacity 0.2s ease, max-height 0.25s ease, padding 0.25s ease;
+}
+
+.navbar-bottom-card {
+    opacity: 1;
+    max-height: 140px;
+    overflow: hidden;
+    transition: opacity 0.2s ease, max-height 0.3s cubic-bezier(0.2, 0, 0, 1), padding 0.3s ease, margin 0.3s ease, border-color 0.2s ease;
+}
+
+/* Desktop Compact / Icon-Only Collapsed Sidebar */
+.mantine-AppShell-navbar.collapsed {
+    width: 68px;
+    padding: 20px 10px;
+    margin-left: 0;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.mantine-AppShell-navbar.collapsed .nav-section-title {
+    opacity: 0;
+    max-height: 0;
+    padding: 0;
+    margin: 0;
+    pointer-events: none;
+}
+
+.mantine-AppShell-navbar.collapsed .mantine-NavLink-root {
+    padding: 10px 0;
+    justify-content: center;
+    width: 48px;
+    margin: 0 auto;
+}
+
+.mantine-AppShell-navbar.collapsed .mantine-NavLink-left {
+    justify-content: center;
+    gap: 0;
+    flex: initial;
+}
+
+.mantine-AppShell-navbar.collapsed .mantine-NavLink-left span:not(.mantine-NavLink-icon) {
+    opacity: 0;
+    max-width: 0;
+    pointer-events: none;
+}
+
+.mantine-AppShell-navbar.collapsed .mantine-NavLink-root > .mantine-Badge-root {
+    opacity: 0;
+    transform: scale(0.5);
+    pointer-events: none;
+    max-width: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.mantine-AppShell-navbar.collapsed .navbar-bottom-card {
+    opacity: 0;
+    max-height: 0;
+    padding: 0 10px;
+    margin: 0;
+    border-color: transparent;
+    pointer-events: none;
+}
+
+.mantine-AppShell-navbar.collapsed .mantine-NavLink-icon {
+    margin-right: 0 !important;
+    font-size: 22px;
 }
 
 .mantine-AppShell-main {
@@ -186,6 +267,20 @@ a:hover {
     margin: 0 auto;
     width: 100%;
     overflow-x: hidden;
+    transition: padding 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Mobile & Tablet Sidebar Drawer */
+.mantine-AppShell-backdrop {
+    display: none;
+    position: fixed;
+    top: var(--appshell-header-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(2px);
+    z-index: 98;
 }
 
 @media (max-width: 1024px) {
@@ -196,10 +291,32 @@ a:hover {
         left: 0;
         z-index: 99;
         transform: translateX(-100%);
+        width: var(--appshell-navbar-width) !important;
+        padding: 20px 16px !important;
+        margin-left: 0 !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
         box-shadow: var(--mantine-shadow-lg);
     }
     .mantine-AppShell-navbar.opened {
         transform: translateX(0);
+    }
+    .mantine-AppShell-navbar.collapsed {
+        width: var(--appshell-navbar-width) !important;
+    }
+    .mantine-AppShell-navbar.collapsed .mantine-NavLink-left span:not(.mantine-NavLink-icon),
+    .mantine-AppShell-navbar.collapsed .mantine-NavLink-root > .mantine-Badge-root,
+    .mantine-AppShell-navbar.collapsed .nav-section-title,
+    .mantine-AppShell-navbar.collapsed .navbar-bottom-card {
+        display: flex !important;
+        opacity: 1 !important;
+        max-height: none !important;
+        max-width: none !important;
+    }
+    .mantine-AppShell-navbar.collapsed .mantine-NavLink-root {
+        justify-content: space-between !important;
+        width: 100% !important;
+        padding: 10px 14px !important;
     }
     .mantine-AppShell-main {
         padding: 20px 16px;
@@ -221,15 +338,14 @@ a:hover {
     background: transparent;
     width: 100%;
     text-align: left;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition: background-color 0.15s ease, color 0.15s ease, padding 0.3s cubic-bezier(0.2, 0, 0, 1), width 0.3s cubic-bezier(0.2, 0, 0, 1);
     text-decoration: none;
-    margin-bottom: 4px;
+    overflow: hidden;
 }
 
 .mantine-NavLink-root:hover {
     background-color: var(--mantine-color-surface-hover);
     color: var(--mantine-color-text);
-    text-decoration: none;
 }
 
 .mantine-NavLink-root.active {
@@ -242,6 +358,23 @@ a:hover {
     display: flex;
     align-items: center;
     gap: 12px;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.mantine-NavLink-left span:not(.mantine-NavLink-icon) {
+    opacity: 1;
+    max-width: 160px;
+    transition: opacity 0.2s ease, max-width 0.25s cubic-bezier(0.2, 0, 0, 1);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mantine-NavLink-root > .mantine-Badge-root {
+    opacity: 1;
+    transition: opacity 0.2s ease, transform 0.2s ease, max-width 0.25s ease;
 }
 
 .mantine-NavLink-icon {
@@ -250,6 +383,8 @@ a:hover {
     align-items: center;
     justify-content: center;
     color: var(--mantine-color-dimmed);
+    transition: color 0.15s ease, font-size 0.25s cubic-bezier(0.2, 0, 0, 1);
+    flex-shrink: 0;
 }
 
 .mantine-NavLink-root.active .mantine-NavLink-icon {
@@ -612,22 +747,54 @@ textarea.mantine-Input-input {
     flex-shrink: 0;
 }
 
-/* 13. Mantine Data Table (highlightOnHover, verticalSpacing="sm", horizontalSpacing="md") */
+/* 13. Mantine Data Table (Sticky Headers + Always-Visible Viewport Bottom Seek Bar) */
 .mantine-Table-wrapper {
     overflow-x: auto;
+    overflow-y: auto;
+    max-height: calc(100vh - 300px);
+    min-height: 260px;
     border-radius: var(--mantine-radius-md);
     border: 1px solid var(--mantine-color-border);
     background-color: var(--mantine-color-surface);
+    position: relative;
+    scrollbar-width: thin;
+    scrollbar-color: var(--mantine-color-primary) var(--mantine-color-surface-active);
+}
+
+/* Custom Styled Viewport Bottom Horizontal Seek Bar */
+.mantine-Table-wrapper::-webkit-scrollbar {
+    height: 10px;
+    width: 8px;
+}
+
+.mantine-Table-wrapper::-webkit-scrollbar-track {
+    background-color: var(--mantine-color-surface-hover);
+    border-radius: 5px;
+}
+
+.mantine-Table-wrapper::-webkit-scrollbar-thumb {
+    background-color: var(--mantine-color-dimmed);
+    border-radius: 5px;
+    border: 2px solid var(--mantine-color-surface-hover);
+}
+
+.mantine-Table-wrapper::-webkit-scrollbar-thumb:hover {
+    background-color: var(--mantine-color-primary);
 }
 
 .mantine-Table-root {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     font-size: 13.5px;
     text-align: left;
+    min-width: 900px;
 }
 
-.mantine-Table-root th {
+.mantine-Table-root thead th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
     background-color: var(--mantine-color-surface-hover);
     padding: 12px 16px;
     font-weight: 600;
@@ -636,6 +803,7 @@ textarea.mantine-Input-input {
     font-size: 12.5px;
     text-transform: uppercase;
     letter-spacing: 0.04em;
+    box-shadow: 0 1px 0 var(--mantine-color-border);
 }
 
 .mantine-Table-root td {
@@ -643,13 +811,14 @@ textarea.mantine-Input-input {
     border-bottom: 1px solid var(--mantine-color-border);
     color: var(--mantine-color-text);
     vertical-align: middle;
+    background-color: var(--mantine-color-surface);
 }
 
 .mantine-Table-root tr:last-child td {
     border-bottom: none;
 }
 
-.mantine-Table-root tbody tr:hover {
+.mantine-Table-root tbody tr:hover td {
     background-color: var(--mantine-color-surface-hover);
 }
 

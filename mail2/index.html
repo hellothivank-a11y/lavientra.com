@@ -19,8 +19,8 @@
     <!-- NOTIFICATIONS CONTAINER (@mantine/notifications) -->
     <div id="mantineNotifications" class="mantine-Notifications-container"></div>
 
-    <!-- 1. LOGIN SCREEN (Shown when user is unauthenticated) -->
-    <div id="loginContainer" class="mantine-Login-wrapper">
+    <!-- 1. LOGIN SCREEN (Google Authentication Gate) -->
+    <div id="loginContainer" class="mantine-Login-wrapper" style="display: flex;">
         <div class="mantine-Login-card">
             <div style="display: flex; justify-content: center; margin-bottom: 20px;">
                 <div class="mantine-ThemeIcon-root" style="background-color: var(--mantine-color-indigo-0); color: var(--mantine-color-indigo-6); width: 54px; height: 54px; border-radius: var(--mantine-radius-lg);">
@@ -29,7 +29,7 @@
             </div>
             <h1 style="font-size: 22px; margin-bottom: 8px;">Lavientra Studio Command Center</h1>
             <p style="color: var(--mantine-color-dimmed); font-size: 13.5px; margin-bottom: 28px;">
-                Authorized Team Access. Sign in with your Google account to access your outreach workspace.
+                Authorized Team Access. Sign in with your authorized Google account to access your outreach workspace.
             </p>
             <button type="button" class="mantine-Button-root mantine-Button-default" style="width: 100%; justify-content: center;" onclick="loginWithGoogle()">
                 <svg class="google-icon" viewBox="0 0 24 24" width="18" height="18" style="margin-right: 10px;">
@@ -44,7 +44,7 @@
     </div>
 
     <!-- 2. MAIN APP CONTAINER (Mantine AppShell Architecture) -->
-    <div id="appContainer" style="display: none;" class="mantine-AppShell-root">
+    <div id="appContainer" class="mantine-AppShell-root" style="display: none;">
         
         <!-- AppShell.Header -->
         <header class="mantine-AppShell-header">
@@ -66,14 +66,32 @@
             </div>
 
             <div style="display: flex; align-items: center; gap: 14px;">
+                <!-- 3-Day Follow-Up Reminder Header Pill -->
+                <div class="mantine-Badge-root mantine-Badge-amber" id="headerFollowupReminderPill" style="cursor: pointer; display: none;" onclick="goToFollowupReminders()">
+                    <span class="pulse-dot" style="background-color: var(--mantine-color-amber-6); box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.7);"></span>
+                    <span id="headerFollowupReminderText">0 Follow-ups Due (3+ Days)</span>
+                </div>
+
+                <!-- Add New Country Quick Action -->
+                <button type="button" class="mantine-Button-root mantine-Button-default" style="height: 32px; padding: 0 10px; font-size: 12px;" onclick="openAddCountryModal()">
+                    <span class="material-symbols-outlined" style="font-size: 16px; color: var(--mantine-color-primary);">public</span>
+                    <span>+ Add Country</span>
+                </button>
+
+                <!-- User Email Badge -->
+                <div class="mantine-Badge-root mantine-Badge-gray" id="headerUserBadge" style="font-size: 12px; padding: 5px 10px;">
+                    <span class="material-symbols-outlined" style="font-size: 15px;">account_circle</span>
+                    <span id="headerUserEmail">Team</span>
+                </div>
+
                 <!-- Dark / Light Theme ActionIcon -->
                 <button type="button" class="mantine-ActionIcon-root mantine-ActionIcon-default" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
                     <span class="material-symbols-outlined" id="themeIcon" style="font-size: 19px;">dark_mode</span>
                 </button>
 
-                <!-- Logout Button -->
-                <button type="button" class="mantine-Button-root mantine-Button-default" onclick="logout()" style="height: 38px; padding: 0 14px; font-size: 13px;">
-                    <span class="material-symbols-outlined" style="font-size: 18px;">logout</span>
+                <!-- Sign Out Button -->
+                <button type="button" class="mantine-Button-root mantine-Button-subtle" style="height: 32px; padding: 0 8px; font-size: 12.5px;" onclick="logout()" title="Sign Out">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">logout</span>
                     <span>Sign Out</span>
                 </button>
             </div>
@@ -81,19 +99,33 @@
 
         <div class="mantine-AppShell-body">
             
+            <!-- Mobile/Tablet Navbar Backdrop Overlay -->
+            <div id="navbarBackdrop" class="mantine-AppShell-backdrop" onclick="toggleSidebar()"></div>
+
             <!-- AppShell.Navbar -->
             <aside class="mantine-AppShell-navbar" id="appNavbar">
                 <div style="display: flex; flex-direction: column; gap: 4px;">
-                    <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--mantine-color-dimmed); padding: 0 12px 8px 12px;">Modules</span>
+                    <span class="nav-section-title" style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--mantine-color-dimmed); padding: 0 12px 8px 12px;">Modules</span>
                     
-                    <button type="button" class="mantine-NavLink-root active" id="navWorkspace" onclick="switchMainTab('workspace')">
+                    <!-- 1. Workspace Dashboard -->
+                    <button type="button" class="mantine-NavLink-root active" id="navWorkspace" onclick="switchMainTab('workspace')" title="Workspace Dashboard">
                         <div class="mantine-NavLink-left">
                             <span class="material-symbols-outlined mantine-NavLink-icon">dashboard</span>
                             <span>Workspace Dashboard</span>
                         </div>
                     </button>
 
-                    <button type="button" class="mantine-NavLink-root" id="navPipeline" onclick="switchMainTab('pipeline')">
+                    <!-- 2. New Contact List (Bottom to Workspace) -->
+                    <button type="button" class="mantine-NavLink-root" id="navNewContacts" onclick="switchMainTab('newContacts')" title="New Contact List">
+                        <div class="mantine-NavLink-left">
+                            <span class="material-symbols-outlined mantine-NavLink-icon">person_pin</span>
+                            <span>New Contact List</span>
+                        </div>
+                        <span class="mantine-Badge-root mantine-Badge-teal" id="navNewBadge">0</span>
+                    </button>
+
+                    <!-- 3. Pipeline & Stages -->
+                    <button type="button" class="mantine-NavLink-root" id="navPipeline" onclick="switchMainTab('pipeline')" title="Pipeline & Stages">
                         <div class="mantine-NavLink-left">
                             <span class="material-symbols-outlined mantine-NavLink-icon">view_kanban</span>
                             <span>Pipeline & Stages</span>
@@ -101,14 +133,16 @@
                         <span class="mantine-Badge-root mantine-Badge-indigo" id="navPipelineBadge">0</span>
                     </button>
 
-                    <button type="button" class="mantine-NavLink-root" id="navTemplates" onclick="switchMainTab('templates')">
+                    <!-- 4. Template Studio -->
+                    <button type="button" class="mantine-NavLink-root" id="navTemplates" onclick="switchMainTab('templates')" title="Template Studio">
                         <div class="mantine-NavLink-left">
                             <span class="material-symbols-outlined mantine-NavLink-icon">auto_fix_high</span>
                             <span>Template Studio</span>
                         </div>
                     </button>
 
-                    <button type="button" class="mantine-NavLink-root" id="navAnalytics" onclick="switchMainTab('analytics')">
+                    <!-- 5. Progress & Analytics -->
+                    <button type="button" class="mantine-NavLink-root" id="navAnalytics" onclick="switchMainTab('analytics')" title="Progress & Analytics">
                         <div class="mantine-NavLink-left">
                             <span class="material-symbols-outlined mantine-NavLink-icon">analytics</span>
                             <span>Progress & Analytics</span>
@@ -117,17 +151,33 @@
                 </div>
 
                 <!-- Navbar Bottom Status Card -->
-                <div style="background-color: var(--mantine-color-surface-hover); border: 1px solid var(--mantine-color-border); border-radius: var(--mantine-radius-md); padding: 14px;">
+                <div class="navbar-bottom-card" style="background-color: var(--mantine-color-surface-hover); border: 1px solid var(--mantine-color-border); border-radius: var(--mantine-radius-md); padding: 14px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                        <span style="font-size: 12px; font-weight: 600;">Firestore Sync</span>
-                        <span class="mantine-Badge-root mantine-Badge-teal" style="font-size: 11px; padding: 2px 6px;">Connected</span>
+                        <span style="font-size: 12px; font-weight: 600;">Active Markets</span>
+                        <button type="button" class="mantine-Button-root mantine-Button-subtle" style="height: 20px; padding: 0 4px; font-size: 11px;" onclick="openAddCountryModal()">+ Add</button>
                     </div>
-                    <p style="font-size: 11.5px; color: var(--mantine-color-dimmed);">Real-time bi-directional pipeline cloud persistence active.</p>
+                    <div id="sidebarCountryList" style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px;">
+                        <!-- Dynamically populated -->
+                    </div>
                 </div>
             </aside>
 
             <!-- AppShell.Main -->
             <main class="mantine-AppShell-main">
+
+                <!-- 3-Day Reminder Alert Banner (Appears when follow-ups are due) -->
+                <div id="followupGlobalAlertBanner" style="display: none; background-color: var(--mantine-color-amber-0); border: 1px solid var(--mantine-color-amber-1); border-radius: var(--mantine-radius-md); padding: 14px 20px; margin-bottom: 24px; align-items: center; justify-content: space-between; gap: 16px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span class="material-symbols-outlined" style="font-size: 24px; color: var(--mantine-color-amber-6);">notification_important</span>
+                        <div>
+                            <strong style="color: var(--mantine-color-amber-7); font-size: 14px;">3-Day Follow-Up Reminder Alert</strong>
+                            <div style="color: var(--mantine-color-amber-7); font-size: 13px;" id="followupAlertMessage">You have contacts that reached 3+ days since their first mail. Send follow-up messages now!</div>
+                        </div>
+                    </div>
+                    <button type="button" class="mantine-Button-root mantine-Button-filled" style="background-color: var(--mantine-color-amber-6); height: 36px; padding: 0 16px; font-size: 13px;" onclick="goToFollowupReminders()">
+                        <span class="material-symbols-outlined" style="font-size: 16px;">forward_to_inbox</span> Review Follow-ups Due
+                    </button>
+                </div>
 
                 <!-- ================================================================= -->
                 <!-- MODULE 1: WORKSPACE DASHBOARD                                      -->
@@ -152,40 +202,40 @@
                         <div class="mantine-MetricCard">
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <div>
-                                    <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--mantine-color-dimmed);">Follow-ups Due</span>
-                                    <h2 style="font-size: 26px; margin: 4px 0; color: var(--mantine-color-amber-6);" id="metricPendingFollowups">0</h2>
+                                    <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--mantine-color-dimmed);">New / Unsent Leads</span>
+                                    <h2 style="font-size: 26px; margin: 4px 0; color: var(--mantine-color-teal-6);" id="metricNewUnsent">0</h2>
                                 </div>
-                                <div class="mantine-ThemeIcon-root" style="background-color: var(--mantine-color-amber-0); color: var(--mantine-color-amber-6);">
+                                <div class="mantine-ThemeIcon-root" style="background-color: var(--mantine-color-teal-0); color: var(--mantine-color-teal-6);">
+                                    <span class="material-symbols-outlined">person_pin</span>
+                                </div>
+                            </div>
+                            <span class="mantine-Badge-root mantine-Badge-teal" style="align-self: flex-start; margin-top: 8px;">Pending Initial Outreach</span>
+                        </div>
+
+                        <div class="mantine-MetricCard" style="border: 1px solid var(--mantine-color-amber-1); background-color: var(--mantine-color-amber-0); cursor: pointer;" onclick="goToFollowupReminders()">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div>
+                                    <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--mantine-color-amber-7);">3-Day Follow-ups Due</span>
+                                    <h2 style="font-size: 26px; margin: 4px 0; color: var(--mantine-color-amber-7);" id="metricPendingFollowups">0</h2>
+                                </div>
+                                <div class="mantine-ThemeIcon-root" style="background-color: #ffffff; color: var(--mantine-color-amber-6);">
                                     <span class="material-symbols-outlined">notification_important</span>
                                 </div>
                             </div>
-                            <span class="mantine-Badge-root mantine-Badge-amber" style="align-self: flex-start; margin-top: 8px;">3+ Days Pending</span>
+                            <span class="mantine-Badge-root mantine-Badge-amber" style="align-self: flex-start; margin-top: 8px;">3+ Days Elapsed (Action Needed)</span>
                         </div>
 
                         <div class="mantine-MetricCard">
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <div>
                                     <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--mantine-color-dimmed);">Initial Sent</span>
-                                    <h2 style="font-size: 26px; margin: 4px 0; color: var(--mantine-color-teal-6);" id="metricTotalSent">0</h2>
+                                    <h2 style="font-size: 26px; margin: 4px 0; color: var(--mantine-color-indigo-6);" id="metricTotalSent">0</h2>
                                 </div>
-                                <div class="mantine-ThemeIcon-root" style="background-color: var(--mantine-color-teal-0); color: var(--mantine-color-teal-6);">
+                                <div class="mantine-ThemeIcon-root" style="background-color: var(--mantine-color-indigo-0); color: var(--mantine-color-indigo-6);">
                                     <span class="material-symbols-outlined">mark_email_read</span>
                                 </div>
                             </div>
-                            <span class="mantine-Badge-root mantine-Badge-teal" style="align-self: flex-start; margin-top: 8px;">Initial Pitches Sent</span>
-                        </div>
-
-                        <div class="mantine-MetricCard">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                                <div>
-                                    <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--mantine-color-dimmed);">Sent Today</span>
-                                    <h2 style="font-size: 26px; margin: 4px 0; color: var(--mantine-color-indigo-6);" id="metricSentToday">0</h2>
-                                </div>
-                                <div class="mantine-ThemeIcon-root" style="background-color: var(--mantine-color-indigo-0); color: var(--mantine-color-indigo-6);">
-                                    <span class="material-symbols-outlined">today</span>
-                                </div>
-                            </div>
-                            <span class="mantine-Badge-root mantine-Badge-indigo" style="align-self: flex-start; margin-top: 8px;">Dispatched Today</span>
+                            <span class="mantine-Badge-root mantine-Badge-indigo" style="align-self: flex-start; margin-top: 8px;">Moved to Pipeline</span>
                         </div>
                     </div>
 
@@ -195,9 +245,9 @@
                             <div>
                                 <div class="mantine-Card-title">
                                     <span class="material-symbols-outlined" style="color: var(--mantine-color-primary);">person_add</span>
-                                    <span>Add New Contact to Pipeline</span>
+                                    <span>Add New Contact</span>
                                 </div>
-                                <p class="mantine-Card-subtitle">Register a prospect lead with channel targeting and real-time duplicate validation.</p>
+                                <p class="mantine-Card-subtitle">Register a prospect lead with channel targeting. Automatically placed into New Contact List.</p>
                             </div>
 
                             <!-- Channel Selector (SegmentedControl size="md") -->
@@ -247,13 +297,12 @@
                             </div>
 
                             <div class="mantine-InputWrapper-root">
-                                <label class="mantine-InputWrapper-label">Target Market Region</label>
-                                <select class="mantine-Input-input" id="country">
-                                    <option value="UK">🇬🇧 United Kingdom (UK)</option>
-                                    <option value="Australia">🇦🇺 Australia (AUS)</option>
-                                    <option value="US">🇺🇸 United States (US)</option>
-                                    <option value="Sri Lanka">🇱🇰 Sri Lanka (SL)</option>
-                                    <option value="UAE">🇦🇪 United Arab Emirates (UAE)</option>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <label class="mantine-InputWrapper-label">Target Market Region</label>
+                                    <button type="button" class="mantine-Button-root mantine-Button-subtle" style="height: 20px; padding: 0 4px; font-size: 11px;" onclick="openAddCountryModal()">+ Add New</button>
+                                </div>
+                                <select class="mantine-Input-input" id="country" onchange="handleCountrySelectChange(this)">
+                                    <!-- Populated dynamically via renderCountryOptions() -->
                                 </select>
                             </div>
                         </div>
@@ -266,14 +315,137 @@
                             </button>
                             <button type="button" class="mantine-Button-root mantine-Button-filled" onclick="addContact()">
                                 <span class="material-symbols-outlined" style="font-size: 18px;">cloud_upload</span>
-                                <span>Save Lead to Cloud</span>
+                                <span>Save to New Contact List</span>
                             </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- ================================================================= -->
-                <!-- MODULE 2: PIPELINE & STAGE MANAGER                                -->
+                <!-- MODULE 2: NEW CONTACT LIST (UNSENT LEADS + CATEGORY CHART/FILTER)  -->
+                <!-- ================================================================= -->
+                <div id="newContactsModule" style="display: none;">
+                    
+                    <!-- Channel Category Breakdown Cards (Mini Chart) -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                        <div class="mantine-MetricCard" style="padding: 16px; cursor: pointer;" onclick="setNewContactCategoryFilter('all')">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 12px; font-weight: 700; color: var(--mantine-color-dimmed);">ALL UNSENT</span>
+                                <span class="mantine-Badge-root mantine-Badge-gray" id="statNewAll">0</span>
+                            </div>
+                            <h3 style="font-size: 20px; margin-top: 4px;" id="statCountAll">0</h3>
+                        </div>
+
+                        <div class="mantine-MetricCard" style="padding: 16px; cursor: pointer;" onclick="setNewContactCategoryFilter('email')">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 12px; font-weight: 700; color: var(--mantine-color-indigo-6);">EMAIL</span>
+                                <span class="mantine-Badge-root mantine-Badge-indigo" id="statNewEmail">0</span>
+                            </div>
+                            <h3 style="font-size: 20px; margin-top: 4px; color: var(--mantine-color-indigo-6);" id="statCountEmail">0</h3>
+                        </div>
+
+                        <div class="mantine-MetricCard" style="padding: 16px; cursor: pointer;" onclick="setNewContactCategoryFilter('instagram')">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 12px; font-weight: 700; color: var(--mantine-color-amber-6);">INSTAGRAM</span>
+                                <span class="mantine-Badge-root mantine-Badge-amber" id="statNewInstagram">0</span>
+                            </div>
+                            <h3 style="font-size: 20px; margin-top: 4px; color: var(--mantine-color-amber-6);" id="statCountInstagram">0</h3>
+                        </div>
+
+                        <div class="mantine-MetricCard" style="padding: 16px; cursor: pointer;" onclick="setNewContactCategoryFilter('linkedin')">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 12px; font-weight: 700; color: var(--mantine-color-indigo-7);">LINKEDIN</span>
+                                <span class="mantine-Badge-root mantine-Badge-indigo" id="statNewLinkedin">0</span>
+                            </div>
+                            <h3 style="font-size: 20px; margin-top: 4px; color: var(--mantine-color-indigo-7);" id="statCountLinkedin">0</h3>
+                        </div>
+
+                        <div class="mantine-MetricCard" style="padding: 16px; cursor: pointer;" onclick="setNewContactCategoryFilter('facebook')">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 12px; font-weight: 700; color: var(--mantine-color-dimmed);">FACEBOOK</span>
+                                <span class="mantine-Badge-root mantine-Badge-gray" id="statNewFacebook">0</span>
+                            </div>
+                            <h3 style="font-size: 20px; margin-top: 4px;" id="statCountFacebook">0</h3>
+                        </div>
+                    </div>
+
+                    <!-- Main New Contact List Card -->
+                    <div class="mantine-Card-root">
+                        <div class="mantine-Card-header">
+                            <div>
+                                <div class="mantine-Card-title">
+                                    <span class="material-symbols-outlined" style="color: var(--mantine-color-teal-6);">person_pin</span>
+                                    <span>New Contact List (Not Sent Yet)</span>
+                                </div>
+                                <p class="mantine-Card-subtitle">Prospects waiting for first outreach. Marking a lead as sent immediately moves it into the Pipeline.</p>
+                            </div>
+
+                            <!-- Dynamic Region Selector -->
+                            <div class="mantine-SegmentedControl-root" id="ncRegionSegmentedControl">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Category Filter Pills (Mantine Tabs) -->
+                        <div class="mantine-Tabs-list" style="margin-bottom: 16px;">
+                            <button type="button" class="mantine-Tabs-tab active" id="ncTabAll" onclick="setNewContactCategoryFilter('all')">
+                                <span>All Categories</span>
+                                <span class="mantine-Badge-root mantine-Badge-gray" id="ncCountAll">0</span>
+                            </button>
+                            <button type="button" class="mantine-Tabs-tab" id="ncTabEmail" onclick="setNewContactCategoryFilter('email')">
+                                <span class="material-symbols-outlined" style="font-size: 15px;">mail</span>
+                                <span>Email</span>
+                                <span class="mantine-Badge-root mantine-Badge-indigo" id="ncCountEmail">0</span>
+                            </button>
+                            <button type="button" class="mantine-Tabs-tab" id="ncTabInstagram" onclick="setNewContactCategoryFilter('instagram')">
+                                <span>Instagram</span>
+                                <span class="mantine-Badge-root mantine-Badge-amber" id="ncCountInstagram">0</span>
+                            </button>
+                            <button type="button" class="mantine-Tabs-tab" id="ncTabLinkedin" onclick="setNewContactCategoryFilter('linkedin')">
+                                <span>LinkedIn</span>
+                                <span class="mantine-Badge-root mantine-Badge-indigo" id="ncCountLinkedin">0</span>
+                            </button>
+                            <button type="button" class="mantine-Tabs-tab" id="ncTabFacebook" onclick="setNewContactCategoryFilter('facebook')">
+                                <span>Facebook</span>
+                                <span class="mantine-Badge-root mantine-Badge-gray" id="ncCountFacebook">0</span>
+                            </button>
+                        </div>
+
+                        <!-- Search & Quick Toolbar -->
+                        <div style="display: flex; gap: 14px; margin-bottom: 20px;">
+                            <div style="flex: 1; position: relative;">
+                                <input type="text" class="mantine-Input-input" id="newContactsSearchInput" placeholder="Search new contacts by company, handle, email..." oninput="renderNewContacts()" style="padding-left: 38px;">
+                                <span class="material-symbols-outlined" style="position: absolute; left: 12px; top: 11px; font-size: 18px; color: var(--mantine-color-dimmed);">search</span>
+                            </div>
+                        </div>
+
+                        <!-- High-Contrast Table for New Contacts -->
+                        <div class="mantine-Table-wrapper">
+                            <table class="mantine-Table-root">
+                                <thead>
+                                    <tr>
+                                        <th>Company / Website</th>
+                                        <th>Contact Person</th>
+                                        <th>Category & Target</th>
+                                        <th>Region</th>
+                                        <th>Status</th>
+                                        <th style="text-align: right;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="newContactsTableBody">
+                                    <tr>
+                                        <td colspan="6" style="text-align: center; color: var(--mantine-color-dimmed); padding: 36px;">
+                                            No new unsent contacts found.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================================================================= -->
+                <!-- MODULE 3: PIPELINE & STAGE MANAGER (ACTIVE OUTREACH PIPELINE)     -->
                 <!-- ================================================================= -->
                 <div id="pipelineModule" style="display: none;">
                     <div class="mantine-Card-root">
@@ -282,36 +454,30 @@
                             <div>
                                 <div class="mantine-Card-title">
                                     <span class="material-symbols-outlined" style="color: var(--mantine-color-primary);">view_kanban</span>
-                                    <span>Pipeline Stage Manager</span>
+                                    <span>Pipeline & 3-Day Follow-Up Tracker</span>
                                 </div>
-                                <p class="mantine-Card-subtitle">Review leads, copy outreach message templates, and mark contacts as sent.</p>
+                                <p class="mantine-Card-subtitle">Contacts that have been contacted. Follow up on active leads 3 days after initial mail.</p>
                             </div>
 
-                            <!-- Market Region Selector (SegmentedControl size="md") -->
-                            <div class="mantine-SegmentedControl-root">
-                                <button type="button" class="mantine-SegmentedControl-label active" id="wsBtnUK" onclick="setWorkspaceRegion('UK')">🇬🇧 UK</button>
-                                <button type="button" class="mantine-SegmentedControl-label" id="wsBtnAus" onclick="setWorkspaceRegion('Australia')">🇦🇺 Australia</button>
-                                <button type="button" class="mantine-SegmentedControl-label" id="wsBtnUS" onclick="setWorkspaceRegion('US')">🇺🇸 US</button>
+                            <!-- Dynamic Market Region Selector -->
+                            <div class="mantine-SegmentedControl-root" id="pipelineRegionSegmentedControl">
+                                <!-- Populated dynamically -->
                             </div>
                         </div>
 
                         <!-- Stage Tabs (Tabs variant="pills", size="md") -->
                         <div class="mantine-Tabs-list">
                             <button type="button" class="mantine-Tabs-tab active" id="tabStageAll" onclick="setPipelineStageFilter('all')">
-                                <span>All Leads</span>
+                                <span>All Pipeline Leads</span>
                                 <span class="mantine-Badge-root mantine-Badge-gray" id="badgeCountAll">0</span>
                             </button>
                             <button type="button" class="mantine-Tabs-tab" id="tabStageDue" onclick="setPipelineStageFilter('followup_due')">
-                                <span class="material-symbols-outlined" style="font-size: 16px; color: var(--mantine-color-amber-6);">warning</span>
-                                <span>Follow-up Due</span>
+                                <span class="material-symbols-outlined" style="font-size: 16px; color: var(--mantine-color-amber-6);">notification_important</span>
+                                <span>3-Day Follow-up Due</span>
                                 <span class="mantine-Badge-root mantine-Badge-amber" id="badgeCountDue">0</span>
                             </button>
-                            <button type="button" class="mantine-Tabs-tab" id="tabStageNever" onclick="setPipelineStageFilter('never_sent')">
-                                <span>Not Contacted</span>
-                                <span class="mantine-Badge-root mantine-Badge-gray" id="badgeCountNever">0</span>
-                            </button>
                             <button type="button" class="mantine-Tabs-tab" id="tabStageSent" onclick="setPipelineStageFilter('sent_recent')">
-                                <span>Initial Sent</span>
+                                <span>Initial Sent (Pending 3d)</span>
                                 <span class="mantine-Badge-root mantine-Badge-teal" id="badgeCountSent">0</span>
                             </button>
                         </div>
@@ -319,11 +485,11 @@
                         <!-- Search & Filter Toolbar (size="md") -->
                         <div style="display: flex; gap: 14px; margin-bottom: 20px; flex-wrap: wrap;">
                             <div style="flex: 1; min-width: 260px; position: relative;">
-                                <input type="text" class="mantine-Input-input" id="pipelineSearchInput" placeholder="Search by company, email, name..." oninput="renderContacts()" style="padding-left: 38px;">
+                                <input type="text" class="mantine-Input-input" id="pipelineSearchInput" placeholder="Search pipeline by company, email, name..." oninput="renderContacts()" style="padding-left: 38px;">
                                 <span class="material-symbols-outlined" style="position: absolute; left: 12px; top: 11px; font-size: 18px; color: var(--mantine-color-dimmed);">search</span>
                             </div>
                             <select class="mantine-Input-input" id="pipelineChannelFilter" onchange="renderContacts()" style="width: 170px;">
-                                <option value="all">All Channels</option>
+                                <option value="all">All Categories</option>
                                 <option value="email">Email Only</option>
                                 <option value="instagram">Instagram</option>
                                 <option value="linkedin">LinkedIn</option>
@@ -338,9 +504,9 @@
                                     <tr>
                                         <th>Company / Website</th>
                                         <th>Contact Name</th>
-                                        <th>Channel & Target</th>
+                                        <th>Category & Target</th>
                                         <th>Region</th>
-                                        <th>Outreach Status</th>
+                                        <th>3-Day Follow-up Status</th>
                                         <th style="text-align: right;">Actions</th>
                                     </tr>
                                 </thead>
@@ -357,7 +523,7 @@
                 </div>
 
                 <!-- ================================================================= -->
-                <!-- MODULE 3: TEMPLATE STUDIO                                         -->
+                <!-- MODULE 4: TEMPLATE STUDIO (INITIAL PITCH & FOLLOW-UP DRAFT STUDIO)-->
                 <!-- ================================================================= -->
                 <div id="templatesModule" style="display: none;">
                     
@@ -366,15 +532,26 @@
                             <div>
                                 <div class="mantine-Card-title">
                                     <span class="material-symbols-outlined" style="color: var(--mantine-color-primary);">auto_fix_high</span>
-                                    <span>Copy Template Studio</span>
+                                    <span>Copy Template & Follow-Up Studio</span>
                                 </div>
-                                <p class="mantine-Card-subtitle">Customize outreach copy templates with dynamic variables.</p>
+                                <p class="mantine-Card-subtitle">Craft and customize outreach templates for both Initial Pitches and 3-Day Follow-up messages.</p>
                             </div>
 
-                            <!-- Market Selector (SegmentedControl size="md") -->
-                            <div class="mantine-SegmentedControl-root">
-                                <button type="button" class="mantine-SegmentedControl-label active" id="tplBtnUK" onclick="switchTemplateMarket('UK')">🇬🇧 UK Pitch</button>
-                                <button type="button" class="mantine-SegmentedControl-label" id="tplBtnAus" onclick="switchTemplateMarket('Australia')">🇦🇺 Australia Pitch</button>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <!-- Dynamic Market Selector -->
+                                <div class="mantine-SegmentedControl-root" id="tplMarketSegmentedControl">
+                                    <!-- Populated dynamically -->
+                                </div>
+
+                                <!-- Template Type Selector (Single Clean Icon) -->
+                                <div class="mantine-SegmentedControl-root">
+                                    <button type="button" class="mantine-SegmentedControl-label active" id="tplTypeBtnInitial" onclick="switchTemplateType('initial')">
+                                        <span class="material-symbols-outlined" style="font-size: 15px;">mail</span> Initial Pitch
+                                    </button>
+                                    <button type="button" class="mantine-SegmentedControl-label" id="tplTypeBtnFollowup" onclick="switchTemplateType('followup')">
+                                        <span class="material-symbols-outlined" style="font-size: 15px; color: var(--mantine-color-amber-6);">notification_important</span> Follow-Up Draft
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
@@ -383,6 +560,10 @@
                             
                             <!-- Left: Editor & Variable Chips -->
                             <div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                    <span id="activeTemplateBadge" class="mantine-Badge-root mantine-Badge-indigo">Editing: Initial Pitch Template</span>
+                                </div>
+
                                 <div class="mantine-InputWrapper-root">
                                     <div style="display: flex; justify-content: space-between; align-items: center;">
                                         <label class="mantine-InputWrapper-label">Subject Line Template</label>
@@ -404,17 +585,17 @@
 
                                 <div class="mantine-InputWrapper-root">
                                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                                        <label class="mantine-InputWrapper-label">Pitch Message Body</label>
+                                        <label class="mantine-InputWrapper-label" id="templateBodyLabel">Message Body Template</label>
                                         <button type="button" class="mantine-Button-root mantine-Button-subtle" style="height: 26px; padding: 0 8px; font-size: 12px;" onclick="copyTemplateBody(this)">
                                             <span class="material-symbols-outlined" style="font-size: 14px;">content_copy</span> Copy Body
                                         </button>
                                     </div>
-                                    <textarea class="mantine-Input-input" id="templateBodyInput" rows="9" oninput="updateLiveTemplatePreview()"></textarea>
+                                    <textarea class="mantine-Input-input" id="templateBodyInput" rows="10" oninput="updateLiveTemplatePreview()"></textarea>
                                 </div>
 
-                                <button type="button" class="mantine-Button-root mantine-Button-filled" style="width: 100%; margin-top: 10px;" onclick="saveCurrentTemplate()">
+                                <button type="button" class="mantine-Button-root mantine-Button-filled" id="saveTemplateBtn" style="width: 100%; margin-top: 10px;" onclick="saveCurrentTemplate()">
                                     <span class="material-symbols-outlined" style="font-size: 18px;">save</span>
-                                    <span>Save Market Template</span>
+                                    <span>Save Template</span>
                                 </button>
                             </div>
 
@@ -430,7 +611,7 @@
                                     <div class="mantine-EmailPreview-header">
                                         <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
                                             <span style="color: var(--mantine-color-dimmed);">To:</span>
-                                            <span style="font-weight: 600;">contact@summitmedia.co.uk</span>
+                                            <span style="font-weight: 600;" id="previewToEmail">contact@summitmedia.co.uk</span>
                                         </div>
                                         <div style="display: flex; justify-content: space-between;">
                                             <span style="color: var(--mantine-color-dimmed);">Subject:</span>
@@ -445,81 +626,56 @@
                 </div>
 
                 <!-- ================================================================= -->
-                <!-- MODULE 4: PROGRESS & ANALYTICS                                    -->
+                <!-- MODULE 5: PROGRESS & ANALYTICS                                    -->
                 <!-- ================================================================= -->
                 <div id="analyticsModule" style="display: none;">
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;">
-                        
-                        <!-- UK Breakdown Card -->
-                        <div class="mantine-Card-root">
-                            <div class="mantine-Card-header">
-                                <div class="mantine-Card-title">
-                                    <span>🇬🇧 United Kingdom</span>
-                                </div>
-                                <span class="mantine-Badge-root mantine-Badge-indigo" id="ukCompletionBadge">0% Done</span>
-                            </div>
-
-                            <div style="background-color: var(--mantine-color-surface-active); height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 20px;">
-                                <div id="ukProgressBar" style="background-color: var(--mantine-color-primary); height: 100%; width: 0%; transition: width 0.3s ease;"></div>
-                            </div>
-
-                            <div style="display: flex; flex-direction: column; gap: 12px;">
-                                <div style="display: flex; justify-content: space-between; font-size: 13.5px;">
-                                    <span style="color: var(--mantine-color-dimmed);">Total Lead Count</span>
-                                    <strong id="ukListCount">0</strong>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; font-size: 13.5px;">
-                                    <span style="color: var(--mantine-color-dimmed);">Follow-ups Due (3+ Days)</span>
-                                    <strong id="ukPendingFollowups" style="color: var(--mantine-color-amber-6);">0</strong>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; font-size: 13.5px;">
-                                    <span style="color: var(--mantine-color-dimmed);">Initial Mails Sent</span>
-                                    <strong id="ukSentCount" style="color: var(--mantine-color-teal-6);">0</strong>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; font-size: 13.5px;">
-                                    <span style="color: var(--mantine-color-dimmed);">Follow-ups Sent</span>
-                                    <strong id="ukFollowupCount" style="color: var(--mantine-color-indigo-6);">0</strong>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Australia Breakdown Card -->
-                        <div class="mantine-Card-root">
-                            <div class="mantine-Card-header">
-                                <div class="mantine-Card-title">
-                                    <span>🇦🇺 Australia</span>
-                                </div>
-                                <span class="mantine-Badge-root mantine-Badge-indigo" id="ausCompletionBadge">0% Done</span>
-                            </div>
-
-                            <div style="background-color: var(--mantine-color-surface-active); height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 20px;">
-                                <div id="ausProgressBar" style="background-color: var(--mantine-color-teal-6); height: 100%; width: 0%; transition: width 0.3s ease;"></div>
-                            </div>
-
-                            <div style="display: flex; flex-direction: column; gap: 12px;">
-                                <div style="display: flex; justify-content: space-between; font-size: 13.5px;">
-                                    <span style="color: var(--mantine-color-dimmed);">Total Lead Count</span>
-                                    <strong id="ausListCount">0</strong>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; font-size: 13.5px;">
-                                    <span style="color: var(--mantine-color-dimmed);">Follow-ups Due (3+ Days)</span>
-                                    <strong id="ausPendingFollowups" style="color: var(--mantine-color-amber-6);">0</strong>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; font-size: 13.5px;">
-                                    <span style="color: var(--mantine-color-dimmed);">Initial Mails Sent</span>
-                                    <strong id="ausSentCount" style="color: var(--mantine-color-teal-6);">0</strong>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; font-size: 13.5px;">
-                                    <span style="color: var(--mantine-color-dimmed);">Follow-ups Sent</span>
-                                    <strong id="ausFollowupCount" style="color: var(--mantine-color-indigo-6);">0</strong>
-                                </div>
-                            </div>
-                        </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;" id="analyticsCountryGrid">
+                        <!-- Dynamically populated per country -->
                     </div>
                 </div>
 
             </main>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- DYNAMIC COUNTRY ADD MODAL                                          -->
+    <!-- ================================================================= -->
+    <div class="mantine-Modal-overlay" id="countryModalOverlay">
+        <div class="mantine-Modal-content" style="max-width: 440px;">
+            <div class="mantine-Modal-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="mantine-ThemeIcon-root" style="background-color: var(--mantine-color-indigo-0); color: var(--mantine-color-indigo-6); width: 36px; height: 36px;">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">public</span>
+                    </div>
+                    <h3 style="font-size: 16px;">Add Target Country Market</h3>
+                </div>
+                <button type="button" class="mantine-ActionIcon-root mantine-ActionIcon-default" onclick="closeCountryModal()">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+                </button>
+            </div>
+
+            <div class="mantine-Modal-body">
+                <div class="mantine-InputWrapper-root">
+                    <label class="mantine-InputWrapper-label">Country Code / Key *</label>
+                    <input type="text" class="mantine-Input-input" id="newCountryKey" placeholder="e.g. US, Canada, UAE" required>
+                </div>
+                <div class="mantine-InputWrapper-root">
+                    <label class="mantine-InputWrapper-label">Full Country Name *</label>
+                    <input type="text" class="mantine-Input-input" id="newCountryName" placeholder="e.g. United States" required>
+                </div>
+                <div class="mantine-InputWrapper-root">
+                    <label class="mantine-InputWrapper-label">Flag Emoji (Optional)</label>
+                    <input type="text" class="mantine-Input-input" id="newCountryFlag" placeholder="e.g. 🇺🇸" value="🌐">
+                </div>
+            </div>
+
+            <div class="mantine-Modal-footer">
+                <button type="button" class="mantine-Button-root mantine-Button-default" onclick="closeCountryModal()">Cancel</button>
+                <button type="button" class="mantine-Button-root mantine-Button-filled" onclick="saveNewCountry()">
+                    <span class="material-symbols-outlined">add_circle</span> Add Country Market
+                </button>
+            </div>
         </div>
     </div>
 
@@ -531,10 +687,13 @@
             
             <div class="mantine-Modal-header">
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <div class="mantine-ThemeIcon-root" style="background-color: var(--mantine-color-indigo-0); color: var(--mantine-color-indigo-6); width: 36px; height: 36px;">
-                        <span class="material-symbols-outlined" style="font-size: 20px;">mail</span>
+                    <div class="mantine-ThemeIcon-root" id="modalThemeIcon" style="background-color: var(--mantine-color-indigo-0); color: var(--mantine-color-indigo-6); width: 36px; height: 36px;">
+                        <span class="material-symbols-outlined" id="modalIconSymbol" style="font-size: 20px;">mail</span>
                     </div>
-                    <h3 id="modalDialogTitle" style="font-size: 16px;">Draft Outreach Message</h3>
+                    <div>
+                        <h3 id="modalDialogTitle" style="font-size: 16px;">Draft Outreach Message</h3>
+                        <span id="modalSubBadge" class="mantine-Badge-root mantine-Badge-indigo" style="font-size: 11px; margin-top: 2px;">Initial Pitch</span>
+                    </div>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <button type="button" class="mantine-Button-root mantine-Button-light" style="height: 32px; padding: 0 10px; font-size: 12px;" onclick="copyAllOutreach(this)">
@@ -586,7 +745,7 @@
             <div class="mantine-Modal-footer">
                 <button type="button" class="mantine-Button-root mantine-Button-default" onclick="closeTemplate()">Cancel</button>
                 <button type="button" class="mantine-Button-root mantine-Button-filled" id="modalMarkAsSentBtn" onclick="markAsSent()">
-                    <span class="material-symbols-outlined">send</span> Mark as Sent
+                    <span class="material-symbols-outlined">send</span> Mark as Sent & Move to Pipeline
                 </button>
             </div>
 
